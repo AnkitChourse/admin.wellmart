@@ -278,16 +278,7 @@ const routes = [
 
 
 
-      {
-        type: "collapse",
-        name: "Coupons",
-        key: "Utilities",
-        collapseKey: "Utilities4",
-        icon: <Icon fontSize="small">radio_button_checked</Icon>,
-        route: "/coupons",
-        component: <Coupons />,
-        permissions: ["ALL", "COUPON"],
-      },
+   
   // {
   //   type: "collapse",
   //   name: "Products",
@@ -338,14 +329,26 @@ const routes = [
         component: <Tax />,
         permissions: ["ALL", "TAX"],
       },
+      // {
+      //   name: "E-commerce Brands",
+      //   key: "Utilities",
+      //   collapseKey: "Utilities3",
+      //   route: "/utilities/brands",
+      //   icon: <Icon fontSize="small">radio_button_checked</Icon>,
+      //   component: <Brands />,
+      //   permissions: ["ALL", "BRAND"],
+      // },
+
+
       {
-        name: "E-commerce Brands",
+       
+        name: "Coupons",
         key: "Utilities",
-        collapseKey: "Utilities3",
-        route: "/utilities/brands",
+        collapseKey: "Utilities4",
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
-        component: <Brands />,
-        permissions: ["ALL", "BRAND"],
+        route: "/coupons",
+        component: <Coupons />,
+        permissions: ["ALL", "COUPON"],
       },
      
     ],
