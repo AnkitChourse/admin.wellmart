@@ -1,0 +1,44 @@
+.Image {
+  width: 26%;
+  height: 10vh;
+  margin: 3px;
+}
+
+.Images {
+  width: 12%;
+  height: 10vh;
+  margin: 3px;
+}
+
+.custom-file-input {
+  width: 100%;
+  color: transparent;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.custom-file-input::before {
+  width: 100%;
+  color: black;
+  content: 'Choose File';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid gainsboro;
+  border-radius: 7px;
+  padding: 10px 8px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 10pt;
+}
+
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #ffffff, #ffffff);
+}

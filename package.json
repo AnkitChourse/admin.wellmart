@@ -1,0 +1,95 @@
+{
+  "name": "electro_king_admin",
+  "version": "2.2.0",
+  "private": true,
+  "author": "its shubham_creation",
+  "license": "MIT",
+  "description": "its shubham_creation",
+  "dependencies": {
+    "@date-io/dayjs": "^1.3.13",
+    "@emotion/cache": "11.10.8",
+    "@emotion/react": "11.10.8",
+    "@emotion/styled": "11.10.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.137",
+    "@mui/material": "^5.12.3",
+    "@mui/x-date-pickers": "^6.10.1",
+    "@reduxjs/toolkit": "^1.9.5",
+    "axios": "^1.4.0",
+    "chart.js": "4.3.0",
+    "chroma-js": "2.4.2",
+    "dayjs": "^1.11.9",
+    "dompurify": "^3.0.5",
+    "draft-js": "^0.11.7",
+    "draft-js-export-html": "^1.4.1",
+    "draftjs-to-html": "^0.9.1",
+    "firebase": "^10.3.1",
+    "google-map-react": "^2.2.1",
+    "material-ui-color-picker": "^3.5.1",
+    "moment": "^2.29.4",
+    "prop-types": "15.8.1",
+    "react": "18.2.0",
+    "react-chartjs-2": "5.2.0",
+    "react-dom": "18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
+    "react-github-btn": "1.4.0",
+    "react-helmet": "^6.1.0",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-notifications-component": "^4.0.1",
+    "react-quill": "^2.0.0",
+    "react-redux": "^8.0.5",
+    "react-router-dom": "6.11.0",
+    "react-scripts": "5.0.1",
+    "react-table": "7.8.0",
+    "stylis": "4.1.4",
+    "stylis-plugin-rtl": "2.1.1",
+    "swiper": "^9.3.2",
+    "yup": "1.1.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "eslint": "8.39.0",
+    "eslint-config-prettier": "8.8.0",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-jsx-a11y": "6.7.1",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-react": "7.32.2",
+    "eslint-plugin-react-hooks": "4.6.0"
+  },
+  "overrides": {
+    "svgo": "3.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shubhamghatode2015/admin.ElectroKing.com.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Shubhamghatode2015/admin.ElectroKing.com/issues"
+  },
+  "homepage": "/",
+  "main": "index.js"
+}
