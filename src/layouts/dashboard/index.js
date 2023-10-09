@@ -55,13 +55,13 @@ function Dashboard() {
   const [isUsers, setIsUsers] = useState({});
   // const [latestProductd, setLatestProductd] = useState([]);
   // const [latestOrders, setLatestOrders] = useState([]);
-
+// console.log(isDashboard)
   useEffect(() => {
     (async () => {
       setIsLoading(true);
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_APII}/dashBoard/${admin}`,
+          `${process.env.REACT_APP_API}dashBoard`,
           {
             headers: {
               // "Content-Type": "multipart/form-data",
@@ -70,31 +70,31 @@ function Dashboard() {
             },
           }
         );
-        const response2 = await axios.get(
-          `${process.env.REACT_APP_APII}/eCommerce/filterOrderByDate/${admin}?page=1`,
-          {
-            headers: {
-              // "Content-Type": "multipart/form-data",
-              // Accept: "application/json",
-              authorization: localStorage.getItem("token"),
-            },
-          }
-        );
-        const response3 = await axios.get(
-          `${process.env.REACT_APP_APII}/filterOrderByDate/${admin}?page=1`,
-          {
-            headers: {
-              // "Content-Type": "multipart/form-data",
-              // Accept: "application/json",
-              authorization: localStorage.getItem("token"),
-            },
-          }
-        );
+        // const response2 = await axios.get(
+        //   `${process.env.REACT_APP_APII}/eCommerce/filterOrderByDate/${admin}?page=1`,
+        //   {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //       Accept: "application/json",
+        //       authorization: localStorage.getItem("token"),
+        //     },
+        //   }
+        // );
+        // const response3 = await axios.get(
+        //   `${process.env.REACT_APP_APII}/filterOrderByDate/${admin}?page=1`,
+        //   {
+        //     headers: {
+        //       "Content-Type": "multipart/form-data",
+        //       Accept: "application/json",
+        //       authorization: localStorage.getItem("token"),
+        //     },
+        //   }
+        // );
         // console.log(isDashboard)
         setIsLoading(false);
         setIsDashboard(response.data?.data);
-        setEcommOrderStats(response2?.data?.stats);
-        setServiceOrderStats(response3?.data?.stats);
+        // setEcommOrderStats(response2?.data?.stats);
+        // setServiceOrderStats(response3?.data?.stats);
         // setLatestProductd(response?.data?.latestProduct);
         // setLatestOrders(response?.data?.latestOrders);
         return response?.data;
@@ -108,26 +108,28 @@ function Dashboard() {
   useEffect(() => {
     if (isDashboard) {
       setIsMonth({
-        labels: Object.keys(isDashboard?.orderCountsByMonth),
+        labels: Object.keys(isDashboard?.lastSevenMonth),
         datasets: {
           label: "Order's",
-          data: Object.values(isDashboard?.orderCountsByMonth),
+          data: Object.values(isDashboard?.lastSevenMonth),
         },
       });
       setIsDay({
-        labels: Object.keys(isDashboard?.orderCountByWeekday),
+        labels: Object.keys(isDashboard?.lastSevendays
+          ),
         datasets: {
           label: "Order's",
-          data: Object.values(isDashboard?.orderCountByWeekday),
+          data: Object.values(isDashboard?.lastSevendays
+            ),
         },
       });
-      setIsUsers({
-        labels: Object.keys(isDashboard?.userData),
-        datasets: {
-          label: "User's",
-          data: Object.values(isDashboard?.userData),
-        },
-      });
+      // setIsUsers({
+      //   labels: Object.keys(isDashboard?.userData),
+      //   datasets: {
+      //     label: "User's",
+      //     data: Object.values(isDashboard?.userData),
+      //   },
+      // });
     }
   }, [isDashboard]);
 
@@ -142,7 +144,7 @@ function Dashboard() {
                 color="error"
                 icon="group_add"
                 title="Total User's"
-                count={isDashboard?.count?.USER}
+                count={isDashboard?.totalUser}
               />
             </MDBox>
           </Grid>
@@ -151,7 +153,7 @@ function Dashboard() {
               <ComplexStatisticsCard
                 icon={<ShoppingCart />}
                 title="Total Orders"
-                count={isDashboard?.count?.ORDER}
+                count={isDashboard?.totalOrders}
               // percentage={{
               //   color: "success",
               //   amount: "+3%",
@@ -165,8 +167,19 @@ function Dashboard() {
               <ComplexStatisticsCard
                 color="success"
                 icon={<AutoMode />}
-                title="Turnover"
-                count={SkPrice(isDashboard?.count?.TURNOVER)}
+                title="Total Product"
+                count={SkPrice(isDashboard?.totalProduct)}
+              />
+
+            </MDBox>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <MDBox mb={1.5}>
+              <ComplexStatisticsCard
+                color="info"
+                icon="group_add"
+                title="Today User"
+                count={SkPrice(isDashboard?.todayUser)}
               />
             </MDBox>
           </Grid>
@@ -223,7 +236,7 @@ function Dashboard() {
             </Grid>
           </Grid>
         </MDBox>
-        <MDBox sx={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+        {/* <MDBox sx={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           <MDTypography>Service Orders Stats</MDTypography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
@@ -307,8 +320,8 @@ function Dashboard() {
               </MDBox>
             </Grid>
           </Grid>
-        </MDBox>
-        <MDBox mb={3}>
+        </MDBox> */}
+        {/* <MDBox mb={3}>
           <ReportsBarChart
             color="info"
             title="User's Distribution"
@@ -317,8 +330,8 @@ function Dashboard() {
             // date="campaign sent just updated"
             chart={isUsers}
           />
-        </MDBox>
-        <MDBox sx={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+        </MDBox> */}
+        {/* <MDBox sx={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
           <MDTypography>Ecommerce Orders Stats</MDTypography>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={4}>
@@ -432,7 +445,7 @@ function Dashboard() {
               </MDBox>
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
         {/* <MDBox>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>

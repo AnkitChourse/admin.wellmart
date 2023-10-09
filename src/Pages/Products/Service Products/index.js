@@ -61,11 +61,11 @@ const Products = () => {
   const [getUrl, setGetUrl] = useState("");
 
 
-  useEffect(() => {
-    if (!isOpen && !viewProductModal) dispatch(getSingleProduct(null));
-  }, [isOpen, viewProductModal]);
+  // useEffect(() => {
+  //   if (!isOpen && !viewProductModal) dispatch(getSingleProduct(null));
+  // }, [isOpen, viewProductModal]);
 
-  console.log(AllProducts, "allProducts   ");
+  // console.log(AllProducts, "allProducts   ");
   // console.log(page, "page  ");
 
   return (

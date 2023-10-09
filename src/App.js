@@ -44,6 +44,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import http from "Utils/api";
 import Notification from "components/Notification/Notification";
+import { getAdminDetails } from "redux/festures/adminSlice";
 // import Notification from "components/Notification/Notification";
 
 export default function App() {
@@ -66,6 +67,7 @@ export default function App() {
   const adminId = localStorage.getItem("admin_id");
   const { isAdmin } = useSelector((data) => ({ ...data?.admin }));
   const [filterRoutes, setFilterRoutes] = useState([]);
+  
 
   const navigate = useNavigate();
   // Cache for the rtl
@@ -115,73 +117,190 @@ export default function App() {
 
 
 
+  useEffect(() => {
+    if(isAdmin){
+      isDispatch(getAdminDetails(`${process.env.REACT_APP_API}/getUserById/${adminId}`));
+    }
+   }, [])
+ 
+   console.log(isAdmin, "Admin");
+
+
+  //  const isSubset = (parentSet, subSet) => {
+  //   return subSet.some((x) => parentSet.includes(x));
+  // };
+
+  // const calculateRoutes = (allRoutes) => {
+  //   let filter = [];
+  //   const Froutes = allRoutes.map((route) => {
+  //     if (route.permissions && isAdmin) {
+  //       if (route.collapse) {
+  //         // console.log(route.collapse, 'coolea')
+  //         filter.push(route);
+  //         return calculateRoutes(route.collapse);
+  //       }
+  //       if (
+  //         route.route &&
+  //         isSubset(route?.permissions, isAdmin?.permissions)
+  //       ) {
+  //         if (route?.type) filter.push(route);
+  //         return (
+  //           <Route
+  //             exact
+  //             path={route.route}
+  //             element={route.component}
+  //             key={route.key}
+  //           />
+  //         );
+  //       }
+  //       return null;
+  //     } else {
+  //       if (route.collapse) {
+  //         // console.log(route.collapse, 'coolea')
+  //         filter.push(route);
+  //         return calculateRoutes(route.collapse);
+  //       }
+  //       if (route.route) {
+  //         if (route?.type) filter.push(route);
+  //         return (
+  //           <Route
+  //             exact
+  //             path={route.route}
+  //             element={route.component}
+  //             key={route.key}
+  //           />
+  //         );
+  //       }
+  //       return null;
+  //     }
+  //   });
+  //   setFilterRoutes(filter);
+  //   return Froutes;
+  // };
+
+  // const getRoutes = useMemo(() => {
+  //   return calculateRoutes(routes);
+  // }, [isAdmin]);
+  // console.log(getRoutes);
+
+
+
  
   
 
 
 
 
-  // const isSubset = (parentSet, subSet) => {
-  //   return subSet.some((x) => parentSet.includes(x));
+  // // const isSubset = (parentSet, subSet) => {
+  // //   return subSet.some((x) => parentSet.includes(x));
+  // // };
+
+  // const calculateRoutes = (allRoutes) => {
+  //   let filter = [];
+  //   const Froutes = allRoutes.map((route) => {
+  //     if (isAdmin?.permissions && isAdmin) {
+  //       if (route.collapse) {
+  //         console.log(route.collapse, 'coolea')
+  //         const calculateRoutesData = calculateRoutes(route.collapse);
+  //         if (calculateRoutesData?.find(ele => ele?.key)) {
+  //           filter.push(route);
+  //         }
+  //         return calculateRoutesData
+  //       }
+  //       // if (
+  //       //   route.route &&
+  //       //   isSubset(route?.permissions, isAdmin?.permissions)
+  //       // ) {
+  //         if (route?.type) filter.push(route);
+  //         return (
+  //           <Route
+  //             exact
+  //             path={route.route}
+  //             element={route.component}
+  //             key={route.key}
+  //           />
+  //         );
+  //       // }
+  //       // return null;
+  //     } else {
+  //       if (route.collapse) {
+  //         // console.log(route.collapse, 'coolea')
+  //         const calculateRoutesData = calculateRoutes(route.collapse);
+  //         if (calculateRoutesData?.find(ele => ele?.key)) {
+  //           filter.push(route);
+  //         }
+  //         return calculateRoutesData
+  //       }
+  //       if (route.route) {
+  //         if (route?.type) filter.push(route);
+  //         return (
+  //           <Route
+  //             exact
+  //             path={route.route}
+  //             element={route.component}
+  //             key={route.key}
+  //           />
+  //         );
+  //       }
+  //       return null;
+  //     }
+  //   });
+  //   setFilterRoutes(filter);
+  //   return Froutes;
   // };
 
-  const calculateRoutes = (allRoutes) => {
+
+
+
+
+  
+
+
+
+
+  const isSubset = (parentSet, subSet) => {
+    return subSet.some((x) => parentSet.includes(x));
+  };
+  
+  const calculateRoutes = (allRoutes, isAdmin) => {
     let filter = [];
+  
     const Froutes = allRoutes.map((route) => {
-      if (route.permissions && isAdmin) {
-        if (route.collapse) {
-          // console.log(route.collapse, 'coolea')
-          const calculateRoutesData = calculateRoutes(route.collapse);
-          if (calculateRoutesData?.find(ele => ele?.key)) {
-            filter.push(route);
-          }
-          return calculateRoutesData
-        }
-        // if (
-        //   route.route &&
-        //   isSubset(route?.permissions, isAdmin?.permissions)
-        // ) {
-          if (route?.type) filter.push(route);
-          return (
-            <Route
-              exact
-              path={route.route}
-              element={route.component}
-              key={route.key}
-            />
-          );
-        // }
-        // return null;
-      } else {
-        if (route.collapse) {
-          // console.log(route.collapse, 'coolea')
-          const calculateRoutesData = calculateRoutes(route.collapse);
-          if (calculateRoutesData?.find(ele => ele?.key)) {
-            filter.push(route);
-          }
-          return calculateRoutesData
-        }
-        if (route.route) {
-          if (route?.type) filter.push(route);
-          return (
-            <Route
-              exact
-              path={route.route}
-              element={route.component}
-              key={route.key}
-            />
-          );
-        }
-        return null;
+      if (route.collapse) {
+        filter.push(route);
+        return calculateRoutes(route.collapse, isAdmin);
       }
+  
+      if (route.route && (isAdmin ? isSubset(route?.permissions, isAdmin?.permissions) : true)) {
+        if (route.type) filter.push(route);
+  
+        return (
+          <Route
+            exact
+            path={route.route}
+            element={route.component}
+            key={route.key}
+          />
+        );
+      }
+  
+      return null;
     });
+  
     setFilterRoutes(filter);
     return Froutes;
   };
+  
+  
+  
 
   const getRoutes = useMemo(() => {
-    return calculateRoutes(routes);
-  }, [isAdmin]);
+    return calculateRoutes(routes, isAdmin);
+  }, [routes, isAdmin]);
+
+
+
+
 
   const configsButton = (
     <MDBox

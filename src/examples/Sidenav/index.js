@@ -61,7 +61,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const collapseName = location.pathname.replace("/", "");
   const isDispatch = useDispatch();
   useEffect(() => {
-    isDispatch(skCompany({ url: "company/getCompany" }));
+    isDispatch(skCompany({ url: `/company/getCompany` }));
   }, []);
   const { Loading, companyData } = useSelector((data) => ({ ...data?.isCompany }));
 
@@ -74,7 +74,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }
 
 
-  console.log(companyData,"companyData")
+  // console.log(companyData,"companyData")
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
@@ -252,7 +252,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
                 e.target.src = require("../../assets/images/bruce-mars.jpg");
               }}
             />
-          )}
+           )}
           <MDBox
             width={!brandName && "100%"}
             sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}

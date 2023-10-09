@@ -35,16 +35,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { handleAlert } from "redux/festures/alertSlice";
 import { updateUser } from "redux/festures/userSlice";
 import { getAllUsers } from "redux/festures/userSlice";
-import SingleUserDetails from "./SingleUserDetails";
+
 // import { getAllGlobalUsers } from "redux/festures/userSlice";
 import MDInput from "components/MDInput";
 import { getSingleUser } from "redux/festures/userSlice";
 import { createNotification } from "redux/festures/userSlice";
-import Form from "./Form";
+//   import Form from "./Form";
 import UpdateForm from "./UpdateForm";
 import { useLocation } from "react-router-dom";
+import Createform from "./Createform";
+import SingleUserDetails from "Pages/Users/SingleUserDetails";
 const columns = {
-  allUsers: [
+  sub: [
     { Header: "S.No", accessor: "no" },
     { Header: "user details", accessor: "user details", width: "20%" },
     { Header: "mobile/email", accessor: "mobile/email", width: "20%" },
@@ -53,31 +55,14 @@ const columns = {
     // { Header: "total orders", accessor: "total orders" },
     // { Header: "User Type", accessor: "User Type" },
     // { Header: "Permission", accessor: "Permission" },
-    
+
     { Header: "block/unblock", accessor: "block/unblock" },
     // { Header: "send Notification", accessor: "send Notification" },
     { Header: "view", accessor: "view", textAlign: "center" },
-    // { Header: "action", accessor: "action" },
-   
-  ],
-  CUSTOMER: [
-    { Header: "S.No", accessor: "no" },
-    { Header: "user details", accessor: "user details", width: "20%" },
-    { Header: "mobile/email", accessor: "mobile/email", width: "20%" },
-    // { Header: "MemberShips", accessor: "MemberShips", width: "20%" },
-    // { Header: "payment method ", accessor: "payment method" },
-    // { Header: "total orders", accessor: "total orders" },
-    // { Header: "User Type", accessor: "User Type" },
-    // { Header: "Permission", accessor: "Permission" },
-    
-    { Header: "block/unblock", accessor: "block/unblock" },
-    { Header: "send Notification", accessor: "send Notification" },
-    { Header: "view", accessor: "view", textAlign: "center" },
-    // { Header: "action", accessor: "action" },
-   
+    { Header: "action", accessor: "action" },
   ],
 };
-const Users = () => {
+const SubAdmin = () => {
   const { pathname } = useLocation();
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
@@ -104,13 +89,13 @@ const Users = () => {
   // console.log(AllUsers, isPages, "Allusers");
   // console.log(rowsData, "rowsData");
   // console.log(singleUsers, "singleUsers");
-  // useEffect(() => {
-  //   // if (pathname === "/users/admins") setUserType("ADMIN");
-  //   if (pathname === "/users/subadmins") setUserType("SUB_ADMIN");
-  //   else setUserType("CUSTOMER");
+  //   useEffect(() => {
+  //     // if (pathname === "/users/admins") setUserType("ADMIN");
+  //     if (pathname === "/users/subadmins") setUserType("SUB_ADMIN");
+  //     else setUserType("CUSTOMER");
 
-  //   setPagess(1);
-  // }, [pathname]);
+  //     setPagess(1);
+  //   }, [pathname]);
 
   // const handleSwitchUpdate = (items) => {
   //   dispatch(
@@ -375,173 +360,129 @@ const Users = () => {
   //   });
   // };
 
-
   // useEffect(() => {
-  //   dispatch(getAllUsers(`/getAllUser/${admin}?page=${pagess}&${isFilterName}=${isSearch}`));
+  //   dispatch(getAllUsers(`/getAllSubadmin/${admin}?page=${pagess}&${isFilterName}=${isSearch}`));
   // }, [isSearch, isSwitch, pagess, AllUsers]);
   useEffect(() => {
-  
-
-   
-      dispatch(
-        getAllUsers(
-          `/getAllUser/${admin}?page=${pagess}${
-            isSearch !== "" ? `&${isFilterName}=${isSearch}` : ""
-          }`
-        ))
-     
-      .then((data) => {
-        // console.log("hwl", data);
-        if (data?.payload?.data && data?.payload?.data?.length > 0) {
-          const temprows =
-            data?.payload?.data &&
-            data?.payload?.data?.length > 0 &&
-            data?.payload?.data?.map((value, index) => ({
-            
-              no: (
-                <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
-                  {index + 1}
-                  {console.log(value?.fullName,"value")}
-                </MDTypography>
-              ),
-              "user details": (
+    dispatch(getAllUsers(`/getAllSubadmin/${admin}`)).then((data) => {
+      // console.log("hwl", data);
+      if (data?.payload?.data && data?.payload?.data?.length > 0) {
+        const temprows =
+          data?.payload?.data &&
+          data?.payload?.data?.length > 0 &&
+          data?.payload?.data?.map((value, index) => ({
+            no: (
+              <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+                {index + 1}
+                {/* {console.log(value, "value")} */}
+              </MDTypography>
+            ),
+            "user details": (
+              <MDBox
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "flex-start",
+                  justifyContent: "flex-start",
+                  gap: 1,
+                }}
+              >
+                <MDBox sx={{ height: 40, width: 40 }}>
+                  {/* {console.log(value,"dfghjkdfgh")} */}
+                  <img
+                    src={`${process.env.REACT_APP_URI}/${value?.image}`}
+                    alt={"img"}
+                    onError={(e) => {
+                      (e.onError = null),
+                        (e.target.src = require("../../assets/images/bg-profile.jpeg"));
+                    }}
+                    style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+                  />
+                </MDBox>
                 <MDBox
                   sx={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "flex-start",
                     justifyContent: "flex-start",
-                    gap: 1,
+                    flexDirection: "column",
                   }}
                 >
-                  <MDBox sx={{ height: 40, width: 40 }}>
-                    {/* {console.log(value,"dfghjkdfgh")} */}
-                    <img
-                      src={`${process.env.REACT_APP_URI}/${value?.image}`}
-                      alt={"img"}
-                      onError={(e) => {
-                        (e.onError = null),
-                          (e.target.src = require("../../assets/images/bg-profile.jpeg"));
-                      }}
-                      style={{ width: "100%", height: "100%", borderRadius: "50%" }}
-                    />
-                  </MDBox>
-                  <MDBox
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "flex-start",
-                      justifyContent: "flex-start",
-                      flexDirection: "column",
+                  <MDTypography
+                    sx={{ fontSize: 12, fontWeight: "medium" }}
+                    variant="text"
+                    style={{
+                      maxWidth: "350px",
+                      lineHeight: "20px",
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 2,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
-                    <MDTypography
-                      sx={{ fontSize: 12, fontWeight: "medium" }}
-                      variant="text"
-                      style={{
-                        maxWidth: "350px",
-                        lineHeight: "20px",
-                        display: "-webkit-box",
-                        WebkitBoxOrient: "vertical",
-                        WebkitLineClamp: 2,
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                      }}
-                    >
-                      Name: {value?.fullName || null}
-                    </MDTypography>
-                    <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
-                      UserId: {value?._id || "N/A"}
-                    </MDTypography>
-                  </MDBox>
+                    Name: {value?.fullName || null}
+                  </MDTypography>
+                  <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+                    UserId: {value?._id || "N/A"}
+                  </MDTypography>
                 </MDBox>
-              ),
-              
-              "User Type": (
-                <MDBadge
-                  badgeContent={value?.userType|| "N/A"}
-                  color={
-                    (value?.userType?.at(0)=== "USER" && "primary") ||
-                    (value?.userType?.at(0) === "ADMIN" && "info") ||
-                    (value?.userType?.at(0) === "SUB_ADMIN" && "warning") ||
-                    (value?.userType?.at(0) === "SUB_ADMIN" && "warning") ||
-                    (value?.userType?.at(0) === "PARTNER" && "primary")
-                  }
-                  variant="gradient"
-                  size="lg"
-                />
-              ),
-              Permission: (
-                <MDBadge
-                  badgeContent={value?.permissions || "N/A"}
-                  color={
-                    (value?.role === "USER" && "primary") || (value?.role === "ADMIN" && "info")
-                  }
-                  variant="gradient"
-                  size="lg"
-                />
-              ),
-              "mobile/email": (
-                <>
-                  {value?.email && (
-                    <MDTypography
-                      display="block"
-                      variant="button"
-                      fontWeight="medium"
-                      fontSize={12}
-                      ml={1}
-                      lineHeight={2}
-                    >
-                      Email: {value?.email}
-                    </MDTypography>
-                  )}
+              </MDBox>
+            ),
 
-                  {value?.phoneNumber && (
-                    <MDTypography
-                      display="block"
-                      variant="button"
-                      fontWeight="medium"
-                      ml={1}
-                      fontSize={12}
-                      lineHeight={1}
-                    >
-                      Mobile No : {value?.phoneNumber}{" "}
-                    </MDTypography>
-                  )}
-                </>
-              ),
-              MemberShips: (
-                <>
+            "User Type": (
+              <MDBadge
+                badgeContent={value?.userType || "N/A"}
+                color={
+                  (value?.userType?.at(0) === "USER" && "primary") ||
+                  (value?.userType?.at(0) === "ADMIN" && "info") ||
+                  (value?.userType?.at(0) === "SUB_ADMIN" && "warning") ||
+                  (value?.userType?.at(0) === "SUB_ADMIN" && "warning") ||
+                  (value?.userType?.at(0) === "PARTNER" && "primary")
+                }
+                variant="gradient"
+                size="lg"
+              />
+            ),
+            Permission: (
+              <MDBadge
+                badgeContent={value?.permissions || "N/A"}
+                color={(value?.role === "USER" && "primary") || (value?.role === "ADMIN" && "info")}
+                variant="gradient"
+                size="lg"
+              />
+            ),
+            "mobile/email": (
+              <>
+                {value?.email && (
+                  <MDTypography
+                    display="block"
+                    variant="button"
+                    fontWeight="medium"
+                    fontSize={12}
+                    ml={1}
+                    lineHeight={2}
+                  >
+                    Email: {value?.email}
+                  </MDTypography>
+                )}
+
+                {value?.phoneNumber && (
                   <MDTypography
                     display="block"
                     variant="button"
                     fontWeight="medium"
                     ml={1}
+                    fontSize={12}
                     lineHeight={1}
                   >
-                    {value?.membership?.features.length > 0 ? (
-                      <>Features: {value?.membership?.features}</>
-                    ) : (
-                      "-"
-                    )}
+                    Mobile No : {value?.phoneNumber}{" "}
                   </MDTypography>
-
-                  <MDTypography
-                    display="block"
-                    variant="button"
-                    fontWeight="medium"
-                    ml={1}
-                    lineHeight={1}
-                  >
-                    {value?.membership?.membershipId ? (
-                      <>MemberShip Id : {value?.membership?.membershipId}</>
-                    ) : (
-                      "-"
-                    )}
-                  </MDTypography>
-                </>
-              ),
-              id: (
+                )}
+              </>
+            ),
+            MemberShips: (
+              <>
                 <MDTypography
                   display="block"
                   variant="button"
@@ -549,100 +490,149 @@ const Users = () => {
                   ml={1}
                   lineHeight={1}
                 >
-                  {value?._id || "N/A"}
+                  {value?.membership?.features.length > 0 ? (
+                    <>Features: {value?.membership?.features}</>
+                  ) : (
+                    "-"
+                  )}
                 </MDTypography>
-              ),
 
-              
-              view: (
-                <>
-                  {/* <IconButton
-                    aria-label="msg send"
-                    onClick={() => {
-                      setIsNotificationOn(true);
-                      setIsSingleUser(true);
-                      dispatch(getSingleUser(`getUserById/${value?._id}`));
-                    }}
-                  >
-                    <NotificationAdd
-                      sx={({ palette: { dark, white, info } }) => ({
-                        color: darkMode ? info.main : dark.main,
-                      })}
-                    />
-                  </IconButton> */}
-                  <IconButton
-                    aria-label="action_edit"
-                    onClick={() => {
-                      setIsUserDetails(true);
-                      setViewUserId(value);
-                    }}
-                  >
-                    <Visibility
-                      sx={({ palette: { dark, white, info } }) => ({
-                        color: darkMode ? info.main : dark.main,
-                      })}
-                    />
-                  </IconButton>
-                </>
-              ),
-              "block/unblock": (
-                <Switch
-                  value={value?.disable}
-                  checked={value?.disable}
-                  color={"info"}
-                  onChange={(e) => {
-                    handleSwitchUpdate(value?._id);
-                    setIsSwitch(!isSwitch);
-                  }}
-                  inputProps={{ "aria-label": "controlled" }}
-                />
-              ),
+                <MDTypography
+                  display="block"
+                  variant="button"
+                  fontWeight="medium"
+                  ml={1}
+                  lineHeight={1}
+                >
+                  {value?.membership?.membershipId ? (
+                    <>MemberShip Id : {value?.membership?.membershipId}</>
+                  ) : (
+                    "-"
+                  )}
+                </MDTypography>
+              </>
+            ),
+            id: (
+              <MDTypography
+                display="block"
+                variant="button"
+                fontWeight="medium"
+                ml={1}
+                lineHeight={1}
+              >
+                {value?._id || "N/A"}
+              </MDTypography>
+            ),
 
-              
-              "send Notification": (
-                <>
-                  <IconButton
-                    aria-label="msg send"
-                    onClick={() => {
-                      setIsNotificationOn(true);
-                      setIsSingleUser(true);
-                      dispatch(getSingleUser(`getUserById/${value?._id}`));
-                    }}
-                  >
-                    <NotificationAdd
-                      sx={({ palette: { dark, white, info } }) => ({
-                        color: darkMode ? info.main : dark.main,
-                      })}
-                    />
-                  </IconButton>
-                </>
-              ),
-            
-             
-              action: (
+            view: (
+              <>
+                {/* <IconButton
+                      aria-label="msg send"
+                      onClick={() => {
+                        setIsNotificationOn(true);
+                        setIsSingleUser(true);
+                        dispatch(getSingleUser(`getUserById/${value?._id}`));
+                      }}
+                    >
+                      <NotificationAdd
+                        sx={({ palette: { dark, white, info } }) => ({
+                          color: darkMode ? info.main : dark.main,
+                        })}
+                      />
+                    </IconButton> */}
                 <IconButton
                   aria-label="action_edit"
                   onClick={() => {
-                    setUpdate(true);
-                    setUpdateData(value);
+                    setIsUserDetails(true);
+                    setViewUserId(value);
                   }}
                 >
-                  <Edit
+                  <Visibility
                     sx={({ palette: { dark, white, info } }) => ({
                       color: darkMode ? info.main : dark.main,
                     })}
                   />
                 </IconButton>
-              ),
-            }));
-          // console.log(userType,"userType");
-          // console.log(temprows);
-          setRowsData(temprows);
-        } else {
-          setRowsData([]);
-        }
-      });
-  
+              </>
+            ),
+            "block/unblock": (
+
+
+                
+              <Switch
+                value={value?.disable}
+                checked={value?.disable}
+                color={"info"}
+             
+
+                onChange={(e) => {
+                  // handleSwitchControl(value?._id);
+                  // setIsSwitch(!isSwitch);
+                  setIsSwitch(!isSwitch);
+                  dispatch(
+                    updateUser({
+                      url: `${process.env.REACT_APP_API}disableUser/${value?._id}/${admin}`,
+                    })
+                  ).then((data) => {
+                    dispatch(
+                      handleAlert({
+                        isOpen: true,
+                        type: `${data?.payload?.success ? "success" : "error"}`,
+                        msg: data?.payload?.message,
+                      })
+                    );
+                    if (data?.payload?.success) {
+                        dispatch(getAllUsers(`/getAllSubadmin/${admin}`))
+                    }
+                  });
+                }}
+                inputProps={{ "aria-label": "controlled" }}
+              />
+            ),
+
+            "send Notification": (
+              <>
+                <IconButton
+                  aria-label="msg send"
+                  onClick={() => {
+                    setIsNotificationOn(true);
+                    setIsSingleUser(true);
+                    dispatch(getSingleUser(`getUserById/${value?._id}`));
+                  }}
+                >
+                  <NotificationAdd
+                    sx={({ palette: { dark, white, info } }) => ({
+                      color: darkMode ? info.main : dark.main,
+                    })}
+                  />
+                </IconButton>
+              </>
+            ),
+
+            action: (
+              <IconButton
+                aria-label="action_edit"
+                onClick={() => {
+                  setUpdate(true);
+                  setUpdateData(value);
+                }}
+              >
+                <Edit
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: darkMode ? info.main : dark.main,
+                  })}
+                />
+              </IconButton>
+            ),
+          }));
+        // console.log(userType,"userType");
+        // console.log(temprows);
+        setRowsData(temprows);
+      } else {
+        setRowsData([]);
+      }
+    });
+    // }
   }, [pagess, isSearch, userType, isFilterName, update, isOpen]);
 
   const [isFormData, setIsFormData] = useState({
@@ -729,54 +719,55 @@ const Users = () => {
               <MDTypography variant="h6" color="white">
                 User &apos;s Table{" "}
               </MDTypography>
-              {userType === "ADMIN" || userType === "SUB_ADMIN" ? (
-                <MDBox sx={{display:"flex" ,gap:'2%'}}>
-                  <MDButton
-                    variant="gradient"
-                    color="dark"
-                    disabled={Loading}
-                    sx={({ palette: { dark, white, info } }) => ({
+              {/* {userType === "ADMIN" || userType === "SUB_ADMIN" ? ( */}
+              <MDBox sx={{ display: "flex", gap: "2%" }}>
+                <MDButton
+                  variant="gradient"
+                  color="dark"
+                  disabled={Loading}
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: white.main,
+                    backgroundColor: dark.main,
+                    "&:hover": {
                       color: white.main,
                       backgroundColor: dark.main,
-                      "&:hover": {
-                        color: white.main,
-                        backgroundColor: dark.main,
-                      },
-                    })}
-                    onClick={() => {
-                      // setIsNotificationOn(true);
-                      setIsOpen(true);
-                      setIsSingleUser(false);
-                    }}
-                  >
-                    <People />
-                    &nbsp; Create Admin And SubAdmin
-                  </MDButton>
-                 
-                </MDBox>
-              ) :  <MDButton
-              variant="gradient"
-              color="dark"
-              disabled={Loading}
-              sx={({ palette: { dark, white, info } }) => ({
-                color: white.main,
-                backgroundColor: dark.main,
-                "&:hover": {
-                  color: white.main,
-                  backgroundColor: dark.main,
-                },
-              })}
-              onClick={() => {
-                setIsNotificationOn(true);
-                // setIsOpen(true);
-                // setIsSingleUser(false);
-              }}
-            >
-              <NotificationAdd />
-              &nbsp; Send to all User Notification
-            </MDButton>}
+                    },
+                  })}
+                  onClick={() => {
+                    // setIsNotificationOn(true);
+                    setIsOpen(true);
+                    setIsSingleUser(false);
+                  }}
+                >
+                  <People />
+                  &nbsp; Create Admin And SubAdmin
+                </MDButton>
+              </MDBox>
+              {/* ) : (
+                <MDButton
+                  variant="gradient"
+                  color="dark"
+                  disabled={Loading}
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: white.main,
+                    backgroundColor: dark.main,
+                    "&:hover": {
+                      color: white.main,
+                      backgroundColor: dark.main,
+                    },
+                  })}
+                  onClick={() => {
+                    setIsNotificationOn(true);
+                    // setIsOpen(true);
+                    // setIsSingleUser(false);
+                  }}
+                >
+                  <NotificationAdd />
+                  &nbsp; Send to all User Notification
+                </MDButton>
+              )} */}
             </MDBox>
-            <MDBox
+            {/* <MDBox
               px={3}
               sx={{
                 display: "flex",
@@ -883,13 +874,7 @@ const Users = () => {
                   </Select>
                 )}
               </MDBox>
-
-
-              
-
-
-
-            </MDBox>
+            </MDBox> */}
             <MDBox py={3}>
               {Loading ? (
                 <SkLoading />
@@ -897,10 +882,8 @@ const Users = () => {
                 <>
                   <DataTable
                     table={{
-                      columns:
-                        userType === "CUSTOMER"
-                          ? columns.CUSTOMER?.toSpliced(columns.allUsers?.length - 1, 1)
-                          : columns.allUsers,
+                      columns: columns?.sub,
+
                       rows: rowsData,
                     }}
                     isSorted={false}
@@ -969,7 +952,7 @@ const Users = () => {
         padding={3}
         overflowY={true}
       >
-        <Form setIsOpen={setIsOpen} userType={userType} />
+        <Createform setIsOpen={setIsOpen} userType={userType} />
       </SkModal>
       <SkModal
         show={update}
@@ -1128,4 +1111,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default SubAdmin;

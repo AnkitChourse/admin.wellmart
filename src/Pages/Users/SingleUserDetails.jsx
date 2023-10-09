@@ -18,7 +18,7 @@ const SingleUserDetails = ({ viewUserId, setViewProductModal }) => {
   //   dispatch(getSingleUser(`getUserById/${viewUserId}`));
   // }, [viewUserId]);
 
-  // console.log(singleUsers, "singleUsers");
+  console.log(viewUserId, "singleUsers");
   return isLoading ? (
     <SkLoading />
   ) : (

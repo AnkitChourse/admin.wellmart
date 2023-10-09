@@ -61,7 +61,7 @@ const Brands = () => {
   const [isOpenDialog, setIsOpenDialog] = useState({ open: false, isId: null });
 
   useEffect(() => {
-    dispatch(getBrands(`${process.env.REACT_APP_API}/getAllBrand`));
+    dispatch(getBrands(`${process.env.REACT_APP_API}getAllBrand`));
   }, []);
 
   useEffect(() => {
@@ -151,7 +151,7 @@ const Brands = () => {
                 // setIsSwitch(!isSwitch);
                 dispatch(
                   updateBrands({
-                    url: `${process.env.REACT_APP_API}/disableBrand/${value?._id}/${admin}`,
+                    url: `${process.env.REACT_APP_API}disableBrand/${value?._id}/${admin}`,
                   })
                 ).then((data) => {
                   dispatch(

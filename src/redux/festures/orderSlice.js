@@ -128,7 +128,7 @@ const orderSlice = createSlice({
       })
       .addCase(getAllOrders.fulfilled, (state, action) => {
         state.Loading = false;
-        state.AllOrders = action.payload?.data;
+        state.AllOrders = action.payload?.filterData;
         state.isPages = action.payload?.page;
       })
       .addCase(getGlobalOrders.fulfilled, (state, action) => {

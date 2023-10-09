@@ -38,7 +38,7 @@ import { getAllCoupons } from "redux/festures/couponsSlice";
 import { updateCoupons } from "redux/festures/couponsSlice";
 import SkDatePicker from "components/SkDataPicker";
 import axios from "axios";
-import { getAllGlobalUsers } from "redux/festures/userSlice";
+// import { getAllGlobalUsers } from "redux/festures/userSlice";
 import { createAdmin } from "redux/festures/userSlice";
 import { Stack } from "immutable";
 import { updateAdmin } from "redux/festures/userSlice";
@@ -101,7 +101,7 @@ const UpdateForm = ({ setUpdate, update, updateData, userType }) => {
     // console.log(...formData)
     dispatch(
       updateAdmin({
-        url: `${process.env.REACT_APP_APII}/updateUser/${updateData?._id}`,
+        url: `${process.env.REACT_APP_API}/updateUser/${updateData?._id}`,
         data: formData,
       })
     ).then((data) => {
@@ -121,7 +121,7 @@ const UpdateForm = ({ setUpdate, update, updateData, userType }) => {
           ...prev,
           permissions: "",
         }));
-        dispatch(getAllGlobalUsers(`/getAllUser/${admin}`));
+        // dispatch(getAllGlobalUsers(`/getAllUser/${admin}`));
       } else {
         dispatch(
           handleAlert({
@@ -321,15 +321,15 @@ const UpdateForm = ({ setUpdate, update, updateData, userType }) => {
                 { name: "COMPANY", _id: "COMMPANY" },
                 { name: "NONE", _id: "NONE" },
               ]}
-              state={userData?.permissions}
-              label="Permissions"
-              setState={(selectedPermissions) => {
-                setUserData((prevUserData) => ({
-                  ...prevUserData,
-                  // permissions: selectedPermissions 
-                  permissions: selectedPermissions && selectedPermissions?.length ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" || selectedPermissions[selectedPermissions?.length - 1] === "NONE" ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" ? ["ALL"] : ["NONE"] : selectedPermissions?.includes("ALL") ? [...selectedPermissions].toSpliced(selectedPermissions?.indexOf("ALL"), 1) : selectedPermissions?.includes("NONE") ? selectedPermissions.toSpliced(selectedPermissions?.indexOf("NONE"), 1) : selectedPermissions : [],
-                }));
-              }}
+              // state={userData?.permissions}
+              // label="Permissions"
+              // setState={(selectedPermissions) => {
+              //   setUserData((prevUserData) => ({
+              //     ...prevUserData,
+              //     // permissions: selectedPermissions 
+              //     permissions: selectedPermissions && selectedPermissions?.length ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" || selectedPermissions[selectedPermissions?.length - 1] === "NONE" ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" ? ["ALL"] : ["NONE"] : selectedPermissions?.includes("ALL") ? [...selectedPermissions].toSpliced(selectedPermissions?.indexOf("ALL"), 1) : selectedPermissions?.includes("NONE") ? selectedPermissions.toSpliced(selectedPermissions?.indexOf("NONE"), 1) : selectedPermissions : [],
+              //   }));
+              // }}
               name="Permissions"
               disabled={createUpdateLoading}
               simpleArray={true}

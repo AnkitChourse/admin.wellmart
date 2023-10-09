@@ -59,14 +59,10 @@ const SingleOrderDetails = ({
   const dispatch = useDispatch();
   const { singleOrders, IsLoading } = useSelector((state) => ({ ...state.isOrders }));
   // console.log(viewOrderId, "vieworderId");
-  // console.log(singleOrders, "singleOrder");
+  console.log(singleOrders, "singleOrder");
   useEffect(() => {
     dispatch(
-      getSingleOrders(
-        ecom
-          ? `/eCommerce/getByOrderId/${viewOrderId}/${admin}`
-          : `/getOrderByOrderId/${viewOrderId}/${admin}`
-      )
+      getSingleOrders(`${process.env.REACT_APP_API}/getOrderByOrderId/${viewOrderId}/${admin}`)
     );
   }, [viewOrderId]);
 
@@ -83,7 +79,6 @@ const SingleOrderDetails = ({
 
   // console.log(singleOrders,"singleOrders")
 
-  
   const isStatusUpdateFunction = (isStatus) => {
     const status = { status: isStatus };
     // console.log(isOrderDetails, "isOrderDetails");
@@ -900,25 +895,21 @@ const SingleOrderDetails = ({
                 borderRadius: "5px",
               }}
             >
-              {singleOrders?.orderDetails?.status}
+              {singleOrders?.product?.at(0)?.status}
             </span>
           </MDTypography>
 
-          <Tooltip title={singleOrders?.orderDetails?.status || "N/A"}>
+          <Tooltip title={singleOrders?.product?.at(0)?.status || "N/A"}>
             <IconButton
               aria-controls="notification-menu"
               disabled={
-                ecom
-                  ? singleOrders?.orderDetails?.status === "PENDING" ||
-                    singleOrders?.orderDetails?.status === "CANCELLED" ||
-                    singleOrders?.orderDetails?.status === "DELIVERED" ||
-                    singleOrders?.orderDetails?.status === "RETURN_REQUEST" ||
-                    singleOrders?.orderDetails?.status === "RETURN_REQUEST_APPROVED" ||
-                    singleOrders?.orderDetails?.status === "MULTI_STATUS" ||
-                    singleOrders?.orderDetails?.status === "RETURNED"
-                  : singleOrders?.orderDetails?.status === "PENDING" ||
-                    singleOrders?.orderDetails?.status === "CANCELLED" ||
-                    singleOrders?.orderDetails?.status === "WORKING"
+                singleOrders?.product?.at(0)?.status === "PENDING" ||
+                singleOrders?.product?.at(0)?.status === "CANCELLED" ||
+                singleOrders?.product?.at(0)?.status === "DELIVERED" ||
+                singleOrders?.product?.at(0)?.status === "RETURN_REQUEST" ||
+                singleOrders?.product?.at(0)?.status === "RETURN_REQUEST_APPROVED" ||
+                singleOrders?.product?.at(0)?.status === "MULTI_STATUS" ||
+                singleOrders?.product?.at(0)?.status === "RETURNED"
               }
               aria-haspopup="true"
               component="a"
@@ -1052,7 +1043,7 @@ const SingleOrderDetails = ({
                     <MDBox width="100%" height="100%">
                       <img
                         style={{ width: "80%", height: "100%", p: 1, objectFit: "contain" }}
-                        src={`${process.env.REACT_APP_URI}/${value?.productId?.thumnail}`}
+                        src={`${process.env.REACT_APP_URI}/${value?.productId?.thumbnail}`}
                         onError={(e) => {
                           (e.onError = null),
                             (e.target.src = require("../../assets/images/bg-profile.jpeg"));
@@ -1090,7 +1081,7 @@ const SingleOrderDetails = ({
                           maxWidth: "100%",
                         }}
                       >
-                        {value?.productId?.title || "N/A"}{" "}
+                        {value?.productId?.name || "N/A"}{" "}
                       </MDTypography>
                     </MDBox>
                     <MDBox
@@ -1263,7 +1254,7 @@ const SingleOrderDetails = ({
                       </MDBox>
                     )}
 
-                    {ecom ? (
+                    {!ecom ? (
                       <MDBox
                         sx={({ palette: { dark, white, info }, breakpoints }) => ({
                           display: "flex",
