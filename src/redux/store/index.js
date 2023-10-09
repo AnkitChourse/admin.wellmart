@@ -24,19 +24,19 @@ import membershipSlice from "redux/festures/membershipSlice";
 import taxSlice from "redux/festures/taxSlice";
 import homeBannerSlice from "redux/festures/homeBannerSlice";
 import appBannerSlice from "redux/festures/appBannerSlice";
-import homeCategoryCartSlice from "redux/festures/homeCategoryCart"
-import eHomeCategoryCartSlice from "redux/festures/eHomeCategoryCart"
+import homeCategoryCartSlice from "redux/festures/homeCategoryCart";
+import eHomeCategoryCartSlice from "redux/festures/eHomeCategoryCart";
 import eHomeBannerSlice from "redux/festures/eHomeBannerSlice";
 import eHomeProduct from "redux/festures/eHomeProduct";
 import homeProduct from "redux/festures/homeProduct";
-
+import PermissionsSlice from "redux/festures/PermissionsSlice";
 
 export default configureStore(
   {
     reducer: {
       admin: adminSlice,
       isAlert: alertSlice,
-  
+      isPermition: PermissionsSlice,
       isCategory: categorySlice,
       isProducts: productSlice,
       isBrand: brandSlice,
@@ -56,15 +56,15 @@ export default configureStore(
       isNotification: notificationSlice,
       isReview: reviewSlice,
       isCity: citySlice,
-      isMembership :membershipSlice,
-      isTax :taxSlice,
-      isHomeBanner:homeBannerSlice,
-      isEHomeBanner:eHomeBannerSlice,
-      isAppBanner:appBannerSlice,
-      isHomeCategoryCart:homeCategoryCartSlice,
-      isEHomeCategoryCart:eHomeCategoryCartSlice,
-      isEHomeProduct:eHomeProduct,
-      isHomeProduct:homeProduct,
+      isMembership: membershipSlice,
+      isTax: taxSlice,
+      isHomeBanner: homeBannerSlice,
+      isEHomeBanner: eHomeBannerSlice,
+      isAppBanner: appBannerSlice,
+      isHomeCategoryCart: homeCategoryCartSlice,
+      isEHomeCategoryCart: eHomeCategoryCartSlice,
+      isEHomeProduct: eHomeProduct,
+      isHomeProduct: homeProduct,
     },
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

@@ -241,6 +241,7 @@ const filterByPaymentMethod = [
   },
 ];
 
+
 const Orders = () => {
   // const location = useLocation();
   // const { state } = location;
@@ -281,7 +282,7 @@ const Orders = () => {
     }
   }, [isNewOrderId, isModalStatus]);
 
-  // console.log(AllOrders, "Allorders");
+  console.log(AllOrders, "Allorders");
 
   // console.log(viewOrderId, "viewOrderId");
   // console.log(viewProductModal, "viewProductModal");
@@ -292,6 +293,7 @@ const Orders = () => {
     status: 0,
     price: 0,
     paymentMethod: 0,
+    others:0,
     search: "",
   });
   const [isOrderDetails, setIsOrderDetails] = useState(null);
@@ -799,107 +801,104 @@ const Orders = () => {
   };
   useEffect(() => {
     dispatch(
-      getAllOrders(
-        ecom
-          ? `/eCommerce/filterOrderByDate/${admin}?${
-              filter?.filter ? `filter=${encodeURIComponent(filter?.filter)}` : ""
-            }${filter?.price ? `&price=${encodeURIComponent(filter?.price)}` : ""}${
-              filter?.paymentMethod
-                ? `&paymentMethod=${encodeURIComponent(filter?.paymentMethod)}`
-                : ""
-            }${filter?.status ? `&status=${encodeURIComponent(filter?.status)}` : ""}${
-              filter?.search ? `&search=${encodeURIComponent(filter?.search)}` : ""
-            }&page=${encodeURIComponent(pagess)}`
-          : `/filterOrderByDate/${admin}?${
-              filter?.filter ? `filter=${encodeURIComponent(filter?.filter)}` : ""
-            }${filter?.price ? `&price=${encodeURIComponent(filter?.price)}` : ""}${
-              filter?.paymentMethod
-                ? `&paymentMethod=${encodeURIComponent(filter?.paymentMethod)}`
-                : ""
-            }${filter?.status ? `&status=${encodeURIComponent(filter?.status)}` : ""}${
-              filter?.search ? `&search=${encodeURIComponent(filter?.search)}` : ""
-            }&page=${encodeURIComponent(pagess)}`
-      )
+      getAllOrders()
+      // `${process.env.REACT_APP_API}order/filterOrder`
+      // `${process.env.REACT_APP_API}getAllBrand`
+      // ecom
+      //   ? `/eCommerce/filterOrderByDate/${admin}?${
+      //       filter?.filter ? `filter=${encodeURIComponent(filter?.filter)}` : ""
+      //     }${filter?.price ? `&price=${encodeURIComponent(filter?.price)}` : ""}${
+      //       filter?.paymentMethod
+      //         ? `&paymentMethod=${encodeURIComponent(filter?.paymentMethod)}`
+      //         : ""
+      //     }${filter?.status ? `&status=${encodeURIComponent(filter?.status)}` : ""}${
+      //       filter?.search ? `&search=${encodeURIComponent(filter?.search)}` : ""
+      //     }&page=${encodeURIComponent(pagess)}`
+      //   : `/filterOrderByDate/${admin}?${
+      //       filter?.filter ? `filter=${encodeURIComponent(filter?.filter)}` : ""
+      //     }${filter?.price ? `&price=${encodeURIComponent(filter?.price)}` : ""}${
+      //       filter?.paymentMethod
+      //         ? `&paymentMethod=${encodeURIComponent(filter?.paymentMethod)}`
+      //         : ""
+      //     }${filter?.status ? `&status=${encodeURIComponent(filter?.status)}` : ""}${
+      //       filter?.search ? `&search=${encodeURIComponent(filter?.search)}` : ""
+      //     }&page=${encodeURIComponent(pagess)}`
     ).then((data) => {
       // console.log("hwl", data);
       if (data.payload.success) {
         const temprows =
-          data.payload?.data &&
-          data.payload?.data?.at(0) &&
-          data.payload?.data?.map((value, index) => {
-            return ecom
-              ? {
-                  no: (
-                    <MDTypography
-                      sx={{ fontSize: 12, fontWeight: "medium", width: 10 }}
-                      variant="text"
-                    >
-                      {index + 1}
-                    </MDTypography>
-                  ),
-                  update: (
-                    <>
-                      <Tooltip title={value?.status || "N/A"}>
-                        <IconButton
-                          aria-controls="notification-menu"
-                          disabled={
-                            value?.status === "PENDING" ||
-                            value?.status === "CANCELLED" ||
-                            value?.status === "DELIVERED" ||
-                            value?.status === "RETURN_REQUEST" ||
-                            value?.status === "RETURN_REQUEST_APPROVED" ||
-                            value?.status === "MULTI_STATUS" ||
-                            value?.status === "RETURNED"
-                          }
-                          aria-haspopup="true"
-                          component="a"
-                          target="_blank"
-                          rel="noreferrer"
-                          variant="gradient"
-                          color="info"
-                          size="small"
-                          circular
-                          onClick={(e) => {
-                            handleOpenMenu({ event: e });
-                            setIsOrderDetails(value);
-                          }}
-                        >
-                          <MDBadge
-                            badgeContent="Update Status"
-                            color="primary"
-                            variant="gradient"
-                            size="lg"
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </>
-                  ),
-                  "order details": (
-                    <MDBox
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-
-                        justifyContent: "flex-start",
+          data.payload?.filterData &&
+          data.payload?.filterData?.at(0) &&
+          data.payload?.filterData?.map((value, index) => {
+            return {
+              no: (
+                <MDTypography sx={{ fontSize: 12, fontWeight: "medium", width: 10 }} variant="text">
+                  {index + 1}
+                </MDTypography>
+              ),
+              update: (
+                <>
+                  <Tooltip title={value?.status || "N/A"}>
+                    <IconButton
+                      aria-controls="notification-menu"
+                      disabled={
+                        value?.status === "PENDING" ||
+                        value?.status === "CANCELLED" ||
+                        value?.status === "DELIVERED" ||
+                        value?.status === "RETURN_REQUEST" ||
+                        value?.status === "RETURN_REQUEST_APPROVED" ||
+                        value?.status === "MULTI_STATUS" ||
+                        value?.status === "RETURNED"
+                      }
+                      aria-haspopup="true"
+                      component="a"
+                      target="_blank"
+                      rel="noreferrer"
+                      variant="gradient"
+                      color="info"
+                      size="small"
+                      circular
+                      onClick={(e) => {
+                        handleOpenMenu({ event: e });
+                        setIsOrderDetails(value);
                       }}
                     >
-                      <MDTypography
-                        sx={{ fontSize: 12, fontWeight: "medium" }}
-                        variant="text"
-                        style={{
-                          maxWidth: "300px",
-                          lineHeight: "20px",
-                          display: "-webkit-box",
-                          WebkitBoxOrient: "vertical",
-                          WebkitLineClamp: 2,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        Name: {value?.customerId?.fullName || "-"}
-                      </MDTypography>
-                      {/* <MDTypography
+                      <MDBadge
+                        badgeContent="Update Status"
+                        color="primary"
+                        variant="gradient"
+                        size="lg"
+                      />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              ),
+              "order details": (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <MDTypography
+                    sx={{ fontSize: 12, fontWeight: "medium" }}
+                    variant="text"
+                    style={{
+                      maxWidth: "300px",
+                      lineHeight: "20px",
+                      display: "-webkit-box",
+                      WebkitBoxOrient: "vertical",
+                      WebkitLineClamp: 2,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    Name: {value?.customerId?.fullName || "-"}
+                  </MDTypography>
+                  {/* <MDTypography
                     sx={{ fontSize: 12, fontWeight: "medium" }}
                     variant="text"
                     style={{
@@ -915,298 +914,338 @@ const Orders = () => {
                     Email: {value?.address?.email || "N/A"}
                   </MDTypography> */}
 
-                      <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
-                        OrderId: {value?._id || "N/A"}
-                      </MDTypography>
-                      {/* {console.log(isFindStatus(value), "isFindStatus(value)")} */}
-                    </MDBox>
-                  ),
-                  "order status": (
-                    <MDBadge
-                      badgeContent={value?.status ? mapStatusByName[value?.status] : "-"}
-                      color={
-                        (value?.status === "DELIVERED" && "success") ||
-                        (value?.status === "CANCELLED" && "error") ||
-                        (value?.status === "OUT_OF_DELIVERY" && "info") ||
-                        (value?.status === "RETURNED" && "error") ||
-                        (value?.status === "RETURN_REQUEST" && "warning") ||
-                        (value?.status === "RETURN_REQUEST_APPROVED" && "info") ||
-                        (value?.status === "ACCEPTED" && "success") ||
-                        (value?.status === "PENDING" && "warning") ||
-                        (value?.status === "ORDERED" && "primary") ||
-                        (value?.status === "ONTHEWAY" && "info") ||
-                        (value?.status === "WORKING" && "secondary") ||
-                        (value?.status === "COMPLETED" && "success") ||
-                        (value?.status === "SHIPPED" && "secondary") ||
-                        (value?.status === "MULTI_STATUS" && "warning")
-                      }
-                      variant="gradient"
-                      size="lg"
-                    />
-                  ),
-                  "payment method": (
-                    <MDBox
-                      sx={{
-                        display: "flex",
-                        // flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        // gap: 1,
-                      }}
-                    >
-                      {(value?.paymentMethod === "COD" && (
-                        <MDBadge badgeContent="COD" color="success" variant="gradient" size="lg" />
-                      )) ||
-                        (value?.paymentMethod === "ONLINE" && (
-                          <MDBadge
-                            badgeContent="ONLINE"
-                            color="primary"
-                            variant="gradient"
-                            size="lg"
-                          />
-                        )) || (
-                          <MDBadge
-                            badgeContent={value?.paymentMethod || "N/A"}
-                            color="error"
-                            variant="gradient"
-                            size="lg"
-                          />
-                        )}
-                    </MDBox>
-                  ),
-                  "order total": value?.orderTotal ? SkPrice(value?.orderTotal) : "-",
-                  //   < MDBadge
-                  //     badgeContent={ value?.orderTotal }
-                  //     color="secondary"
-                  //     variant="gradient"
-                  //     size="lg"
-                  // />
-                  view: (
-                    <IconButton
-                      aria-label="action_edit"
-                      onClick={() => {
-                        setViewProductModal(true);
-                        setViewOrderId(value?._id);
-                      }}
-                    >
-                      <Visibility
-                        sx={({ palette: { dark, white, info } }) => ({
-                          color: darkMode ? info.main : dark.main,
-                        })}
+                  <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+                    OrderId: {value?._id || "N/A"}
+                  </MDTypography>
+                  {/* {console.log(isFindStatus(value), "isFindStatus(value)")} */}
+                </MDBox>
+              ),
+              "order status": (
+                <MDBadge
+                  badgeContent={value?.status ? mapStatusByName[value?.status] : "-"}
+                  color={
+                    (value?.status === "DELIVERED" && "success") ||
+                    (value?.status === "CANCELLED" && "error") ||
+                    (value?.status === "OUT_OF_DELIVERY" && "info") ||
+                    (value?.status === "RETURNED" && "error") ||
+                    (value?.status === "RETURN_REQUEST" && "warning") ||
+                    (value?.status === "RETURN_REQUEST_APPROVED" && "info") ||
+                    (value?.status === "ACCEPTED" && "success") ||
+                    (value?.status === "PENDING" && "warning") ||
+                    (value?.status === "ORDERED" && "primary") ||
+                    (value?.status === "ONTHEWAY" && "info") ||
+                    (value?.status === "WORKING" && "secondary") ||
+                    (value?.status === "COMPLETED" && "success") ||
+                    (value?.status === "SHIPPED" && "secondary") ||
+                    (value?.status === "MULTI_STATUS" && "warning")
+                  }
+                  variant="gradient"
+                  size="lg"
+                />
+              ),
+              "payment method": (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    // flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    // gap: 1,
+                  }}
+                >
+                  {(value?.paymentMethod === "COD" && (
+                    <MDBadge badgeContent="COD" color="success" variant="gradient" size="lg" />
+                  )) ||
+                    (value?.paymentMethod === "ONLINE" && (
+                      <MDBadge badgeContent="ONLINE" color="primary" variant="gradient" size="lg" />
+                    )) || (
+                      <MDBadge
+                        badgeContent={value?.paymentMethod || "N/A"}
+                        color="error"
+                        variant="gradient"
+                        size="lg"
                       />
-                    </IconButton>
-                  ),
-                  //   visibility: (
-                  //     <Switch
-                  //       value={value?.visibility}
-                  //       checked={value?.visibility}
-                  //       color={"info"}
-                  //       onChange={(e) => handleChangeSwitch(value?._id)}
-                  //       inputProps={{ "aria-label": "controlled" }}
-                  //     />
-                  //   ),
-                  "place Order": (
-                    <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
-                      {formattedDateServer(new Date(value?.createdAt)) || "N/A"}
-                    </MDTypography>
-                  ),
-                }
-              : {
-                  no: (
-                    <MDTypography
-                      sx={{ fontSize: 12, fontWeight: "medium", width: 10 }}
-                      variant="text"
-                    >
-                      {index + 1}
-                    </MDTypography>
-                  ),
-                  update: (
-                    <>
-                      <Tooltip title={value?.status || "N/A"}>
-                        <IconButton
-                          aria-controls="notification-menu"
-                          disabled={
-                            value?.status === "PENDING" ||
-                            value?.status === "CANCELLED" ||
-                            value?.status === "WORKING"
-                          }
-                          aria-haspopup="true"
-                          component="a"
-                          target="_blank"
-                          rel="noreferrer"
-                          variant="gradient"
-                          color="info"
-                          size="small"
-                          circular
-                          onClick={(e) => {
-                            handleOpenMenu({ event: e });
-                            setIsOrderDetails(value);
-                          }}
-                        >
-                          <MDBadge
-                            badgeContent="Update Status"
-                            color="primary"
-                            variant="gradient"
-                            size="lg"
-                          />
-                        </IconButton>
-                      </Tooltip>
-                    </>
-                  ),
-                  "order details": (
-                    <MDBox
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-
-                        justifyContent: "flex-start",
-                      }}
-                    >
-                      <MDTypography
-                        sx={{ fontSize: 12, fontWeight: "medium" }}
-                        variant="text"
-                        style={{
-                          maxWidth: "300px",
-                          lineHeight: "20px",
-                          display: "-webkit-box",
-                          WebkitBoxOrient: "vertical",
-                          WebkitLineClamp: 2,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
-                        Name: {value?.customerId?.fullName || "-"}
-                      </MDTypography>
-                      {/* <MDTypography
-                    sx={{ fontSize: 12, fontWeight: "medium" }}
-                    variant="text"
-                    style={{
-                      maxWidth: "300px",
-                      lineHeight: "20px",
-                      display: "-webkit-box",
-                      WebkitBoxOrient: "vertical",
-                      WebkitLineClamp: 2,
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                    }}
-                  >
-                    Email: {value?.address?.email || "N/A"}
-                  </MDTypography> */}
-
-                      <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
-                        OrderId: {value?._id || "N/A"}
-                      </MDTypography>
-                      {/* {console.log(isFindStatus(value), "isFindStatus(value)")} */}
-                    </MDBox>
-                  ),
-                  "order status": (
-                    <MDBadge
-                      badgeContent={value?.status ? mapStatusByName[value?.status] : "-"}
-                      color={
-                        (value?.status === "DELIVERED" && "success") ||
-                        (value?.status === "CANCELLED" && "error") ||
-                        (value?.status === "OUT_OF_DELIVERY" && "info") ||
-                        (value?.status === "RETURNED" && "error") ||
-                        (value?.status === "RETURN_REQUEST" && "warning") ||
-                        (value?.status === "RETURN_REQUEST_APPROVED" && "info") ||
-                        (value?.status === "ACCEPTED" && "success") ||
-                        (value?.status === "PENDING" && "warning") ||
-                        (value?.status === "ORDERED" && "primary") ||
-                        (value?.status === "ONTHEWAY" && "info") ||
-                        (value?.status === "WORKING" && "secondary") ||
-                        (value?.status === "COMPLETED" && "success") ||
-                        (value?.status === "SHIPPED" && "secondary") ||
-                        (value?.status === "MULTI_STATUS" && "warning")
-                      }
-                      variant="gradient"
-                      size="lg"
-                    />
-                  ),
-                  "payment method": (
-                    <MDBox
-                      sx={{
-                        display: "flex",
-                        // flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        // gap: 1,
-                      }}
-                    >
-                      {(value?.paymentMethod === "COD" && (
-                        <MDBadge badgeContent="COD" color="success" variant="gradient" size="lg" />
-                      )) ||
-                        (value?.paymentMethod === "ONLINE" && (
-                          <MDBadge
-                            badgeContent="ONLINE"
-                            color="primary"
-                            variant="gradient"
-                            size="lg"
-                          />
-                        )) || (
-                          <MDBadge badgeContent="N/A" color="error" variant="gradient" size="lg" />
-                        )}
-                    </MDBox>
-                  ),
-                  "order total": value?.orderTotal ? SkPrice(value?.orderTotal) : "-",
-                  //   < MDBadge
-                  //     badgeContent={ value?.orderTotal }
-                  //     color="secondary"
-                  //     variant="gradient"
-                  //     size="lg"
-                  // />
-                  view: (
-                    <IconButton
-                      aria-label="action_edit"
-                      onClick={() => {
-                        setViewProductModal(true);
-                        setViewOrderId(value?._id);
-                      }}
-                    >
-                      <Visibility
-                        sx={({ palette: { dark, white, info } }) => ({
-                          color: darkMode ? info.main : dark.main,
-                        })}
-                      />
-                    </IconButton>
-                  ),
-                  //   visibility: (
-                  //     <Switch
-                  //       value={value?.visibility}
-                  //       checked={value?.visibility}
-                  //       color={"info"}
-                  //       onChange={(e) => handleChangeSwitch(value?._id)}
-                  //       inputProps={{ "aria-label": "controlled" }}
-                  //     />
-                  //   ),
-                  "place Order": (
-                    <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
-                      {formattedDateServer(new Date(value?.createdAt)) || "N/A"}
-                    </MDTypography>
-                  ),
-                  assignPartner: (
-                    <IconButton
-                      aria-label="action_edit"
-                      onClick={() => {
-                        setAssignPartnerModal(true);
-                        setViewOrderId(value?._id);
-                      }}
-                    >
-                      <PersonAdd
-                        sx={({ palette: { dark, white, info } }) => ({
-                          color: darkMode ? info.main : dark.main,
-                        })}
-                      />
-                    </IconButton>
-                  ),
-                };
+                    )}
+                </MDBox>
+              ),
+              "order total": value?.orderTotal ? SkPrice(value?.orderTotal) : "-",
+              //   < MDBadge
+              //     badgeContent={ value?.orderTotal }
+              //     color="secondary"
+              //     variant="gradient"
+              //     size="lg"
+              // />
+              view: (
+                <IconButton
+                  aria-label="action_edit"
+                  onClick={() => {
+                    setViewProductModal(true);
+                    setViewOrderId(value?._id);
+                  }}
+                >
+                  <Visibility
+                    sx={({ palette: { dark, white, info } }) => ({
+                      color: darkMode ? info.main : dark.main,
+                    })}
+                  />
+                </IconButton>
+              ),
+              //   visibility: (
+              //     <Switch
+              //       value={value?.visibility}
+              //       checked={value?.visibility}
+              //       color={"info"}
+              //       onChange={(e) => handleChangeSwitch(value?._id)}
+              //       inputProps={{ "aria-label": "controlled" }}
+              //     />
+              //   ),
+              "place Order": (
+                <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+                  {formattedDateServer(new Date(value?.createdAt)) || "N/A"}
+                </MDTypography>
+              ),
+            };
           });
         setRowsData(temprows);
       } else {
         setRowsData(["", " "]);
       }
     });
-  }, [ecom, filter, pagess, viewProductModal, assignPartnerModal, createOrderModal]);
+  }, []);
+
+  useEffect(() => {
+    dispatch(getAllOrders(`${process.env.REACT_APP_API}/order/filterOrder`));
+  }, []);
+  useEffect(() => {
+    dispatch(getAllOrders(`${process.env.REACT_APP_API}/order/filterOrder?${
+            filter?.filter ? `filter=${encodeURIComponent(filter?.filter)}` : ""
+          }${filter?.price ? `&price=${encodeURIComponent(filter?.price)}` : ""}${
+            filter?.paymentMethod
+              ? `&paymentMethod=${encodeURIComponent(filter?.paymentMethod)}`
+              : ""
+          }${filter?.status ? `&status=${encodeURIComponent(filter?.status)}` : ""}${
+            filter?.search ? `&search=${encodeURIComponent(filter?.search)}` : ""
+          }&page=${encodeURIComponent(pagess)}`));
+  }, [filter]);
+
+  useEffect(() => {
+    if (AllOrders && AllOrders.length > 0) {
+      const temprows =
+        AllOrders &&
+        AllOrders?.at(0) &&
+        AllOrders?.map((value, index) => ({
+          no: (
+            <MDTypography sx={{ fontSize: 12, fontWeight: "medium", width: 10 }} variant="text">
+              {index + 1}
+            </MDTypography>
+          ),
+          update: (
+            <>
+              <Tooltip title={value?.product.at(0)?.status || "N/A"}>
+                <IconButton
+                  aria-controls="notification-menu"
+                  disabled={
+                    value?.status === "PENDING" ||
+                    value?.status === "CANCELLED" ||
+                    value?.status === "DELIVERED" ||
+                    value?.status === "RETURN_REQUEST" ||
+                    value?.status === "RETURN_REQUEST_APPROVED" ||
+                    value?.status === "MULTI_STATUS" ||
+                    value?.status === "RETURNED"
+                  }
+                  aria-haspopup="true"
+                  component="a"
+                  target="_blank"
+                  rel="noreferrer"
+                  variant="gradient"
+                  color="info"
+                  size="small"
+                  circular
+                  onClick={(e) => {
+                    handleOpenMenu({ event: e });
+                    setIsOrderDetails(value);
+                  }}
+                >
+                  <MDBadge
+                    badgeContent="Update Status"
+                    color="primary"
+                    variant="gradient"
+                    size="lg"
+                  />
+                </IconButton>
+              </Tooltip>
+            </>
+          ),
+          "order details": (
+            <MDBox
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+
+                justifyContent: "flex-start",
+              }}
+            >
+              {/* <MDTypography
+                sx={{ fontSize: 12, fontWeight: "medium" }}
+                variant="text"
+                style={{
+                  maxWidth: "300px",
+                  lineHeight: "20px",
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                Name: {value?.customerId?.fullName || "-"}
+              </MDTypography> */}
+              {/* <MDTypography
+                sx={{ fontSize: 12, fontWeight: "medium" }}
+                variant="text"
+                style={{
+                  maxWidth: "300px",
+                  lineHeight: "20px",
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                Email: {value?.address?.email || "N/A"}
+              </MDTypography> */}
+
+              <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+                OrderId: {value?._id || "N/A"}
+              </MDTypography>
+              {/* {console.log(isFindStatus(value), "isFindStatus(value)")} */}
+            </MDBox>
+          ),
+          "order status": (
+            <MDBadge
+              badgeContent={value?.product.at(0)?.status ? mapStatusByName[value?.product.at(0)?.status] : "-"}
+              color={
+                (value?.status === "DELIVERED" && "success") ||
+                (value?.status === "CANCELLED" && "error") ||
+                (value?.status === "OUT_OF_DELIVERY" && "info") ||
+                (value?.status === "RETURNED" && "error") ||
+                (value?.status === "RETURN_REQUEST" && "warning") ||
+                (value?.status === "RETURN_REQUEST_APPROVED" && "info") ||
+                (value?.status === "ACCEPTED" && "success") ||
+                (value?.status === "PENDING" && "warning") ||
+                (value?.status === "ORDERED" && "primary") ||
+                (value?.status === "ONTHEWAY" && "info") ||
+                (value?.status === "WORKING" && "secondary") ||
+                (value?.status === "COMPLETED" && "success") ||
+                (value?.status === "SHIPPED" && "secondary") ||
+                (value?.status === "MULTI_STATUS" && "warning")
+              }
+              variant="gradient"
+              size="lg"
+            />
+          ),
+          "payment method": (
+            <MDBox
+              sx={{
+                display: "flex",
+                // flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                // gap: 1,
+              }}
+            >
+              {(value?.paymentStatus?.at(0) === "COD" && (
+                <MDBadge badgeContent="COD" color="success" variant="gradient" size="lg" />
+              )) ||
+                (value?.paymentStatus?.at(0) === "ONLINE" && (
+                  <MDBadge badgeContent="ONLINE" color="primary" variant="gradient" size="lg" />
+                )) || (
+                  <MDBadge
+                    badgeContent={value?.paymentMethod || "N/A"}
+                    color="error"
+                    variant="gradient"
+                    size="lg"
+                  />
+                )}
+            </MDBox>
+          ),
+          "order total": (
+            <>
+              <MDTypography
+                sx={{ fontSize: 12, fontWeight: "medium" }}
+                variant="text"
+                style={{
+                  maxWidth: "300px",
+                  lineHeight: "20px",
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                Payable Amount : {value?.totalPrice ? SkPrice(value?.totalPrice) : "-"}
+              </MDTypography>
+              <MDTypography
+                sx={{ fontSize: 12, fontWeight: "medium" }}
+                variant="text"
+                style={{
+                  maxWidth: "300px",
+                  lineHeight: "20px",
+                  display: "-webkit-box",
+                  WebkitBoxOrient: "vertical",
+                  WebkitLineClamp: 2,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                Total Price: {value?.totalPrice ? SkPrice(value?.totalPrice) : "-"}
+              </MDTypography>
+            </>
+          ),
+          //   < MDBadge
+          //     badgeContent={ value?.orderTotal }
+          //     color="secondary"
+          //     variant="gradient"
+          //     size="lg"
+          // />
+          view: (
+            <IconButton
+              aria-label="action_edit"
+              onClick={() => {
+                setViewProductModal(true);
+                setViewOrderId(value?._id);
+              }}
+            >
+              <Visibility
+                sx={({ palette: { dark, white, info } }) => ({
+                  color: darkMode ? info.main : dark.main,
+                })}
+              />
+            </IconButton>
+          ),
+          //   visibility: (
+          //     <Switch
+          //       value={value?.visibility}
+          //       checked={value?.visibility}
+          //       color={"info"}
+          //       onChange={(e) => handleChangeSwitch(value?._id)}
+          //       inputProps={{ "aria-label": "controlled" }}
+          //     />
+          //   ),
+          "place Order": (
+            <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+              {formattedDateServer(new Date(value?.createdAt)) || "N/A"}
+            </MDTypography>
+          ),
+        }));
+      setRowsData(temprows);
+    } else {
+      setRowsData(["", " "]);
+    }
+  }, [AllOrders]);
 
   return (
     <>
@@ -1295,7 +1334,7 @@ const Orders = () => {
               <MDTypography variant="h6" color="white">
                 Order &apos;s Table{" "}
               </MDTypography>
-              {!ecom ? (
+              {ecom ? (
                 <MDButton
                   variant="gradient"
                   color="dark"

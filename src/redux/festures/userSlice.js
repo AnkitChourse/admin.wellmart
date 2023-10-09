@@ -37,14 +37,14 @@ export const getSingleTransaction = createAsyncThunk("getSingleTransaction", asy
     return { data: null };
   }
 });
-export const getAllGlobalUsers = createAsyncThunk("getAllGlobalUsers", async (url) => {
-  try {
-    const res = await http.get(url);
-    return res.data;
-  } catch (error) {
-    return { data: null };
-  }
-});
+// export const getAllGlobalUsers = createAsyncThunk("getAllGlobalUsers", async (url) => {
+//   try {
+//     const res = await http.get(url);
+//     return res.data;
+//   } catch (error) {
+//     return { data: null };
+//   }
+// });
 export const createAdmin = createAsyncThunk("createAdmin", async ({ url, data }) => {
   try {
     const res = await http.post(url, data);
@@ -170,11 +170,11 @@ const usersSlice = createSlice({
         state.AllUsers = action.payload?.data;
         state.isPages = action.payload?.page;
       })
-      .addCase(getAllGlobalUsers.fulfilled, (state, action) => {
-        state.Loading = false;
-        state.AllUsers = action.payload?.data;
-        state.isPages = action.payload?.page;
-      })
+      // .addCase(getAllGlobalUsers.fulfilled, (state, action) => {
+      //   state.Loading = false;
+      //   state.AllUsers = action.payload?.data;
+      //   state.isPages = action.payload?.page;
+      // })
       .addCase(getAllUsers.rejected, (state, action) => {
         state.Loading = false;
       })

@@ -102,7 +102,7 @@ export default function BasicTabs({
 
   const [rowsData, setRowsData] = useState([]);
 
-  const [current, setcurrent] = useState(null);
+  // const [current, setcurrent] = useState(null);
   const [categoryId, setCategoryId] = useState("");
   const [name, setName] = useState("");
   const [filter, setFilter] = useState("");
@@ -111,6 +111,8 @@ export default function BasicTabs({
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
+  const [brandId, setBrandId] = useState("");
+  const [productId, setproductId] = useState("");
 
   //Static Filters
 
@@ -211,24 +213,19 @@ export default function BasicTabs({
     },
   };
 
-
-
   const { category, EcomCategory } = useSelector((data) => ({ ...data?.isCategory }));
-
-
 
   // const handleChange = (event, newValue) => {
   //   setValue(newValue);
   // };
 
-  useEffect(() => {
-    if (pathname === "/products/ecom-products") setcurrent(columns?.ecomm);
-    else setcurrent(columns?.service);
-  }, [pathname]);
+  // useEffect(() => {
+  //   if (pathname === "/products/ecom-products") setcurrent(columns?.ecomm);
+  //   else setcurrent(columns?.service);
+  // }, [pathname]);
 
   useEffect(() => {
     dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
-
   }, []);
 
   // useEffect(() => {
@@ -280,25 +277,21 @@ export default function BasicTabs({
   //     });
   // }, [current?.value]);
 
-
-
   useEffect(() => {
-
     dispatch(
       getAllGlobalProducts(
         `${process.env.REACT_APP_API}productFilter?categoryId=${categoryId || ""}&name=${
           name || ""
-        }&filter=${filter || ""}&price=${price||""}&brandId=&productId&discount=${discount||""}&stock=${
-          stock || ""
-        }&sold=${sold || ""}&rating=${rating || ""}
+        }&filter=${filter || ""}&price=${price || ""}&brandId= ${brandId || ""}&productId=${
+          productId || ""
+        }&discount=${discount || ""}&stock=${stock || ""}&sold=${sold || ""}&rating=${rating || ""}
        `
       )
     );
-
-  }, [isPages, current, isOpen, categoryId, name, filter, rating, sold, stock,price,discount]);
-
+  }, [isPages, isOpen, categoryId, name, filter, rating, sold, stock, price, discount,brandId,productId]);
 
 
+  console.log(AllProducts,"AllProducts")
   useEffect(() => {
     setRowsData(
       AllProducts && AllProducts?.length
@@ -719,7 +712,6 @@ export default function BasicTabs({
                 ),
               }}
               onChange={(e) => setName(e.target.value)}
-          
             />
           </MDBox>
           <Collapse in={filterCollapse} timeout="auto" unmountOnExit sx={{ width: "100%", p: 3 }}>
@@ -753,13 +745,12 @@ export default function BasicTabs({
             >
               <MDBox width="23%" display="flex" flexDirection="column">
                 <MDTypography variant="button">Filter By Duration</MDTypography>
-                {/* <Select
+                <Select
                   disabled={Loading}
                   labelId="demo-select-small-label"
                   id="demo-select-small"
                   value={filter}
                   onChange={(e) => setFilter(e.target.value)}
-                 
                   sx={({ palette: { dark, white, info } }) => ({
                     width: "100%",
                     height: "3rem",
@@ -777,10 +768,9 @@ export default function BasicTabs({
                       {ele?.name}
                     </MenuItem>
                   ))}
-                </Select> */}
+                </Select>
 
-
-                <SimpleSelect
+                {/* <SimpleSelect
                   disabled={Loading}
                   sx={{ margin: "10px" }}
                   data={dateFilter}
@@ -789,7 +779,7 @@ export default function BasicTabs({
                   onChange={(e) => setFilter(e.target.value)}
                   origin="Good Type"
                   required={false}
-                />
+                /> */}
               </MDBox>
               <MDBox width="23%" display="flex" flexDirection="column">
                 <MDTypography variant="button">Filter By Category</MDTypography>
@@ -863,7 +853,6 @@ export default function BasicTabs({
                   ))}
                 </Select>
               </MDBox>
-          
 
               <MDBox width="23%" display="flex" flexDirection="column">
                 <MDTypography variant="button">Sort By Price</MDTypography>
@@ -1004,6 +993,33 @@ export default function BasicTabs({
                   ))}
                 </Select>
               </MDBox>
+
+              <MDBox width="23%" display="flex" flexDirection="column">
+                <MDTypography variant="button">Brand Id </MDTypography>
+
+                <MDInput
+                  disabled={Loading}
+                  placeholder="Brand Id"
+                  type="text"
+                  fullWidth
+                  name="brandId"
+                  value={brandId}
+                  onChange={(e) => setBrandId(e.target.value)}
+                />
+              </MDBox>
+              <MDBox width="23%" display="flex" flexDirection="column">
+                <MDTypography variant="button">Product Id </MDTypography>
+
+                <MDInput
+                  disabled={Loading}
+                  placeholder="product Id"
+                  type="text"
+                  fullWidth
+                  name="productId"
+                  value={productId}
+                  onChange={(e) => setproductId(e.target.value)}
+                />
+              </MDBox>
             </MDBox>
           </Collapse>
         </MDBox>
@@ -1128,10 +1144,10 @@ export default function BasicTabs({
         //   );
         // })
         <>
-          {current && AllProducts && AllProducts.length > 0 ? (
+          {AllProducts && AllProducts.length > 0 ? (
             <DataTable
               table={{
-                columns: current?.col,
+                columns: columns?.col,
                 rows: rowsData || [],
               }}
               isSorted={false}
@@ -1155,7 +1171,7 @@ export default function BasicTabs({
               <MDTypography variant="h6">Something went wrong !</MDTypography>
             </MDBox>
           )}
-          {current?.pagination ? (
+          {/* {current?.pagination ? (
             <MDBox className="center" py={3}>
               {/* <Pagination
                     count={totalPage}
@@ -1164,8 +1180,8 @@ export default function BasicTabs({
                     variant="outlined"
                     color="primary"
                   /> */}
-            </MDBox>
-          ) : null}
+          {/* </MDBox>
+          ) : null}  */}
         </>
       )}
     </Box>

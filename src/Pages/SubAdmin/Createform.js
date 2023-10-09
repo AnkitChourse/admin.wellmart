@@ -9,7 +9,7 @@ import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import SkLoading from "components/SkLoading";
 import MDInput from "components/MDInput";
-import AstrieskIcon from 'components/AstrieskIcon'
+import AstrieskIcon from "components/AstrieskIcon";
 import {
   Card,
   Chip,
@@ -30,7 +30,7 @@ import { getAllBlogs } from "redux/festures/blogSlice";
 import { updateBlog } from "redux/festures/blogSlice";
 import { createPostBlogs } from "redux/festures/blogSlice";
 import { handleAlert } from "redux/festures/alertSlice";
-// import ApnaSelect from "components/ApnaSelect/ApnaSelect";
+import ApnaSelect from "components/ApnaSelect/ApnaSelect";
 // import ApnaSelect2 from "components/ApnaSelect";
 import { getCategory } from "redux/festures/categorySlice";
 import { getAllProducts } from "redux/festures/productSlice";
@@ -43,25 +43,31 @@ import axios from "axios";
 // import { getAllGlobalUsers } from "redux/festures/userSlice";
 import { createAdmin } from "redux/festures/userSlice";
 import { Stack } from "immutable";
+import { getAllUsers } from "redux/festures/userSlice";
+import { getAllPermissions } from "redux/festures/PermissionsSlice";
 
-const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
+// import CreateForm from "Pages/Products/Service Products/CreateForm";
+
+const Createform = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
   const [userData, setUserData] = useState({
     fullName: "",
     email: "",
-    phoneNumber: "",
     password: "",
-    // userType: [],
-    // permissions: [],
+    permissions: {
+      customer: [],
+      subAdmin: [],
+    },
   });
+
   // console.log(userData?.permissions);
   const [isCouponsIcon, setIsCouponsIcon] = useState("");
   const [isShow, setIsShow] = useState("");
   const [isSelection, setIsSelection] = useState("category");
   const [isCategory, setIsCategory] = useState([]);
   const [isProducts, setIsProducts] = useState([]);
-  const [passwordVisibility, setPasswordVisibility] = useState(false)
+  const [passwordVisibility, setPasswordVisibility] = useState(false);
   const admin = localStorage.getItem("admin_id");
   const dispatch = useDispatch();
   const { category } = useSelector((state) => ({
@@ -70,9 +76,17 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
   const { Loading, singleCoupons } = useSelector((data) => ({ ...data?.isCoupons }));
   const { createUpdateLoading } = useSelector((data) => ({ ...data?.isUsers }));
   const { AllProducts } = useSelector((state) => ({ ...state.isProducts }));
-  // useEffect(() => {
-  //   dispatch(getAllGlobalUsers(`/getAllUser/${admin}`));
-  // }, []);
+
+  //   const {  permissions } = useSelector((state) => ({...state?.admin }));
+
+  useEffect(() => {
+    dispatch(getAllUsers(`/getAllSubadmin/${admin}`));
+    dispatch(getAllPermissions(`${process.env.REACT_APP_API}/getAllPermision`));
+  }, []);
+
+  const { permissions } = useSelector((data) => ({ ...data.isPermition }));
+
+
 
   // const allPermissions = [
   //   {
@@ -110,100 +124,49 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
       [name]: value,
     }));
   };
-  
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    if (isOpenUpdate) {
+
+    dispatch(
+      createAdmin({
+        url: `${process.env.REACT_APP_API}/createSubadmin/${admin}`,
+        data: {
+          ...userData,
+        },
+      })
+    ).then((data) => {
       dispatch(
-        updateCoupons({
-          url: `${process.env.REACT_APP_APII}/updateCoupon/${singleCoupons?._id}/${admin}`,
-          data: userData,
+        handleAlert({
+          isOpen: true,
+          type: `${data?.payload?.success ? "success" : "error"}`,
+          msg: data?.payload?.message,
         })
-      ).then((data) => {
-        // console.log(data?.payload);
-        dispatch(
-          handleAlert({
-            isOpen: true,
-            type: `${data?.payload?.success ? "success" : "error"}`,
-            msg: data?.payload?.message,
-          })
-        );
-        if (data?.payload?.success) {
-          setIsOpen(false);
-          // setIsOpenUpdate(false);
-          setIsShow("");
-          setIsProducts([]);
-          setIsCategory([]);
-          setUserData((prev) => ({
-            ...prev,
-            fullName: "",
-            email: "",
-            phoneNumber: "",
-            password: "",
-            userType: "",
-            permissions: "",
-          }));
-          // dispatch(getAllGlobalUsers(`/getAllUser/${admin}`));
-        } else {
-          dispatch(
-            handleAlert({
-              isOpen: true,
-              type: "warning",
-              msg: "all fields is required !",
-            })
-          );
-        }
-      });
-    } else {
-      dispatch(
-        createAdmin({
-          url: `${process.env.REACT_APP_API}/createSubadmin/${admin}`,
-          data: {
-            ...userData,
-            userType
+      );
+      if (data?.payload?.success) {
+        setIsOpen(false);
+        setUserData({
+          fullName: "",
+          email: "",
+          password: "",
+          permissions: {
+            customer: [],
+            subAdmin: [],
           },
-        })
-      ).then((data) => {
-        // console.log(data);
+        });
+        dispatch(getAllUsers(`/getAllSubadmin/${admin}`));
+      } else {
         dispatch(
           handleAlert({
             isOpen: true,
-            type: `${data?.payload?.success ? "success" : "error"}`,
-            msg: data?.payload?.message,
+            type: "warning",
+            msg: "All fields are required!",
           })
         );
-        if (data?.payload?.success) {
-          setIsOpen(false);
-          // setIsOpenUpdate(false);
-          setUserData((prev) => ({
-            ...prev,
-            fullName: "",
-            email: "",
-            phoneNumber: "",
-            password: "",
-            userType: "",
-            permissions: "",
-          }));
-          // dispatch(getAllGlobalUsers(`/getAllUser/${admin}`));
-        } else {
-          dispatch(
-            handleAlert({
-              isOpen: true,
-              type: "warning",
-              msg: "all fields is required !",
-            })
-          );
-        }
-      });
-    }
+      }
+    });
   };
-  // const handleChange = (event) => {
-  //   setUserData((prev) => ({
-  //     ...prev,
-  //     userType: event.target.value,
-  //   }));
-  // };
+
   return Loading ? (
     <SkLoading />
   ) : (
@@ -265,7 +228,9 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               flexDirection: "column",
             }}
           >
-            <MDTypography variant="h6">Full Name <AstrieskIcon/></MDTypography>
+            <MDTypography variant="h6">
+              Full Name <AstrieskIcon />
+            </MDTypography>
             <MDInput
               required={true}
               type="text"
@@ -287,20 +252,21 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               flexDirection: "column",
             }}
           >
-            <MDTypography variant="h6">Email <AstrieskIcon/></MDTypography>
+            <MDTypography variant="h6">
+              Email <AstrieskIcon />
+            </MDTypography>
             <MDInput
               required={true}
               type="email"
               placeholder="Email"
               fullWidth
               name="email"
-             
               disabled={createUpdateLoading}
               value={userData?.email}
               onChange={handleForm}
             />
           </MDBox>
-          <MDBox
+          {/* <MDBox
             lineHeight={1}
             gap={3}
             width={"90%"}
@@ -328,9 +294,9 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               value={userData?.phoneNumber}
               onChange={handleForm}
             />
-          </MDBox>
-          {isOpenUpdate ? (
-            <MDBox
+          </MDBox> */}
+
+          {/* <MDBox
               lineHeight={1}
               gap={3}
               width={"90%"}
@@ -341,7 +307,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               }}
             >
               <MDTypography variant="h6">User Type</MDTypography>
-              {/* <ApnaSelect
+              <ApnaSelect
                 data={[
                   { name: "ADMIN", _id: "ADMIN" },
                   { name: "SUB ADMIN", _id: "SUB_ADMIN" },
@@ -358,9 +324,9 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
                 }
                 name="userType"
                 simpleArray={true}
-              /> */}
-            </MDBox>
-          ) : null}
+              />
+            </MDBox> */}
+
           <MDBox
             lineHeight={1}
             gap={3}
@@ -371,7 +337,72 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               flexDirection: "column",
             }}
           >
-            {/* <MDTypography variant="h6">Permissions <AstrieskIcon/></MDTypography> */}
+            <MDTypography variant="h6">
+              Permissions(customer) <AstrieskIcon />
+            </MDTypography>
+
+            <ApnaSelect
+              multiple
+              // required={true}
+              data={[
+                { name: "DISABLE", _id: "DISABLE" },
+                { name: "UPDATE", _id: "UPDATE" },
+                { name: "VIEWS", _id: "VIEWS" },
+                { name: "NONE", _id: "NONE" },
+              ]}
+              state={userData?.permissions?.customer}
+              label="Permissions"
+              disabled={createUpdateLoading}
+              setState={(selectedPermissions) => {
+                setUserData((prevUserData) => ({
+                  ...prevUserData,
+                  permissions: {
+                    ...prevUserData.permissions,
+                    customer: selectedPermissions,
+                  },
+                }));
+              }}
+              name="customer"
+              simpleArray={true}
+
+              //   state={userData?.permissions}
+              //   label="Permissions"
+              //   disabled={createUpdateLoading}
+              //   setState={(selectedPermissions) => {
+              //     setUserData((prevUserData) => ({
+              //       ...prevUserData,
+              //       permissions:
+              //         selectedPermissions && selectedPermissions?.length
+              //           ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" ||
+              //             selectedPermissions[selectedPermissions?.length - 1] === "NONE"
+              //             ? selectedPermissions[selectedPermissions?.length - 1] === "ALL"
+              //               ? ["ALL"]
+              //               : ["NONE"]
+              //             : selectedPermissions?.includes("ALL")
+              //             ? [...selectedPermissions].toSpliced(selectedPermissions?.indexOf("ALL"), 1)
+              //             : selectedPermissions?.includes("NONE")
+              //             ? selectedPermissions.toSpliced(selectedPermissions?.indexOf("NONE"), 1)
+              //             : selectedPermissions
+              //           : [],
+              //     }));
+              //   }}
+              //   name="Permissions"
+              //   simpleArray={true}
+            />
+          </MDBox>
+          <MDBox
+            lineHeight={1}
+            gap={3}
+            width={"90%"}
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              flexDirection: "column",
+            }}
+          >
+            <MDTypography variant="h6">
+              Permissions(subAdmin) <AstrieskIcon />
+            </MDTypography>
             {/* <Select
               sx={{ height: "3rem" }}
               fullWidth
@@ -451,39 +482,55 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               </MenuItem>
             </Select> */}
 
-            {/* <ApnaSelect
+            <ApnaSelect
               multiple
               // required={true}
               data={[
-                { name: "ALL", _id: "ALL" },
-                { name: "USERS", _id: "USERS" },
-                { name: "ORDER", _id: "ORDER" },
-                { name: "CATERGORY", _id: "CATERGORY" },
-                { name: "PRODUCT", _id: "PRODUCT" },
-                { name: "TAX", _id: "TAX" },
-                { name: "BRAND", _id: "BRAND" },
-                { name: "CITY", _id: "CITY" },
-                { name: "COUPON", _id: "COUPON" },
-                { name: "MEMBERSHIP", _id: "MEMBERSHIP" },
-                { name: "HOME BANNER", _id: "HOME_BANNER" },
-                { name: "HOME CATEGORY", _id: "HOME_CATEGORY" },
-                { name: "HOME PRODUCT", _id: "HOME_PRODUCT" },
-                { name: "APP BANNER", _id: "APP_BANNER" },
-                { name: "COMPANY", _id: "COMMPANY" },
+                { name: "CREATE", _id: "CREATE" },
+                { name: "DISABLE", _id: "DISABLE" },
+                { name: "UPDATE", _id: "UPDATE" },
+                { name: "VIEWS", _id: "VIEWS" },
                 { name: "NONE", _id: "NONE" },
               ]}
-              state={userData?.permissions}
+              state={userData?.permissions?.subAdmin}
               label="Permissions"
               disabled={createUpdateLoading}
               setState={(selectedPermissions) => {
                 setUserData((prevUserData) => ({
                   ...prevUserData,
-                  permissions: selectedPermissions && selectedPermissions?.length ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" || selectedPermissions[selectedPermissions?.length - 1] === "NONE" ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" ? ["ALL"] : ["NONE"] : selectedPermissions?.includes("ALL") ? [...selectedPermissions].toSpliced(selectedPermissions?.indexOf("ALL"), 1) : selectedPermissions?.includes("NONE") ? selectedPermissions.toSpliced(selectedPermissions?.indexOf("NONE"), 1) : selectedPermissions : [],
+                  permissions: {
+                    ...prevUserData.permissions,
+                    subAdmin: selectedPermissions,
+                  },
                 }));
               }}
-              name="Permissions"
+              name="subAdmin"
               simpleArray={true}
-            /> */}
+
+              //   state={userData?.permissions}
+              //   label="Permissions"
+              //   disabled={createUpdateLoading}
+              //   setState={(selectedPermissions) => {
+              //     setUserData((prevUserData) => ({
+              //       ...prevUserData,
+              //       permissions:
+              //         selectedPermissions && selectedPermissions?.length
+              //           ? selectedPermissions[selectedPermissions?.length - 1] === "ALL" ||
+              //             selectedPermissions[selectedPermissions?.length - 1] === "NONE"
+              //             ? selectedPermissions[selectedPermissions?.length - 1] === "ALL"
+              //               ? ["ALL"]
+              //               : ["NONE"]
+              //             : selectedPermissions?.includes("ALL")
+              //             ? [...selectedPermissions].toSpliced(selectedPermissions?.indexOf("ALL"), 1)
+              //             : selectedPermissions?.includes("NONE")
+              //             ? selectedPermissions.toSpliced(selectedPermissions?.indexOf("NONE"), 1)
+              //             : selectedPermissions
+              //           : [],
+              //     }));
+              //   }}
+              //   name="Permissions"
+              //   simpleArray={true}
+            />
           </MDBox>
           <MDBox
             lineHeight={1}
@@ -495,14 +542,28 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
               flexDirection: "column",
             }}
           >
-            <MDTypography variant="h6">Password <AstrieskIcon/></MDTypography>
+            <MDTypography variant="h6">
+              Password <AstrieskIcon />
+            </MDTypography>
             <MDInput
               InputProps={{
-                endAdornment: <InputAdornment position="end">{
-                  passwordVisibility ?
-                    <RemoveRedEye sx={{ cursor: 'pointer' }} onClick={() => setPasswordVisibility(!passwordVisibility)} color="white" />
-                    : <VisibilityOff sx={{ cursor: 'pointer' }} onClick={() => setPasswordVisibility(!passwordVisibility)} color="white" />
-                }</InputAdornment>,
+                endAdornment: (
+                  <InputAdornment position="end">
+                    {passwordVisibility ? (
+                      <RemoveRedEye
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => setPasswordVisibility(!passwordVisibility)}
+                        color="white"
+                      />
+                    ) : (
+                      <VisibilityOff
+                        sx={{ cursor: "pointer" }}
+                        onClick={() => setPasswordVisibility(!passwordVisibility)}
+                        color="white"
+                      />
+                    )}
+                  </InputAdornment>
+                ),
               }}
               required={true}
               type={passwordVisibility ? "text" : "password"}
@@ -523,9 +584,17 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
             }}
           >
             {" "}
-            <MDButton disabled={createUpdateLoading}
-              color={"info"} verdant={"gradient"} type={"submit"}>
-              {createUpdateLoading ? <CircularProgress size={20} color="primary" /> : userType === "ADMIN" ? isOpenUpdate ? `Update Admin` : ` Create Admin` : isOpenUpdate ? `Update Sub Admin` : ` Create Sub Admin`}
+            <MDButton
+              disabled={createUpdateLoading}
+              color={"info"}
+              verdant={"gradient"}
+              type={"submit"}
+            >
+              {createUpdateLoading ? (
+                <CircularProgress size={20} color="primary" />
+              ) : (
+                ` Create Sub Admin`
+              )}
             </MDButton>
           </MDBox>
         </MDBox>
@@ -534,8 +603,8 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, userType }) => {
   );
 };
 
-export default Form;
-Form.propTypes = {
+export default Createform;
+Createform.propTypes = {
   isOpenUpdate: PropTypes.bool.isRequired,
   setIsOpen: PropTypes.any,
   setIsOpenUpdate: PropTypes.any,

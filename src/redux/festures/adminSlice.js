@@ -12,6 +12,11 @@ export const getAdminDetails = createAsyncThunk("getAdminDetails", async (url) =
     return { data: null };
   }
 });
+
+
+
+
+
 export const getDashboardDetails = createAsyncThunk("getDashboardDetails", async (url) => {
   try {
     const res = await http.get(url);
@@ -82,6 +87,7 @@ const adminSlice = createSlice({
     admin: null,
     Loading: false,
     isDashboard: null,
+  
   },
 
   reducers: {},
@@ -121,7 +127,18 @@ const adminSlice = createSlice({
       })
       .addCase(getAdminDetails.rejected, (state, action) => {
         state.Loading = false;
-      });
+      })
+      // .addCase(getAllPermissions.pending, (state, action) => {
+      //   state.Loading = true;
+      // })
+      // .addCase(getAllPermissions.fulfilled, (state, action) => {
+      //   state.Loading = false;
+      //   state.permissions = action.payload?.data;
+      //   console.log(action.payload?.data,"hfhfhffhf")
+      // })
+      // .addCase(getAllPermissions.rejected, (state, action) => {
+      //   state.Loading = false;
+      // });
   },
 });
 export default adminSlice.reducer;

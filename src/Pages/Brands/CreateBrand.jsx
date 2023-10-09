@@ -46,12 +46,12 @@ const CreateBrand = ({ isOpen, isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
       if (isOpenUpdate) {
         const formData = new FormData();
         formData.append("name", isBrandName);
-        formData.append("image", isBrandImage);
+        formData.append("icon", isBrandImage);
         // formData.append("showInHome", isBrandShowHome);
         // console.log(...formData, "akldjhksjdhnsdfg");
         dispatch(
           updateBrands({
-            url: `${process.env.REACT_APP_APII}/updatebrand/${singleBrands?._id}/${admin}`,
+            url: `${process.env.REACT_APP_API}updatebrand/${singleBrands?._id}/${admin}`,
             data: formData,
           })
         ).then((data) => {
@@ -67,17 +67,17 @@ const CreateBrand = ({ isOpen, isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
           setIsBrandName("");
           setIsBrandImage("");
           // setIsBrandShowHome("");
-          dispatch(getBrands(`${process.env.REACT_APP_API}/getAllBrand`));
+          dispatch(getBrands(`${process.env.REACT_APP_API}getAllBrand`));
         });
       } else {
         const formData = new FormData();
         formData.append("name", isBrandName);
-        formData.append("image", isBrandImage);
+        formData.append("icon", isBrandImage);
         // formData.append("showInHome", isBrandShowHome);
         // console.log(...formData, "akldjhksjdhnsdfg");
         dispatch(
           createBrands({
-            url: `${process.env.REACT_APP_API}/createBrand/${admin}`,
+            url: `${process.env.REACT_APP_API}createBrand/${admin}`,
             data: formData,
           })
         ).then((data) => {
@@ -93,7 +93,7 @@ const CreateBrand = ({ isOpen, isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
           setIsBrandName("");
           setIsBrandImage("");
           // setIsBrandShowHome("");
-          dispatch(getBrands(`${process.env.REACT_APP_API}/getAllBrand`));
+          dispatch(getBrands(`${process.env.REACT_APP_API}getAllBrand`));
         });
       }
     } else {

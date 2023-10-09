@@ -66,6 +66,7 @@ import { useLocation } from "react-router-dom";
 import ApnaSelect2 from "components/ApnaSelect";
 import { unlinkImage } from "redux/festures/categorySlice";
 import AstrieskIcon from "components/AstrieskIcon";
+import MDBadge from "components/MDBadge";
 
 const disableFilter = [
   {
@@ -118,7 +119,7 @@ const Category = () => {
   const [isSwitch, setIsSwitch] = useState(false);
   const [isOpenDialog, setIsOpenDialog] = useState({ open: false, isId: null });
   const [filter, setFilter] = useState(0);
-  console.log(viewData);
+  // console.log(viewData);
   // console.log(filter, "filter");
   // useEffect(() => {
   //   dispatch(
@@ -324,7 +325,7 @@ const Category = () => {
   // }, [isId, category]);
 
   useEffect(() => {
-    dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
+    dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategory`));
   }, []);
 
   useEffect(() => {
@@ -575,7 +576,7 @@ const Category = () => {
     // if (profile?.uploadPic && profile?.uploadPic !== "") {
     dispatch(
       creatCategoryData({
-        url: ecom ? `/eCommerce/createCategoryss/${admin}` : `/createCategory/${admin}`,
+        url: `${process.env.REACT_APP_API}createCategory/${admin}`,
         reqBody: formData,
       })
     ).then((data) => {
@@ -586,6 +587,7 @@ const Category = () => {
           msg: data?.payload?.message,
         })
       );
+      dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategory`));
       if (data?.payload?.success) {
         setProfile({
           categoryName: "",
@@ -599,13 +601,14 @@ const Category = () => {
           serverBannerImage: null,
         });
         setFile();
+        
         dispatch(
           getGlobalCategory(
             ecom
               ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
                   filter === false ? false : filter || ""
                 }`
-              : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
+              : `${process.env.REACT_APP_API}getAllCategory?disable=${filter === false ? false : filter || ""}`
           )
         );
         setIsOpen(false);
@@ -651,6 +654,7 @@ const Category = () => {
           msg: data?.payload?.message,
         })
       );
+      dispatch(getCategory(`${process.env.REACT_APP_API}`));
       if (data?.payload?.success) {
         setProfile({
           categoryName: "",
@@ -670,7 +674,7 @@ const Category = () => {
               ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
                   filter === false ? false : filter || ""
                 }`
-              : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
+              : `${process.env.REACT_APP_API}getAllCategory?disable=${filter === false ? false : filter || ""}`
           )
         );
         setIsOpen(false);
@@ -707,9 +711,7 @@ const Category = () => {
     // ) {
     dispatch(
       updateCategory({
-        url: ecom
-          ? `/eCommerce/updateCategory/${profile?.categoryId}/${admin}`
-          : `/updateCategory/${profile?.categoryId}/${admin}`,
+        url: `${process.env.REACT_APP_API}updateCategory/${profile?.categoryId}/${admin}`,
         data: formData,
       })
     ).then((data) => {
@@ -720,6 +722,7 @@ const Category = () => {
           msg: data?.payload?.message,
         })
       );
+      dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategory`));
       if (data?.payload?.success) {
         setProfile({
           categoryName: "",
@@ -840,7 +843,7 @@ const Category = () => {
   };
 
   const handleUpdateSubCategory = (value) => {
-    // dispatch(getSubGlobalCategory(`/getAllCategoryByPCategoryId/${value}`)).then((data) =>
+    // dispatch(getSubGlobalCategory(`/ByPCategoryId/${value}`)).then((data) =>
     //   console.log(data)
     // );
     setIsOpenUpdate2(true);
@@ -914,9 +917,7 @@ const Category = () => {
   const handleBinSwitch = (value) => {
     dispatch(
       updateCategory({
-        url: ecom
-          ? `${process.env.REACT_APP_APII}/eCommerce/disableCategory/${value}/${admin}`
-          : `${process.env.REACT_APP_APII}/disableCategory/${value}/${admin}`,
+        url:`${process.env.REACT_APP_API}disableCategory/${value}/${admin}`,
       })
     ).then((data) => {
       dispatch(
@@ -973,7 +974,7 @@ const Category = () => {
                 <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                 &nbsp; Create Category
               </MDButton>
-              <MDButton
+              {/* <MDButton
                 disabled={Loading}
                 variant="gradient"
                 sx={({ palette: { dark, white, info } }) => ({
@@ -990,7 +991,7 @@ const Category = () => {
               >
                 <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                 &nbsp; Create subCategory
-              </MDButton>
+              </MDButton> */}
             </MDBox>{" "}
           </Card>
         </MDBox>
@@ -1011,7 +1012,7 @@ const Category = () => {
               </MDTypography>
             </MDBox>
 
-            <MDBox py={3}>
+            <MDBox py={3} display="flex" justifyContent="flex-end">
               <MDBox width="23%" display="flex" flexDirection="column" padding="2%">
                 <MDTypography variant="button">Filter By Visibility</MDTypography>
                 <Select
@@ -1490,6 +1491,44 @@ const Category = () => {
                   },
                 })}
               >
+                <MDTypography variant="h6">Show in Home :</MDTypography>
+                <MDTypography
+                  variant="h6"
+                  sx={{
+                    overflow: "hidden",
+                    whiteSpace: "wrap",
+                    textOverflow: "ellipsis",
+                    maxWidth: "70%",
+                  }}
+                >
+                    {viewData?.showInHome ? (
+                  <MDBadge badgeContent="Yes" color="success" variant="gradient" size="lg" />
+                ) : (
+                  <MDBadge badgeContent="No" color="error" variant="gradient" size="lg" />
+                )}
+                </MDTypography>
+              </MDBox>
+              {/* <MDBox
+                sx={({ palette: { dark, white, info }, breakpoints }) => ({
+                  display: "flex",
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
+                  width: "100%",
+                  gap: 3,
+                  [breakpoints.up("xs")]: {
+                    px: 1,
+                  },
+                  [breakpoints.up("sm")]: {
+                    px: 1,
+                  },
+                  [breakpoints.up("md")]: {
+                    px: 6,
+                  },
+                  [breakpoints.up("lg")]: {
+                    px: 6,
+                  },
+                })}
+              >
                 <MDTypography variant="h6">Cities :</MDTypography>
                 {viewData?.cityId && viewData?.cityId?.length ? (
                   <MDTypography
@@ -1506,7 +1545,7 @@ const Category = () => {
                 ) : (
                   "-"
                 )}
-              </MDBox>
+              </MDBox> */}
             </MDBox>
             {viewData?.banner && viewData?.banner?.length
               ? viewData?.banner?.map((ele, i) => (
@@ -1660,7 +1699,7 @@ const Category = () => {
               //
             />
           </MDBox>
-          <MDBox
+          {/* <MDBox
             display="flex"
             alignItems="flex-start"
             flexDirection="column"
@@ -1688,7 +1727,7 @@ const Category = () => {
               }}
               //
             />
-          </MDBox>
+          </MDBox> */}
           {/* <MDBox
             display="flex"
             alignItems="flex-start"
@@ -1952,7 +1991,7 @@ const Category = () => {
               //
             />
           </MDBox>
-          <MDBox
+          {/* <MDBox
             display="flex"
             alignItems="flex-start"
             flexDirection="column"
@@ -1980,7 +2019,7 @@ const Category = () => {
               }}
               //
             />
-          </MDBox>
+          </MDBox> */}
           {/* <MDBox
             display="flex"
             alignItems="flex-start"
@@ -2207,7 +2246,7 @@ const Category = () => {
               </div>
             )}
           </MDBox>
-          <MDBox
+          {/* <MDBox
             display="flex"
             alignItems="flex-start"
             flexDirection="column"
@@ -2296,7 +2335,7 @@ const Category = () => {
                 ))}
               </div>
             ) : null}
-          </MDBox>
+          </MDBox> */}
           {/* <MDBox
             display="flex"
             alignItems="flex-start"
