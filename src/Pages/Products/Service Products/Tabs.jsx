@@ -111,7 +111,7 @@ export default function BasicTabs({
   const [stock, setStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [brandId, setBrandId] = useState("");
+  const [brandId, setBrandId] = useState(null);
   const [productId, setproductId] = useState("");
 
   //Static Filters
@@ -188,10 +188,10 @@ export default function BasicTabs({
   ];
 
   const columns = {
-    service: {
-      name: "Service Products",
-      value: "service",
-      pagination: true,
+    // service: {
+    //   name: "Service Products",
+    //   value: "service",
+    //   pagination: true,
       col: [
         { Header: "S.No", accessor: "no" },
         { Header: "Thumbnail", accessor: "thumbnail" },
@@ -210,7 +210,7 @@ export default function BasicTabs({
         { Header: "View", accessor: "view" },
         { Header: "Action", accessor: "action" },
       ],
-    },
+    // },
   };
 
   const { category, EcomCategory } = useSelector((data) => ({ ...data?.isCategory }));
@@ -224,9 +224,9 @@ export default function BasicTabs({
   //   else setcurrent(columns?.service);
   // }, [pathname]);
 
-  useEffect(() => {
-    dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
+  // }, []);
 
   // useEffect(() => {
   //   if (current?.value === "service") {
@@ -282,16 +282,28 @@ export default function BasicTabs({
       getAllGlobalProducts(
         `${process.env.REACT_APP_API}productFilter?categoryId=${categoryId || ""}&name=${
           name || ""
-        }&filter=${filter || ""}&price=${price || ""}&brandId= ${brandId || ""}&productId=${
+        }&filter=${filter || ""}&price=${price || ""}&brandId=${brandId || ""}&productId=${
           productId || ""
         }&discount=${discount || ""}&stock=${stock || ""}&sold=${sold || ""}&rating=${rating || ""}
        `
       )
     );
-  }, [isPages, isOpen, categoryId, name, filter, rating, sold, stock, price, discount,brandId,productId]);
+  }, [
+    isPages,
+    isOpen,
+    categoryId,
+    name,
+    filter,
+    rating,
+    sold,
+    stock,
+    price,
+    discount,
+    brandId,
+    productId,
+  ]);
 
-
-  console.log(AllProducts,"AllProducts")
+  console.log(AllProducts, "AllProducts");
   useEffect(() => {
     setRowsData(
       AllProducts && AllProducts?.length
@@ -406,10 +418,12 @@ export default function BasicTabs({
                 ml={1}
                 lineHeight={1}
               >
-                {value?.mrp.toLocaleString("en-US", {
+                {/* {value?.mrp.toLocaleString("en-US", {
                   style: "currency",
                   currency: "INR",
-                }) || "-"}
+                }) || "-"} */}
+                {value?.mrp
+                 || "-"}₹
               </MDTypography>
             ),
             category: (
@@ -511,7 +525,7 @@ export default function BasicTabs({
                       );
                       if (data?.payload?.success) {
                         dispatch(
-                          getAllGlobalProducts(`${process.env.REACT_APP_API}/getAllProduct`)
+                          getAllGlobalProducts(`${process.env.REACT_APP_API}productFilter`)
                         );
                       }
                     });

@@ -109,6 +109,7 @@ const Category = () => {
   // console.log(category, "category");
 
   const [rowsData, setRowsData] = useState([]);
+  const [rowssubData, setRowssubData] = useState([]);
   const [isId, setIsId] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
@@ -152,7 +153,7 @@ const Category = () => {
   //     )
   //   );
   //   dispatch(getAllCity(`/getAllCityByAdmin/${admin}`));
-  //   // dispatch(getCategory(`/getAllCategory`));
+  //   // dispatch(getCategory(`/`));
   // }, [ecom]);
 
   // useEffect(() => {
@@ -303,7 +304,7 @@ const Category = () => {
   //                   //         msg: data.payload.message,
   //                   //       })
   //                   //     );
-  //                   //     // dispatch(getSubGlobalCategory(`/getAllCategoryByPCategoryId/${value?._id}`));
+  //                   //     // dispatch(getSubGlobalCategory(`/ByPCategoryId/${value?._id}`));
   //                   //     setIsId(value?._id);
   //                 }}
   //               >
@@ -325,15 +326,177 @@ const Category = () => {
   // }, [isId, category]);
 
   useEffect(() => {
-    dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategory`));
+    dispatch(getCategory(`${process.env.REACT_APP_API}/WithPcategory/${admin}`));
   }, []);
+
+
+  console.log(category,"category")
 
   useEffect(() => {
     if (category && category?.length > 0) {
       const temprows =
         category &&
-        category?.at(0) &&
-        category?.map((value, index) => ({
+        category?.at(0)?.subCategory &&
+        category?.at(0)?.subCategory?.map((value, index) => ({
+        
+          no: (
+            <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
+              {index + 1}
+            </MDTypography>
+          ),
+          name: (
+            <MDTypography
+              display="block"
+              variant="button"
+              fontWeight="medium"
+              ml={1}
+              lineHeight={1}
+              // wordBreak=" break-all"
+              style={{
+                maxWidth: "250px",
+                lineHeight: "20px",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: 2,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {value?.name}
+              {console.log(value?.name,"value?.name")}
+            </MDTypography>
+          ),
+          image: (
+            <MDBox sx={{ height: 40, width: 40 }}>
+              <img
+                src={`${process.env.REACT_APP_URI}/${value?.icon}`}
+                alt={"img"}
+                onError={(e) => {
+                  (e.onError = null),
+                    (e.target.src = require("../../assets/images/bg-profile.jpeg"));
+                }}
+                style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+              />
+            </MDBox>
+          ),
+          view: (
+            <IconButton
+              aria-label="action_edit"
+              onClick={() => {
+                setViewData(value);
+                setIsOpenView(true);
+              }}
+            >
+              <Visibility
+                sx={({ palette: { dark, white, info } }) => ({
+                  color: darkMode ? info.main : dark.main,
+                })}
+              />
+            </IconButton>
+          ),
+
+          // disable: (
+          //   <Switch
+          //     value={value?.disable}
+          //     checked={value?.disable}
+          //     color={"info"}
+          //     onChange={(e) => handleChangeSwitch(value?._id)}
+          //     // onChange={() => log("showInHome")console.}
+          //     inputProps={{ "aria-label": "controlled" }}
+          //   />
+          // ),
+
+          delete: (
+            <Tooltip title={value?.disable ? "move to Active" : "delete"}>
+              <IconButton
+                aria-label="action_edit"
+                // disabled={value?.disable}
+                onClick={() => {
+                  handleBinSwitch(value?._id);
+                }}
+              >
+                {value?.disable ? (
+                  <Input
+                    sx={({ palette: { dark, white, info } }) => ({
+                      color: darkMode ? info.main : dark.main,
+                    })}
+                  />
+                ) : (
+                  <Delete
+                    sx={({ palette: { dark, white, info } }) => ({
+                      color: darkMode ? info.main : dark.main,
+                    })}
+                  />
+                )}
+              </IconButton>
+            </Tooltip>
+          ),
+          action: (
+            <MDBox
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                flexDirection: { sx: "column", xs: "column", md: "row", xl: "row" },
+                alignItems: "center",
+                gap: 2,
+              }}
+            >
+              <IconButton aria-label="action-edit" onClick={() => handleUpdateSubCategory(value)}>
+                <Edit
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: darkMode ? white.main : info.main,
+                  })}
+                />
+              </IconButton>
+              {/* <IconButton
+              aria-label="action-delete"
+              onClick={() => {
+                setIsOpenDialog((Preview) => ({
+                  ...Preview,
+                  open: true,
+                  isId: value?._id,
+                }));
+                // dispatch(
+                //   deleteCategory({
+                //     url: `${process.env.REACT_APP_API}/deleteCategory/${value?._id}/${admin}`,
+                //   })
+                // ).then((data) => {
+                //   // console.log(data, "data");
+                //   if (data.payload.success) {
+                //     dispatch(
+                //       handleAlert({
+                //         isOpen: true,
+                //         type: `${data.payload.success ? "success" : "error"}`,
+                //         msg: data.payload.message,
+                //       })
+                //     );
+                //     // dispatch(getSubGlobalCategory(`/getAllCategoryByPCategoryId/${value?._id}`));
+                //     setIsId(value?._id);
+              }}
+            >
+              <Delete
+                sx={({ palette: { dark, white, info } }) => ({
+                  color: darkMode ? white.main : info.main,
+                })}
+              />
+            </IconButton> */}
+            </MDBox>
+          ),
+        }));
+      setRowsData(temprows);
+    } else {
+      setRowsData([]);
+    }
+  }, [category]);
+
+  console.log(category?.at(0)?.subCategory,"category?.subCategory")
+
+  useEffect(() => {
+    if (category && category?.length > 0) {
+      const temprows =
+      category?.at(0)?.subCategory &&
+      category?.at(0)?.subCategory &&
+      category?.at(0)?.subCategory.map((value, index) => ({
           no: (
             <MDTypography sx={{ fontSize: 12, fontWeight: "medium" }} variant="text">
               {index + 1}
@@ -464,7 +627,7 @@ const Category = () => {
                 //         msg: data.payload.message,
                 //       })
                 //     );
-                //     // dispatch(getSubGlobalCategory(`/getAllCategoryByPCategoryId/${value?._id}`));
+                //     // dispatch(getSubGlobalCategory(`/ByPCategoryId/${value?._id}`));
                 //     setIsId(value?._id);
               }}
             >
@@ -477,17 +640,18 @@ const Category = () => {
             </MDBox>
           ),
         }));
-      setRowsData(temprows);
+        setRowssubData(temprows);
     } else {
-      setRowsData([]);
+      setRowssubData([]);
     }
-  }, [category]);
+  }, [category?.at(0)?.subCategory]);
 
   // useEffect(() => {
+  //   console.log(category?.subCategory,"category?.subCategory")
   //   const temprows =
-  //     subCategory &&
-  //     subCategory?.at(0) &&
-  //     subCategory.map((value, index) => ({
+  //   category?.subCategory &&
+  //   category?.subCategory &&
+  //   category?.subCategory.map((value, index) => ({
   //       name: (
   //         <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
   //           {value?.name}
@@ -509,9 +673,9 @@ const Category = () => {
   //         />
   //       ),
   //     }));
-  //   console.log(temprows, "temprows");
+  //   console.log(temprows, "temprdjfhjdfjdhfdws");
   //   setRowsData(temprows);
-  // }, [subCategory, isId]);
+  // }, [ category?.subCategory]);
   const [expanded, setExpanded] = useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -525,6 +689,8 @@ const Category = () => {
     { Header: "delete", accessor: "delete", width: "200px" },
     { Header: "action", accessor: "action", width: "200px" },
   ];
+
+ 
 
   const [file, setFile] = useState();
   const [profile, setProfile] = useState({
@@ -587,7 +753,7 @@ const Category = () => {
           msg: data?.payload?.message,
         })
       );
-      dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategory`));
+      dispatch(getCategory(`${process.env.REACT_APP_API}/WithPcategory/${admin}`));
       if (data?.payload?.success) {
         setProfile({
           categoryName: "",
@@ -603,12 +769,12 @@ const Category = () => {
         setFile();
         
         dispatch(
-          getGlobalCategory(
-            ecom
-              ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
-                  filter === false ? false : filter || ""
-                }`
-              : `${process.env.REACT_APP_API}getAllCategory?disable=${filter === false ? false : filter || ""}`
+          getGlobalCategory( `/getAllCategoryWithPcategory/${admin}`
+            // ecom
+            //   ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
+            //       filter === false ? false : filter || ""
+            //     }`
+            //   : `${process.env.REACT_APP_API}getAllCategory?disable=${filter === false ? false : filter || ""}`
           )
         );
         setIsOpen(false);
@@ -654,7 +820,7 @@ const Category = () => {
           msg: data?.payload?.message,
         })
       );
-      dispatch(getCategory(`${process.env.REACT_APP_API}`));
+      dispatch(getCategory(`${process.env.REACT_APP_API}/WithPcategory/${admin}`));
       if (data?.payload?.success) {
         setProfile({
           categoryName: "",
@@ -669,12 +835,12 @@ const Category = () => {
         });
         setFile();
         dispatch(
-          getGlobalCategory(
-            ecom
-              ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
-                  filter === false ? false : filter || ""
-                }`
-              : `${process.env.REACT_APP_API}getAllCategory?disable=${filter === false ? false : filter || ""}`
+          getGlobalCategory( `/getAllCategoryWithPcategory/${admin}`
+            // ecom
+            //   ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
+            //       filter === false ? false : filter || ""
+            //     }`
+            //   : `${process.env.REACT_APP_API}getAllCategory?disable=${filter === false ? false : filter || ""}`
           )
         );
         setIsOpen(false);
@@ -722,7 +888,7 @@ const Category = () => {
           msg: data?.payload?.message,
         })
       );
-      dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategory`));
+      dispatch(getCategory(`${process.env.REACT_APP_API}/WithPcategory/${admin}`));
       if (data?.payload?.success) {
         setProfile({
           categoryName: "",
@@ -737,12 +903,12 @@ const Category = () => {
         });
         setFile();
         dispatch(
-          getGlobalCategory(
-            ecom
-              ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
-                  filter === false ? false : filter || ""
-                }`
-              : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
+          getGlobalCategory( `/getAllCategoryWithPcategory/${admin}`
+            // ecom
+            //   ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
+            //       filter === false ? false : filter || ""
+            //     }`
+            //   : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
           )
         );
         setIsOpen(false);
@@ -807,12 +973,12 @@ const Category = () => {
         });
         setFile();
         dispatch(
-          getGlobalCategory(
-            ecom
-              ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
-                  filter === false ? false : filter || ""
-                }`
-              : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
+          getGlobalCategory( `/getAllCategoryWithPcategory/${admin}`
+            // ecom
+            //   ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
+            //       filter === false ? false : filter || ""
+            //     }`
+            //   : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
           )
         );
         setIsOpen(false);
@@ -903,12 +1069,12 @@ const Category = () => {
       );
       if (data?.payload?.success) {
         dispatch(
-          getGlobalCategory(
-            ecom
-              ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
-                  filter === false ? false : filter || ""
-                }`
-              : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
+          getGlobalCategory( `/getAllCategoryWithPcategory/${admin}`
+            // ecom
+            //   ? `/eCommerce/getAllNullPcategory/${admin}?disable=${
+            //       filter === false ? false : filter || ""
+            //     }`
+            //   : `/getAllNullPcategory/${admin}?disable=${filter === false ? false : filter || ""}`
           )
         );
       }
@@ -929,10 +1095,10 @@ const Category = () => {
       );
       if (data?.payload?.success) {
         dispatch(
-          getGlobalCategory(
-            ecom
-              ? `/eCommerce/getAllNullPcategory/${admin}?disable=false`
-              : `/getAllNullPcategory/${admin}?disable=false`
+          getGlobalCategory(`/getAllCategoryWithPcategory/${admin}`
+            // ecom
+            //   ? `/eCommerce/getAllNullPcategory/${admin}?disable=false`
+            //   : `/getAllNullPcategory/${admin}?disable=false`
           )
         );
       }
@@ -1316,15 +1482,16 @@ const Category = () => {
                     <AccordionDetails>
                       {IsLoading ? (
                         <SkLoading />
-                      ) : expanded === `panel${index}` && subCategory && subCategory?.at(0) ? (
+                      ) : expanded === `panel${index}` && category.at(0)?.subCategory && category.at(0)?.subCategory ? (
                         <MDBox sx={{ textAlign: "center" }}>
                           <MDTypography variant="button" fontWeight="medium" color="info">
                             SubCategory details
                           </MDTypography>
+                       {   console.log(rowsData,"rowsData")}
                           <DataTable
                             table={{
                               columns: pColumns,
-                              rows: rowsData || [],
+                              rows: rowssubData || [],
                             }}
                             isSorted={false}
                             entriesPerPage={false}
@@ -2905,7 +3072,7 @@ const Category = () => {
                   if (data?.payload?.success) {
                     dispatch(getGlobalCategory(`/getAllNullParantCategory`));
                     dispatch(
-                      getSubGlobalCategory(`/getAllCategoryByPCategoryId/${isOpenDialog?.isId}`)
+                      getSubGlobalCategory(`/getAllCategoryWithPcategory/${admin}`)
                     );
                     setIsOpenDialog((Preview) => ({
                       ...Preview,

@@ -89,7 +89,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, type }) => {
   // dispatch(getAllProducts(`/getAllProduct`));
   // }, []);
   // console.log(category, AllProducts);
-  console.log(category, "isCategory");
+  // console.log(category, "isCategory");
   // console.log(isShow, "isProducts");
 
   useEffect(() => {
@@ -1106,7 +1106,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen, type }) => {
                 {" "}
                 Select Your Category <AstrieskIcon />
               </MDTypography>
-              {console.log(isCategory, "isCategory")}
+              {/* {console.log(isCategory, "isCategory")} */}
               <ApnaSelect
                 disabled={createupdateLoading}
                 required={true}

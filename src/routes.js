@@ -88,6 +88,8 @@ import City from "Pages/City";
 import PartnerProfile from "Pages/PartnerProfile";
 import EcomAppBanner from "Pages/AppBanner/EcommAppBanner";
 import SubAdmin from "Pages/SubAdmin";
+import Subscribe from "Pages/Subscribe";
+import Shiping from "Pages/Shiping";
 
 const routes = [
   {
@@ -338,15 +340,24 @@ const routes = [
         component: <Tax />,
         permissions: ["ALL", "TAX"],
       },
-      // {
-      //   name: "E-commerce Brands",
-      //   key: "Utilities",
-      //   collapseKey: "Utilities3",
-      //   route: "/utilities/brands",
-      //   icon: <Icon fontSize="small">radio_button_checked</Icon>,
-      //   component: <Brands />,
-      //   permissions: ["ALL", "BRAND"],
-      // },
+      {
+        name: "Subscribe",
+        key: "Utilities",
+        collapseKey: "Utilities3",
+        route: "/utilities/brands",
+        icon: <Icon fontSize="small">radio_button_checked</Icon>,
+        component: <Subscribe />,
+        permissions: ["ALL", "Subscribe"],
+      },
+      {
+        name: "Shiping",
+        key: "Utilities",
+        collapseKey: "Utilities3",
+        route: "/utilities/Shiping",
+        icon: <Icon fontSize="small">radio_button_checked</Icon>,
+        component: <Shiping />,
+        permissions: ["ALL", "Shiping"],
+      },
 
 
       {

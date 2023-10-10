@@ -125,15 +125,15 @@ function DashboardNavbar({ absolute, light, isMini }) {
   //   return () => clearInterval(intervalId);
   // }, []);
 
-  useEffect(() => {
-    if (isAdmin) {
-      isDispatch(
-        getAllNotification(
-          `${process.env.REACT_APP_APII}/getByUserId/${adminId}?userType=${isAdmin?.userType}`
-        )
-      );
-    }
-  }, [isAdmin]);
+  // useEffect(() => {
+  //   if (isAdmin) {
+  //     isDispatch(
+  //       getAllNotification(
+  //         `${process.env.REACT_APP_API}/getByUserId/${adminId}?userType=${isAdmin?.userType}`
+  //       )
+  //     );
+  //   }
+  // }, [isAdmin]);
 
   useEffect(() => {
     // Setting the navbar type
@@ -169,10 +169,10 @@ function DashboardNavbar({ absolute, light, isMini }) {
   const handleCloseMenu = () => {
     setOpenMenu(false);
     isDispatch(
-      UpdateNotification({ url: `${process.env.REACT_APP_APII}/seenCount/${adminId}` })
+      UpdateNotification({ url: `${process.env.REACT_APP_API}/seenCount/${adminId}` })
     ).then((data) => {
       if (data?.payload?.success) {
-        isDispatch(getAllNotification(`${process.env.REACT_APP_APII}/getByUserId/${adminId}?userType=${isAdmin?.userType}`));
+        isDispatch(getAllNotification(`${process.env.REACT_APP_API}/${adminId}?userType=${isAdmin?.userType}`));
       }
     });
   };

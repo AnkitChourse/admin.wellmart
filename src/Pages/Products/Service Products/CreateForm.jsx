@@ -68,18 +68,26 @@ const CreateForm = ({
   const dispatch = useDispatch();
   const admin = localStorage.getItem("admin_id");
   const [controller] = useMaterialUIController();
+  const [isCategory, setIsCategory] = useState([]);
   const { darkMode } = controller;
   const { AllProducts, singleProduct, Loading, createUpdateLoading } = useSelector((state) => ({
     ...state.isProducts,
   }));
 
   const { city } = useSelector((state) => state.isCity);
-  const { category, subCategory } = useSelector((state) => ({ ...state.isCategory }));
+  const { category, EcomCategory } = useSelector((data) => ({ ...data?.isCategory }));
 
-  // console.log("singleProduct", singleProduct);
+  // console.log(category,"category")
+  //   // const { AllProducts } = useSelector((state) => ({ ...state.isProducts }));
+  //   useEffect(() => {
+  //     dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
 
-  const [isThumbnil, setIsThumbnil] = useState("");
+  //     // dispatch(getAllProducts(`/getAllProduct`));
+  //   }, []);
+
+ 
   const [serverThumbnail, setServerThumbnail] = useState("");
+  const [isThumbnil, setIsThumbnil] = useState(null);
   const [isImages, setIsImages] = useState(null);
   const [serverImages, setServerImages] = useState(null);
   const [additionalImages, setAdditionalImages] = useState(null);
@@ -88,119 +96,125 @@ const CreateForm = ({
   // const [serverAdditionalVideos, setServerAdditionalVideos] = useState(null)
   // const [isVideo, setIsVideo] = useState(null);
   // const [serverVideo, setServerVideo] = useState(null)
+ 
   const [allBrands, setAllBrands] = useState([]);
   const [allTax, setAllTax] = useState([]);
   const [isProductDescriptionServer, setIsProductDescriptionServer] = useState("");
   const [isProductDescription, setIsProductDescription] = useState(EditorState.createEmpty());
+  const [isProductkeyBenefitServer, setIsProductkeyBenefitServer] = useState("");
+  const [isProductkeyBenefit, setIsProductkeyBenefit] = useState(EditorState.createEmpty());
+  const [isProductdirectionForUseServer, setIsProductdirectionForUseServer] = useState("");
+  const [isProductdirectionForUse, setIsProductdirectionForUse] = useState(
+    EditorState.createEmpty()
+  );
+  const [isProductSafetyInformationServer, setIsProductSafetyInformationServer] = useState("");
+  const [isProductSafetyInformation, setIsProductSafetyInformation] = useState(
+    EditorState.createEmpty()
+  );
+  const [isProductotherInformationServer, setIsProductotherInformationServer] = useState("");
+  const [isProductotherInformation, setIsProductotherInformation] = useState(
+    EditorState.createEmpty()
+  );
+
+  // const [editorState, setEditorState] = useState(null);
 
   const [isData, setIsData] = useState({
     name: "",
-    price: "",
-    include: [""],
-    exclude: [""],
-    warranty: new Date(),
+    brandId: "",
     categoryId: "",
-    pcategoryId: "",
     mrp: "",
-    time: "1",
-    cityId: "",
+    priceDiscount: "",
+    beforeTaxValue: "",
+    afterTexValue: "",
+    stock: "",
+    sold: "",
     taxId: "",
-    subtitle: "",
+    type: "",
+    affiliate: "",
   });
 
-  const types = {
-    service: {
-      title: "",
-      price: "",
-      include: [""],
-      exclude: [""],
-      warranty: new Date(),
-      categoryId: "",
-      pcategoryId: "",
-      mrp: "",
-      time: "1",
-      cityId: "",
-      taxId: "",
-      subtitle: "",
-    },
-    serviceServer: {
-      title: singleProduct?.title || "",
-      price: singleProduct?.price || "",
-      include: singleProduct?.include || [""],
-      exclude: singleProduct?.exclude || [""],
-      warranty: new Date(singleProduct?.warranty) || new Date(),
-      categoryId: singleProduct?.categoryId?._id || "",
-      pcategoryId: singleProduct?.categoryId?.pCategory || "",
-      mrp: singleProduct?.mrp || "",
-      time: singleProduct?.time || "1",
-      cityId: singleProduct?.cityId?._id || "",
-      taxId: singleProduct?.taxId?._id || "",
-      subtitle: singleProduct?.subtitle || "",
-    },
-    ecomm: {
-      title: "",
-      price: "",
-      features: [""],
-      warranty: new Date(),
-      categoryId: "",
-      pcategoryId: "",
-      mrp: "",
-      time: "1",
-      cityId: "",
-      taxId: "",
-      subtitle: "",
-      stock: "",
-      brandId: "",
-    },
-    ecommServer: {
-      title: singleProduct?.title || "",
-      price: singleProduct?.price || "",
-      features: singleProduct?.features || [""],
-      warranty: new Date(singleProduct?.warranty) || new Date(),
-      categoryId: singleProduct?.categoryId?._id || "",
-      pcategoryId: singleProduct?.categoryId?.pCategory || "",
-      mrp: singleProduct?.mrp || "",
-      time: singleProduct?.time || "1",
-      cityId: singleProduct?.cityId?._id || "",
-      taxId: singleProduct?.taxId?._id || "",
-      subtitle: singleProduct?.subtitle || "",
-      stock: singleProduct?.stock || "",
-      brandId: singleProduct?.brandId?._id || "",
-    },
-  };
-
-  useEffect(() => {
-    if (isData?.pcategoryId)
-      dispatch(
-        getSubGlobalCategory(
-          ecom
-            ? `/eCommerce/getCategoryWithPcategory/${isData?.pcategoryId}/${admin}`
-            : `/getCategoryWithPcategory/${isData?.pcategoryId}/${admin}`
-        )
-      );
-  }, [isData?.pcategoryId]);
+  // const types = {
+  //   service: {
+  //     title: "",
+  //     price: "",
+  //     include: [""],
+  //     exclude: [""],
+  //     warranty: new Date(),
+  //     categoryId: "",
+  //     pcategoryId: "",
+  //     mrp: "",
+  //     time: "1",
+  //     cityId: "",
+  //     taxId: "",
+  //     subtitle: "",
+  //   },
+  //   serviceServer: {
+  //     title: singleProduct?.title || "",
+  //     price: singleProduct?.price || "",
+  //     include: singleProduct?.include || [""],
+  //     exclude: singleProduct?.exclude || [""],
+  //     warranty: new Date(singleProduct?.warranty) || new Date(),
+  //     categoryId: singleProduct?.categoryId?._id || "",
+  //     pcategoryId: singleProduct?.categoryId?.pCategory || "",
+  //     mrp: singleProduct?.mrp || "",
+  //     time: singleProduct?.time || "1",
+  //     cityId: singleProduct?.cityId?._id || "",
+  //     taxId: singleProduct?.taxId?._id || "",
+  //     subtitle: singleProduct?.subtitle || "",
+  //   },
+  //   ecomm: {
+  //     title: "",
+  //     price: "",
+  //     features: [""],
+  //     warranty: new Date(),
+  //     categoryId: "",
+  //     pcategoryId: "",
+  //     mrp: "",
+  //     time: "1",
+  //     cityId: "",
+  //     taxId: "",
+  //     subtitle: "",
+  //     stock: "",
+  //     brandId: "",
+  //   },
+  //   ecommServer: {
+  //     title: singleProduct?.title || "",
+  //     price: singleProduct?.price || "",
+  //     features: singleProduct?.features || [""],
+  //     warranty: new Date(singleProduct?.warranty) || new Date(),
+  //     categoryId: singleProduct?.categoryId?._id || "",
+  //     pcategoryId: singleProduct?.categoryId?.pCategory || "",
+  //     mrp: singleProduct?.mrp || "",
+  //     time: singleProduct?.time || "1",
+  //     cityId: singleProduct?.cityId?._id || "",
+  //     taxId: singleProduct?.taxId?._id || "",
+  //     subtitle: singleProduct?.subtitle || "",
+  //     stock: singleProduct?.stock || "",
+  //     brandId: singleProduct?.brandId?._id || "",
+  //   },
+  // };
 
   useEffect(() => {
     if (isOpen) {
-      if (ecom) {
-        http
-          .get(`/getAllBrandByAdmin/${admin}`)
-          .then((response) => {
-            setAllBrands(response?.data?.data || []);
-          })
-          .catch((error) => {
-            dispatch(
-              handleAlert({
-                isOpen: true,
-                type: "error",
-                msg: error?.response?.data?.message,
-              })
-            );
-          });
-      } else dispatch(getAllCity(`/getAllCityByAdmin/${admin}`));
+      http
+        .get(`/getAllBrand`)
+        .then((response) => {
+          console.log(response, "responsergrjngrg");
+          setAllBrands(response?.data?.data || []);
+        })
+        .catch((error) => {
+          dispatch(
+            handleAlert({
+              isOpen: true,
+              type: "error",
+              msg: error?.response?.data?.message,
+            })
+          );
+        });
 
       http
-        .get(`/getAllTax/${admin}`)
+
+        .get(`/getAllTax`)
         .then((response) => {
           const tax =
             response?.data?.data && response?.data?.data?.length
@@ -221,22 +235,29 @@ const CreateForm = ({
             })
           );
         });
-      dispatch(
-        getCategory(
-          ecom ? `/eCommerce/getAllNullPcategory/${admin}` : `/getAllNullPcategory/${admin}`
-        )
-      );
-    }
-  }, [isOpen, ecom]);
 
-  const handleSwitchControll = (event, state, setState) => {
-    setState(event.target.state);
-  };
+      dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
+    }
+  }, [isOpen]);
+
+  console.log(singleProduct,"singleProduct")
 
   useEffect(() => {
     if (isOpen && singleProduct) {
-      if (ecom) setIsData(types?.ecommServer);
-      else setIsData(types?.serviceServer);
+      setIsData({
+        name: singleProduct?.name,
+        brandId: singleProduct?.brandId,
+        categoryId: singleProduct?.categoryId?._id,
+        mrp: singleProduct?.mrp,
+        priceDiscount: singleProduct?.priceDiscount,
+        beforeTaxValue: singleProduct?.priceVarient?.beforeTaxValue,
+        afterTexValue: singleProduct?.afterTexValue,
+        stock: singleProduct?.stock,
+        sold: singleProduct?.sold,
+        taxId: singleProduct?.taxId,
+        type: singleProduct?.type,
+        affiliate: singleProduct?.affiliate?.affiliate,
+      });
 
       setServerThumbnail(singleProduct?.thumnail);
       const tempImages = [];
@@ -254,16 +275,39 @@ const CreateForm = ({
         singleProduct?.additional?.map((ele) =>
           ele?.type === "IMAGE" ? tempImages2?.push(ele) : tempVideos2.push(ele)
         );
-
+        // if (singleCoupons.categoryId && singleCoupons.categoryId.length > 0) {
+        //   const categoriesArray =
+        //     singleCoupons?.categoryId &&
+        //     singleCoupons?.categoryId.length > 0 &&
+        //     singleCoupons?.categoryId.map((items) => items?._id);
+  
+        //   setIsCategory(categoriesArray);
+        // }
       setServerImages(tempImages && tempImages?.length ? tempImages : null);
       // setServerVideo(tempVideos && tempVideos?.length ? tempVideos : null)
       setServerAdditionalImages(tempImages2 && tempImages2?.length ? tempImages2 : null);
       // setServerAdditionalVideos(tempVideos2 && tempVideos2?.length ? tempVideos2 : null)
       setIsProductDescriptionServer(singleProduct?.description || "");
+      setIsProductkeyBenefitServer(singleProduct?.keyBenefit || "");
+      setIsProductotherInformationServer(singleProduct?.otherInformation || "");
+      setIsProductdirectionForUseServer(singleProduct?.directionForUse || "");
+      setIsProductSafetyInformationServer(singleProduct?.SafetyInformation || "");
     } else {
-      if (ecom) setIsData(types?.ecomm);
-      else setIsData(types?.service);
-
+      setIsData({
+        name: "",
+        brandId: "",
+        categoryId: "",
+        mrp: "",
+        priceDiscount: "",
+        beforeTaxValue: "",
+        afterTexValue: "",
+        stock: "",
+        sold: "",
+        taxId: "",
+        type: "",
+        affiliate: "",
+      });
+      // setIsCategory([])
       setServerImages(null);
       setServerAdditionalImages(null);
       setServerThumbnail(null);
@@ -272,342 +316,415 @@ const CreateForm = ({
       setIsThumbnil("");
       setIsProductDescriptionServer("");
       setIsProductDescription(EditorState.createEmpty());
+      setIsProductkeyBenefitServer("");
+      setIsProductkeyBenefit(EditorState.createEmpty());
+      setIsProductotherInformationServer("");
+      setIsProductotherInformation(EditorState.createEmpty());
+      setIsProductdirectionForUseServer("");
+      setIsProductdirectionForUse(EditorState.createEmpty());
+      setIsProductSafetyInformationServer("");
+      setIsProductSafetyInformation(EditorState.createEmpty());
     }
-  }, [singleProduct, isOpen, ecom]);
+  }, [singleProduct, isOpen]);
 
   // console.log(isData?.tags, "isData?.tags");
-  const handleSubmitCrateProduct = (e) => {
+  // const handleSubmitCrateProduct = (e) => {
+  //   e.preventDefault();
+  //   const convertContentToHTML = () => {
+  //     const contentState = isProductDescription?.getCurrentContent();
+  //     const html = stateToHTML(contentState);
+  //     return html;
+  //   };
+  //   // console.log(isThumbnil, "isThumbnil ");
+  //   // console.log(isData?.thumbnail, "isData?.thumbnail ");
+  //   // console.log(isImages, "isImages ");
+  //   // console.log(isData?.images, "isData?.images ");
+  //   // console.log(isMetaImages, "isMetaImages ");
+  //   // console.log(isData?.metaImage, "isData?.metaImage ");
+  //   // console.log(
+  //   //   ((isThumbnil && isThumbnil?.length > 0) ||
+  //   //     (isData?.thumbnail && isData?.thumbnail?.length > 0)) &&
+  //   //     ((isImages && isImages?.length > 0) || (isData?.images && isData?.images?.length > 0)) &&
+  //   //     ((isMetaImages && isMetaImages?.length > 0) ||
+  //   //       (isData?.metaImage && isData?.metaImage?.length > 0)),
+  //   //   "condition "
+  //   // );
+  //   // if (
+  //   //   ((isThumbnil && isThumbnil !== "") || (isData?.thumbnail && isData?.thumbnail !== "")) &&
+  //   //   ((isImages) || (isData?.images && isData?.images !== ""))
+  //   // ) {
+  //   if (singleProduct) {
+  //     if (ecom) {
+  //       const formdata = new FormData();
+  //       if (isImages && isImages?.length)
+  //         isImages.map((images) => formdata.append("images", images));
+  //       if (additionalImages && additionalImages?.length)
+  //         additionalImages.map((images) => formdata.append("additional", images));
+  //       if (isThumbnil) formdata.append("thumnail", isThumbnil);
+
+  //       Object.keys(isData)?.map((ele) =>
+  //         ele === "features"
+  //           ? isData[ele]?.map((e) => formdata.append("features", e))
+  //           : formdata.append(ele, isData[ele])
+  //       );
+  //       formdata.append("description", convertContentToHTML());
+
+  //       // formdata.append("metaImage", isMetaImages);
+  //       // formdata.append("thumbnail", isThumbnil);
+  //       // formdata.append("name", isData?.name);
+  //       // formdata.append("category", isData?.category);
+  //       // formdata.append("brand", isData?.brand);
+  //       // formdata.append("unit", isData?.unit);
+  //       // formdata.append("weight", isData?.weight);
+  //       // // formdata.append("thumbnail", isThumbnil);
+  //       // isData?.variant && formdata.append("variant", isData?.variant);
+  //       // formdata.append("unitPrice", isData?.unitPrice);
+  //       // formdata.append("quantity", isData?.quantity);
+  //       // formdata.append("gst", isData?.gst);
+  //       // formdata.append("trending", isData?.trending);
+  //       // formdata.append("tags", isData?.tags);
+  //       // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
+  //       // // formdata.append("attributes", isAttribute);
+  //       // formdata.append("minimumQuantity", isData?.minimumQuantity);
+  //       // formdata.append("refundable", isData?.refundable);
+  //       // formdata.append("videoProvider", isData?.videoProvider);
+  //       // formdata.append("videoLink", isData?.videoLink);
+  //       // formdata.append("pdfSpecification", isData?.pdfSpecification);
+  //       // formdata.append("discount", isData?.discount);
+  //       // formdata.append("featured", isData?.featured);
+  //       // formdata.append("bestselling", isData?.bestselling);
+  //       // formdata.append("cod", isData?.cod);
+  //       // formdata.append("shippingDays", isData?.shippingDays);
+  //       // formdata.append("showStock", isData?.showStock);
+  //       // formdata.append("hideStock", isData?.hideStock);
+  //       // formdata.append("metaTitle", isData?.metaTitle);
+  //       // formdata.append("metaDiscripition", isData?.metaDescription);
+  //       // formdata.append("metaImage", isMetaImages);
+  //       dispatch(
+  //         createProducts({
+  //           url: `${process.env.REACT_APP_API}/createProduct/${admin}`,
+  //           data: formdata,
+  //         })
+  //         // updateProduct({
+  //         //   url: `${process.env.REACT_APP_API}/eCommerce/updateProduct/${singleProduct?._id}/${admin}`,
+  //         //   data: formdata,
+  //         // })
+  //       ).then((data) => {
+  //         dispatch(
+  //           handleAlert({
+  //             isOpen: true,
+  //             type: `${data?.payload?.success ? "success" : "error"}`,
+  //             msg: data?.payload?.message,
+  //           })
+  //         );
+  //         if (data?.payload?.success) {
+  //           dispatch(getAllGlobalProducts(`${process.env.REACT_APP_API}productFilter`)).then(() => {
+  //             setIsOpen(false);
+  //             setIsSwitch(!isSwitch);
+  //             setIsOpen(false);
+  //             setUpdateProductModal(false);
+  //           });
+  //         }
+  //       });
+  //     } else {
+  //       const formdata = new FormData();
+  //       if (isImages && isImages?.length)
+  //         isImages.map((images) => formdata.append("images", images));
+  //       if (additionalImages && additionalImages?.length)
+  //         additionalImages.map((images) => formdata.append("additional", images));
+  //       if (isThumbnil) formdata.append("thumnail", isThumbnil);
+
+  //       Object.keys(isData)?.map((ele) =>
+  //         ele === "include" || ele === "exclude"
+  //           ? isData[ele]?.map((e) => formdata.append(ele, e))
+  //           : formdata.append(ele, isData[ele])
+  //       );
+  //       formdata.append("description", convertContentToHTML());
+
+  //       // formdata.append("metaImage", isMetaImages);
+  //       // formdata.append("thumbnail", isThumbnil);
+  //       // formdata.append("name", isData?.name);
+  //       // formdata.append("category", isData?.category);
+  //       // formdata.append("brand", isData?.brand);
+  //       // formdata.append("unit", isData?.unit);
+  //       // formdata.append("weight", isData?.weight);
+  //       // // formdata.append("thumbnail", isThumbnil);
+  //       // isData?.variant && formdata.append("variant", isData?.variant);
+  //       // formdata.append("unitPrice", isData?.unitPrice);
+  //       // formdata.append("quantity", isData?.quantity);
+  //       // formdata.append("gst", isData?.gst);
+  //       // formdata.append("trending", isData?.trending);
+  //       // formdata.append("tags", isData?.tags);
+  //       // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
+  //       // // formdata.append("attributes", isAttribute);
+  //       // formdata.append("minimumQuantity", isData?.minimumQuantity);
+  //       // formdata.append("refundable", isData?.refundable);
+  //       // formdata.append("videoProvider", isData?.videoProvider);
+  //       // formdata.append("videoLink", isData?.videoLink);
+  //       // formdata.append("pdfSpecification", isData?.pdfSpecification);
+  //       // formdata.append("discount", isData?.discount);
+  //       // formdata.append("featured", isData?.featured);
+  //       // formdata.append("bestselling", isData?.bestselling);
+  //       // formdata.append("cod", isData?.cod);
+  //       // formdata.append("shippingDays", isData?.shippingDays);
+  //       // formdata.append("showStock", isData?.showStock);
+  //       // formdata.append("hideStock", isData?.hideStock);
+  //       // formdata.append("metaTitle", isData?.metaTitle);
+  //       // formdata.append("metaDiscripition", isData?.metaDescription);
+  //       // formdata.append("metaImage", isMetaImages);
+  //       dispatch(
+  //         // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
+  //         updateProduct({
+  //           url: `${process.env.REACT_APP_API}/updateProduct/${singleProduct?._id}/${admin}`,
+  //           data: formdata,
+  //         })
+  //       ).then((data) => {
+  //         dispatch(
+  //           handleAlert({
+  //             isOpen: true,
+  //             type: `${data?.payload?.success ? "success" : "error"}`,
+  //             msg: data?.payload?.message,
+  //           })
+  //         );
+  //         if (data?.payload?.success) {
+  //           dispatch(getAllGlobalProducts(`${process.env.REACT_APP_API}productFilter`)).then(() => {
+  //             setIsOpen(false);
+  //             setIsSwitch(!isSwitch);
+  //             setIsOpen(false);
+  //             setUpdateProductModal(false);
+  //           });
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     if (ecom) {
+  //       const formdata = new FormData();
+  //       if (isImages && isImages?.length)
+  //         isImages.map((images) => formdata.append("images", images));
+  //       if (additionalImages && additionalImages?.length)
+  //         additionalImages.map((images) => formdata.append("additional", images));
+  //       if (isThumbnil) formdata.append("thumnail", isThumbnil);
+
+  //       Object.keys(isData)?.map((ele) =>
+  //         ele === "features"
+  //           ? isData[ele]?.map((e) => formdata.append("features", e))
+  //           : formdata.append(ele, isData[ele])
+  //       );
+  //       formdata.append("description", convertContentToHTML());
+
+  //       // formdata.append("metaImage", isMetaImages);
+  //       // formdata.append("thumbnail", isThumbnil);
+  //       // formdata.append("name", isData?.name);
+  //       // formdata.append("category", isData?.category);
+  //       // formdata.append("brand", isData?.brand);
+  //       // formdata.append("unit", isData?.unit);
+  //       // formdata.append("weight", isData?.weight);
+  //       // // formdata.append("thumbnail", isThumbnil);
+  //       // isData?.variant && formdata.append("variant", isData?.variant);
+  //       // formdata.append("unitPrice", isData?.unitPrice);
+  //       // formdata.append("quantity", isData?.quantity);
+  //       // formdata.append("gst", isData?.gst);
+  //       // formdata.append("trending", isData?.trending);
+  //       // formdata.append("tags", isData?.tags);
+  //       // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
+  //       // // formdata.append("attributes", isAttribute);
+  //       // formdata.append("minimumQuantity", isData?.minimumQuantity);
+  //       // formdata.append("refundable", isData?.refundable);
+  //       // formdata.append("videoProvider", isData?.videoProvider);
+  //       // formdata.append("videoLink", isData?.videoLink);
+  //       // formdata.append("pdfSpecification", isData?.pdfSpecification);
+  //       // formdata.append("discount", isData?.discount);
+  //       // formdata.append("featured", isData?.featured);
+  //       // formdata.append("bestselling", isData?.bestselling);
+  //       // formdata.append("cod", isData?.cod);
+  //       // formdata.append("shippingDays", isData?.shippingDays);
+  //       // formdata.append("showStock", isData?.showStock);
+  //       // formdata.append("hideStock", isData?.hideStock);
+  //       // formdata.append("metaTitle", isData?.metaTitle);
+  //       // formdata.append("metaDiscripition", isData?.metaDescription);
+  //       // formdata.append("metaImage", isMetaImages);
+  //       dispatch(
+  //         // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
+  //         createProducts({
+  //           url: `${process.env.REACT_APP_APII}/eCommerce/createProduct/${admin}`,
+  //           data: formdata,
+  //         })
+  //       ).then((data) => {
+  //         dispatch(
+  //           handleAlert({
+  //             isOpen: true,
+  //             type: `${data?.payload?.success ? "success" : "error"}`,
+  //             msg: data?.payload?.message,
+  //           })
+  //         );
+  //         if (data?.payload?.success) {
+  //           dispatch(
+  //             getAllGlobalProducts(
+  //               `/eCommerce/filterProductByDate/${admin}?categoryId&price&taxId&disable&page=1&search`
+  //             )
+  //           ).then(() => {
+  //             setIsOpen(false);
+  //             setIsSwitch(!isSwitch);
+  //             setIsOpen(false);
+  //             setUpdateProductModal(false);
+  //           });
+  //         }
+  //       });
+  //     } else {
+  //       const formdata = new FormData();
+  //       if (isImages && isImages?.length)
+  //         isImages.map((images) => formdata.append("images", images));
+  //       if (additionalImages && additionalImages?.length)
+  //         additionalImages.map((images) => formdata.append("additional", images));
+  //       if (isThumbnil) formdata.append("thumnail", isThumbnil);
+
+  //       Object.keys(isData)?.map((ele) =>
+  //         ele === "include" || ele === "exclude"
+  //           ? isData[ele]?.map((e) => formdata.append(ele, e))
+  //           : formdata.append(ele, isData[ele])
+  //       );
+  //       formdata.append("description", convertContentToHTML());
+
+  //       // formdata.append("metaImage", isMetaImages);
+  //       // formdata.append("thumbnail", isThumbnil);
+  //       // formdata.append("name", isData?.name);
+  //       // formdata.append("category", isData?.category);
+  //       // formdata.append("brand", isData?.brand);
+  //       // formdata.append("unit", isData?.unit);
+  //       // formdata.append("weight", isData?.weight);
+  //       // // formdata.append("thumbnail", isThumbnil);
+  //       // isData?.variant && formdata.append("variant", isData?.variant);
+  //       // formdata.append("unitPrice", isData?.unitPrice);
+  //       // formdata.append("quantity", isData?.quantity);
+  //       // formdata.append("gst", isData?.gst);
+  //       // formdata.append("trending", isData?.trending);
+  //       // formdata.append("tags", isData?.tags);
+  //       // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
+  //       // // formdata.append("attributes", isAttribute);
+  //       // formdata.append("minimumQuantity", isData?.minimumQuantity);
+  //       // formdata.append("refundable", isData?.refundable);
+  //       // formdata.append("videoProvider", isData?.videoProvider);
+  //       // formdata.append("videoLink", isData?.videoLink);
+  //       // formdata.append("pdfSpecification", isData?.pdfSpecification);
+  //       // formdata.append("discount", isData?.discount);
+  //       // formdata.append("featured", isData?.featured);
+  //       // formdata.append("bestselling", isData?.bestselling);
+  //       // formdata.append("cod", isData?.cod);
+  //       // formdata.append("shippingDays", isData?.shippingDays);
+  //       // formdata.append("showStock", isData?.showStock);
+  //       // formdata.append("hideStock", isData?.hideStock);
+  //       // formdata.append("metaTitle", isData?.metaTitle);
+  //       // formdata.append("metaDiscripition", isData?.metaDescription);
+  //       // formdata.append("metaImage", isMetaImages);
+  //       dispatch(
+  //         // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
+  //         createProducts({
+  //           url: `${process.env.REACT_APP_APII}/createProduct/${admin}`,
+  //           data: formdata,
+  //         })
+  //       ).then((data) => {
+  //         dispatch(
+  //           handleAlert({
+  //             isOpen: true,
+  //             type: `${data?.payload?.success ? "success" : "error"}`,
+  //             msg: data?.payload?.message,
+  //           })
+  //         );
+  //         if (data?.payload?.success) {
+  //           dispatch(
+  //             getAllGlobalProducts(
+  //               `/filterProductByDate/${admin}?categoryId&cityId&price&taxId&disable&productId&search&page=1`
+  //             )
+  //           ).then(() => {
+  //             setIsOpen(false);
+  //             setIsSwitch(!isSwitch);
+  //             setIsOpen(false);
+  //             setUpdateProductModal(false);
+  //           });
+  //         }
+  //       });
+  //     }
+  //   }
+  //   // } else {
+  //   //   dispatch(
+  //   //     handleAlert({
+  //   //       isOpen: true,
+  //   //       type: "warning",
+  //   //       msg: "all filed is required",
+  //   //     })
+  //   //   );
+  //   // }
+  //   // console.log(isData, "isData");
+  // };
+
+  const handleSubmitCrateProduct = async (e) => {
     e.preventDefault();
+
     const convertContentToHTML = () => {
       const contentState = isProductDescription?.getCurrentContent();
       const html = stateToHTML(contentState);
       return html;
     };
-    // console.log(isThumbnil, "isThumbnil ");
-    // console.log(isData?.thumbnail, "isData?.thumbnail ");
-    // console.log(isImages, "isImages ");
-    // console.log(isData?.images, "isData?.images ");
-    // console.log(isMetaImages, "isMetaImages ");
-    // console.log(isData?.metaImage, "isData?.metaImage ");
-    // console.log(
-    //   ((isThumbnil && isThumbnil?.length > 0) ||
-    //     (isData?.thumbnail && isData?.thumbnail?.length > 0)) &&
-    //     ((isImages && isImages?.length > 0) || (isData?.images && isData?.images?.length > 0)) &&
-    //     ((isMetaImages && isMetaImages?.length > 0) ||
-    //       (isData?.metaImage && isData?.metaImage?.length > 0)),
-    //   "condition "
-    // );
-    // if (
-    //   ((isThumbnil && isThumbnil !== "") || (isData?.thumbnail && isData?.thumbnail !== "")) &&
-    //   ((isImages) || (isData?.images && isData?.images !== ""))
-    // ) {
-    if (singleProduct) {
-      if (ecom) {
-        const formdata = new FormData();
-        if (isImages && isImages?.length)
-          isImages.map((images) => formdata.append("images", images));
-        if (additionalImages && additionalImages?.length)
-          additionalImages.map((images) => formdata.append("additional", images));
-        if (isThumbnil) formdata.append("thumnail", isThumbnil);
 
-        Object.keys(isData)?.map((ele) =>
-          ele === "features"
-            ? isData[ele]?.map((e) => formdata.append("features", e))
-            : formdata.append(ele, isData[ele])
-        );
-        formdata.append("description", convertContentToHTML());
+    try {
+      const formdata = new FormData();
 
-        // formdata.append("metaImage", isMetaImages);
-        // formdata.append("thumbnail", isThumbnil);
-        // formdata.append("name", isData?.name);
-        // formdata.append("category", isData?.category);
-        // formdata.append("brand", isData?.brand);
-        // formdata.append("unit", isData?.unit);
-        // formdata.append("weight", isData?.weight);
-        // // formdata.append("thumbnail", isThumbnil);
-        // isData?.variant && formdata.append("variant", isData?.variant);
-        // formdata.append("unitPrice", isData?.unitPrice);
-        // formdata.append("quantity", isData?.quantity);
-        // formdata.append("gst", isData?.gst);
-        // formdata.append("trending", isData?.trending);
-        // formdata.append("tags", isData?.tags);
-        // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
-        // // formdata.append("attributes", isAttribute);
-        // formdata.append("minimumQuantity", isData?.minimumQuantity);
-        // formdata.append("refundable", isData?.refundable);
-        // formdata.append("videoProvider", isData?.videoProvider);
-        // formdata.append("videoLink", isData?.videoLink);
-        // formdata.append("pdfSpecification", isData?.pdfSpecification);
-        // formdata.append("discount", isData?.discount);
-        // formdata.append("featured", isData?.featured);
-        // formdata.append("bestselling", isData?.bestselling);
-        // formdata.append("cod", isData?.cod);
-        // formdata.append("shippingDays", isData?.shippingDays);
-        // formdata.append("showStock", isData?.showStock);
-        // formdata.append("hideStock", isData?.hideStock);
-        // formdata.append("metaTitle", isData?.metaTitle);
-        // formdata.append("metaDiscripition", isData?.metaDescription);
-        // formdata.append("metaImage", isMetaImages);
-        dispatch(
-          // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
-          updateProduct({
-            url: `${process.env.REACT_APP_APII}/eCommerce/updateProduct/${singleProduct?._id}/${admin}`,
-            data: formdata,
-          })
-        ).then((data) => {
-          dispatch(
-            handleAlert({
-              isOpen: true,
-              type: `${data?.payload?.success ? "success" : "error"}`,
-              msg: data?.payload?.message,
-            })
-          );
-          if (data?.payload?.success) {
-            dispatch(
-              getAllGlobalProducts(
-                `/eCommerce/filterProductByDate/${admin}?categoryId&price&taxId&disable&page=1&search`
-              )
-            ).then(() => {
-              setIsOpen(false);
-              setIsSwitch(!isSwitch);
-              setIsOpen(false);
-              setUpdateProductModal(false);
-            });
-          }
-        });
-      } else {
-        const formdata = new FormData();
-        if (isImages && isImages?.length)
-          isImages.map((images) => formdata.append("images", images));
-        if (additionalImages && additionalImages?.length)
-          additionalImages.map((images) => formdata.append("additional", images));
-        if (isThumbnil) formdata.append("thumnail", isThumbnil);
+      if (isImages && isImages.length)
+        isImages.forEach((image) => formdata.append("images", image));
 
-        Object.keys(isData)?.map((ele) =>
-          ele === "include" || ele === "exclude"
-            ? isData[ele]?.map((e) => formdata.append(ele, e))
-            : formdata.append(ele, isData[ele])
-        );
-        formdata.append("description", convertContentToHTML());
+      if (additionalImages && additionalImages.length)
+        additionalImages.forEach((image) => formdata.append("additional", image));
 
-        // formdata.append("metaImage", isMetaImages);
-        // formdata.append("thumbnail", isThumbnil);
-        // formdata.append("name", isData?.name);
-        // formdata.append("category", isData?.category);
-        // formdata.append("brand", isData?.brand);
-        // formdata.append("unit", isData?.unit);
-        // formdata.append("weight", isData?.weight);
-        // // formdata.append("thumbnail", isThumbnil);
-        // isData?.variant && formdata.append("variant", isData?.variant);
-        // formdata.append("unitPrice", isData?.unitPrice);
-        // formdata.append("quantity", isData?.quantity);
-        // formdata.append("gst", isData?.gst);
-        // formdata.append("trending", isData?.trending);
-        // formdata.append("tags", isData?.tags);
-        // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
-        // // formdata.append("attributes", isAttribute);
-        // formdata.append("minimumQuantity", isData?.minimumQuantity);
-        // formdata.append("refundable", isData?.refundable);
-        // formdata.append("videoProvider", isData?.videoProvider);
-        // formdata.append("videoLink", isData?.videoLink);
-        // formdata.append("pdfSpecification", isData?.pdfSpecification);
-        // formdata.append("discount", isData?.discount);
-        // formdata.append("featured", isData?.featured);
-        // formdata.append("bestselling", isData?.bestselling);
-        // formdata.append("cod", isData?.cod);
-        // formdata.append("shippingDays", isData?.shippingDays);
-        // formdata.append("showStock", isData?.showStock);
-        // formdata.append("hideStock", isData?.hideStock);
-        // formdata.append("metaTitle", isData?.metaTitle);
-        // formdata.append("metaDiscripition", isData?.metaDescription);
-        // formdata.append("metaImage", isMetaImages);
-        dispatch(
-          // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
-          updateProduct({
-            url: `${process.env.REACT_APP_APII}/updateProduct/${singleProduct?._id}/${admin}`,
-            data: formdata,
-          })
-        ).then((data) => {
-          dispatch(
-            handleAlert({
-              isOpen: true,
-              type: `${data?.payload?.success ? "success" : "error"}`,
-              msg: data?.payload?.message,
-            })
-          );
-          if (data?.payload?.success) {
-            dispatch(
-              getAllGlobalProducts(
-                `/filterProductByDate/${admin}?categoryId&cityId&price&taxId&disable&productId&search&page=1`
-              )
-            ).then(() => {
-              setIsOpen(false);
-              setIsSwitch(!isSwitch);
-              setIsOpen(false);
-              setUpdateProductModal(false);
-            });
-          }
+      if (isThumbnil) formdata.append("thumbnail", isThumbnil);
+
+      // Use Object.entries for a cleaner loop
+      for (const [key, value] of Object.entries(isData)) {
+        if (key === "features") {
+          value.forEach((feature) => formdata.append("features", feature));
+        } else {
+          formdata.append(key, value);
+        }
+      }
+
+      formdata.append("description", convertContentToHTML());
+
+      const url = singleProduct
+        ? `${process.env.REACT_APP_API}/updateProduct/${singleProduct._id}/${admin}`
+        : `${process.env.REACT_APP_APII}/createProduct/${admin}`;
+
+      const result = singleProduct
+        ? await updateProduct({ url, data: formdata })
+        : await createProducts({ url, data: formdata });
+
+      const alertType = result?.payload?.success ? "success" : "error";
+
+      dispatch(
+        handleAlert({
+          isOpen: true,
+          type: alertType,
+          msg: result?.payload?.message,
+        })
+      );
+
+      if (result?.payload?.success) {
+        const filterPath = `${process.env.REACT_APP_API}productFilter`;
+
+        dispatch(getAllGlobalProducts(filterPath)).then(() => {
+          setIsOpen(false);
+          setIsSwitch(!isSwitch);
+          setUpdateProductModal(false);
         });
       }
-    } else {
-      if (ecom) {
-        const formdata = new FormData();
-        if (isImages && isImages?.length)
-          isImages.map((images) => formdata.append("images", images));
-        if (additionalImages && additionalImages?.length)
-          additionalImages.map((images) => formdata.append("additional", images));
-        if (isThumbnil) formdata.append("thumnail", isThumbnil);
-
-        Object.keys(isData)?.map((ele) =>
-          ele === "features"
-            ? isData[ele]?.map((e) => formdata.append("features", e))
-            : formdata.append(ele, isData[ele])
-        );
-        formdata.append("description", convertContentToHTML());
-
-        // formdata.append("metaImage", isMetaImages);
-        // formdata.append("thumbnail", isThumbnil);
-        // formdata.append("name", isData?.name);
-        // formdata.append("category", isData?.category);
-        // formdata.append("brand", isData?.brand);
-        // formdata.append("unit", isData?.unit);
-        // formdata.append("weight", isData?.weight);
-        // // formdata.append("thumbnail", isThumbnil);
-        // isData?.variant && formdata.append("variant", isData?.variant);
-        // formdata.append("unitPrice", isData?.unitPrice);
-        // formdata.append("quantity", isData?.quantity);
-        // formdata.append("gst", isData?.gst);
-        // formdata.append("trending", isData?.trending);
-        // formdata.append("tags", isData?.tags);
-        // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
-        // // formdata.append("attributes", isAttribute);
-        // formdata.append("minimumQuantity", isData?.minimumQuantity);
-        // formdata.append("refundable", isData?.refundable);
-        // formdata.append("videoProvider", isData?.videoProvider);
-        // formdata.append("videoLink", isData?.videoLink);
-        // formdata.append("pdfSpecification", isData?.pdfSpecification);
-        // formdata.append("discount", isData?.discount);
-        // formdata.append("featured", isData?.featured);
-        // formdata.append("bestselling", isData?.bestselling);
-        // formdata.append("cod", isData?.cod);
-        // formdata.append("shippingDays", isData?.shippingDays);
-        // formdata.append("showStock", isData?.showStock);
-        // formdata.append("hideStock", isData?.hideStock);
-        // formdata.append("metaTitle", isData?.metaTitle);
-        // formdata.append("metaDiscripition", isData?.metaDescription);
-        // formdata.append("metaImage", isMetaImages);
-        dispatch(
-          // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
-          createProducts({
-            url: `${process.env.REACT_APP_APII}/eCommerce/createProduct/${admin}`,
-            data: formdata,
-          })
-        ).then((data) => {
-          dispatch(
-            handleAlert({
-              isOpen: true,
-              type: `${data?.payload?.success ? "success" : "error"}`,
-              msg: data?.payload?.message,
-            })
-          );
-          if (data?.payload?.success) {
-            dispatch(
-              getAllGlobalProducts(
-                `/eCommerce/filterProductByDate/${admin}?categoryId&price&taxId&disable&page=1&search`
-              )
-            ).then(() => {
-              setIsOpen(false);
-              setIsSwitch(!isSwitch);
-              setIsOpen(false);
-              setUpdateProductModal(false);
-            });
-          }
-        });
-      } else {
-        const formdata = new FormData();
-        if (isImages && isImages?.length)
-          isImages.map((images) => formdata.append("images", images));
-        if (additionalImages && additionalImages?.length)
-          additionalImages.map((images) => formdata.append("additional", images));
-        if (isThumbnil) formdata.append("thumnail", isThumbnil);
-
-        Object.keys(isData)?.map((ele) =>
-          ele === "include" || ele === "exclude"
-            ? isData[ele]?.map((e) => formdata.append(ele, e))
-            : formdata.append(ele, isData[ele])
-        );
-        formdata.append("description", convertContentToHTML());
-
-        // formdata.append("metaImage", isMetaImages);
-        // formdata.append("thumbnail", isThumbnil);
-        // formdata.append("name", isData?.name);
-        // formdata.append("category", isData?.category);
-        // formdata.append("brand", isData?.brand);
-        // formdata.append("unit", isData?.unit);
-        // formdata.append("weight", isData?.weight);
-        // // formdata.append("thumbnail", isThumbnil);
-        // isData?.variant && formdata.append("variant", isData?.variant);
-        // formdata.append("unitPrice", isData?.unitPrice);
-        // formdata.append("quantity", isData?.quantity);
-        // formdata.append("gst", isData?.gst);
-        // formdata.append("trending", isData?.trending);
-        // formdata.append("tags", isData?.tags);
-        // isData?.whoseVariant && formdata.append("whoseVariant", isData?.whoseVariant);
-        // // formdata.append("attributes", isAttribute);
-        // formdata.append("minimumQuantity", isData?.minimumQuantity);
-        // formdata.append("refundable", isData?.refundable);
-        // formdata.append("videoProvider", isData?.videoProvider);
-        // formdata.append("videoLink", isData?.videoLink);
-        // formdata.append("pdfSpecification", isData?.pdfSpecification);
-        // formdata.append("discount", isData?.discount);
-        // formdata.append("featured", isData?.featured);
-        // formdata.append("bestselling", isData?.bestselling);
-        // formdata.append("cod", isData?.cod);
-        // formdata.append("shippingDays", isData?.shippingDays);
-        // formdata.append("showStock", isData?.showStock);
-        // formdata.append("hideStock", isData?.hideStock);
-        // formdata.append("metaTitle", isData?.metaTitle);
-        // formdata.append("metaDiscripition", isData?.metaDescription);
-        // formdata.append("metaImage", isMetaImages);
-        dispatch(
-          // createProducts({ url: `${process.env.REACT_APP_API}/createProduct/${admin}`, data: formdata })
-          createProducts({
-            url: `${process.env.REACT_APP_APII}/createProduct/${admin}`,
-            data: formdata,
-          })
-        ).then((data) => {
-          dispatch(
-            handleAlert({
-              isOpen: true,
-              type: `${data?.payload?.success ? "success" : "error"}`,
-              msg: data?.payload?.message,
-            })
-          );
-          if (data?.payload?.success) {
-            dispatch(
-              getAllGlobalProducts(
-                `/filterProductByDate/${admin}?categoryId&cityId&price&taxId&disable&productId&search&page=1`
-              )
-            ).then(() => {
-              setIsOpen(false);
-              setIsSwitch(!isSwitch);
-              setIsOpen(false);
-              setUpdateProductModal(false);
-            });
-          }
-        });
-      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+      dispatch(
+        handleAlert({
+          isOpen: true,
+          type: "error",
+          msg: "An error occurred while submitting the form.",
+        })
+      );
     }
-    // } else {
-    //   dispatch(
-    //     handleAlert({
-    //       isOpen: true,
-    //       type: "warning",
-    //       msg: "all filed is required",
-    //     })
-    //   );
-    // }
-    // console.log(isData, "isData");
   };
 
   const handleForm = (e) => {
@@ -716,7 +833,7 @@ const CreateForm = ({
                 }}
               >
                 <MDTypography variant="h6">
-                  Product Title <AstrieskIcon />
+                  Product Name <AstrieskIcon />
                 </MDTypography>
                 <MDInput
                   disabled={createUpdateLoading}
@@ -725,11 +842,11 @@ const CreateForm = ({
                   placeholder="Product Title"
                   fullWidth
                   name="title"
-                  value={isData?.title}
+                  value={isData?.name}
                   onChange={handleForm}
                 />
               </MDBox>
-              <MDBox
+              {/* <MDBox
                 lineHeight={1}
                 gap={3}
                 width={"90%"}
@@ -752,7 +869,7 @@ const CreateForm = ({
                   value={isData?.subtitle}
                   onChange={handleForm}
                 />
-              </MDBox>
+              </MDBox> */}
               <MDBox
                 lineHeight={1}
                 gap={3}
@@ -789,6 +906,146 @@ const CreateForm = ({
                 />
               </MDBox>
               <MDBox
+                lineHeight={1}
+                gap={3}
+                width={"90%"}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
+              >
+                <MDTypography variant="h6">
+                  Product keyBenefit <AstrieskIcon />
+                </MDTypography>
+                {/* <MDInput
+                  required={true}
+                  type="text"
+                  placeholder="Product Description"
+                  fullWidth
+                  name="description"
+                  value={isData?.description}
+                  onChange={handleForm}
+                  multiline
+                  rows={5}
+                /> */}
+                <Skeditor
+                  required={true}
+                  disabled={createUpdateLoading}
+                  editorState={isProductkeyBenefit}
+                  setEditorState={setIsProductkeyBenefit}
+                  placeholder={"Product keyBenefit"}
+                  initialContent={isOpen && singleProduct ? isProductkeyBenefitServer : ""}
+                  isButton={true}
+                  // content={"Blog Content"}
+                />
+              </MDBox>
+              <MDBox
+                lineHeight={1}
+                gap={3}
+                width={"90%"}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
+              >
+                <MDTypography variant="h6">
+                  Product Direction For Use <AstrieskIcon />
+                </MDTypography>
+                {/* <MDInput
+                  required={true}
+                  type="text"
+                  placeholder="Product Description"
+                  fullWidth
+                  name="description"
+                  value={isData?.description}
+                  onChange={handleForm}
+                  multiline
+                  rows={5}
+                /> */}
+                <Skeditor
+                  required={true}
+                  disabled={createUpdateLoading}
+                  editorState={isProductdirectionForUse}
+                  setEditorState={setIsProductdirectionForUse}
+                  placeholder={"Product Direction For Use"}
+                  initialContent={isOpen && singleProduct ? isProductdirectionForUseServer : ""}
+                  isButton={true}
+                  // content={"Blog Content"}
+                />
+              </MDBox>
+              <MDBox
+                lineHeight={1}
+                gap={3}
+                width={"90%"}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
+              >
+                <MDTypography variant="h6">
+                  Product Safety Information <AstrieskIcon />
+                </MDTypography>
+                {/* <MDInput
+                  required={true}
+                  type="text"
+                  placeholder="Product Description"
+                  fullWidth
+                  name="description"
+                  value={isData?.description}
+                  onChange={handleForm}
+                  multiline
+                  rows={5}
+                /> */}
+                <Skeditor
+                  required={true}
+                  disabled={createUpdateLoading}
+                  editorState={isProductSafetyInformation}
+                  setEditorState={setIsProductSafetyInformation}
+                  placeholder={"Product Safety Information"}
+                  initialContent={isOpen && singleProduct ? isProductSafetyInformationServer : ""}
+                  isButton={true}
+                  // content={"Blog Content"}
+                />
+              </MDBox>
+              <MDBox
+                lineHeight={1}
+                gap={3}
+                width={"90%"}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
+              >
+                <MDTypography variant="h6">
+                  Product Other Information <AstrieskIcon />
+                </MDTypography>
+                {/* <MDInput
+                  required={true}
+                  type="text"
+                  placeholder="Product Description"
+                  fullWidth
+                  name="description"
+                  value={isData?.description}
+                  onChange={handleForm}
+                  multiline
+                  rows={5}
+                /> */}
+                <Skeditor
+                  required={true}
+                  disabled={createUpdateLoading}
+                  editorState={isProductotherInformation}
+                  setEditorState={setIsProductotherInformation}
+                  placeholder={"Product other Information Server"}
+                  initialContent={isOpen && singleProduct ? isProductotherInformationServer : ""}
+                  isButton={true}
+                  // content={"Blog Content"}
+                />
+              </MDBox>
+              <MDBox
                 display={"flex"}
                 alignItems="center"
                 justifyContent="space-between"
@@ -820,8 +1077,8 @@ const CreateForm = ({
                     type="text"
                     placeholder="Price"
                     fullWidth
-                    name="price"
-                    value={isData?.price}
+                    name="priceDiscount"
+                    value={isData?.priceDiscount}
                     onChange={handleForm}
                   />
                 </MDBox>
@@ -849,7 +1106,79 @@ const CreateForm = ({
                     onChange={handleForm}
                   />
                 </MDBox>
-                {!ecom ? (
+                <MDBox
+                  lineHeight={1}
+                  gap={3}
+                  width={"100%"}
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <MDTypography variant="h6">
+                    Product Before Tax Value <AstrieskIcon />
+                  </MDTypography>
+                  <MDInput
+                    disabled={createUpdateLoading}
+                    required={true}
+                    type="text"
+                    placeholder="beforeTaxValue"
+                    fullWidth
+                    name="beforeTaxValue"
+                    value={isData?.beforeTaxValue}
+                    onChange={handleForm}
+                  />
+                </MDBox>
+                <MDBox
+                  lineHeight={1}
+                  gap={3}
+                  width={"100%"}
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <MDTypography variant="h6">
+                    Product After Tex Value <AstrieskIcon />
+                  </MDTypography>
+                  <MDInput
+                    disabled={createUpdateLoading}
+                    required={true}
+                    type="text"
+                    placeholder="After Tex Value"
+                    fullWidth
+                    name="afterTexValue"
+                    value={isData?.afterTexValue}
+                    onChange={handleForm}
+                  />
+                </MDBox>
+                <MDBox
+                  lineHeight={1}
+                  gap={3}
+                  width={"100%"}
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <MDTypography variant="h6">
+                    Product Affiliate <AstrieskIcon />
+                  </MDTypography>
+                  <MDInput
+                    disabled={createUpdateLoading}
+                    required={true}
+                    type="text"
+                    placeholder="affiliate"
+                    fullWidth
+                    name="affiliate"
+                    value={isData?.affiliate}
+                    onChange={handleForm}
+                  />
+                </MDBox>
+                {/* {!ecom ? (
                   <MDBox
                     lineHeight={1}
                     gap={3}
@@ -888,8 +1217,8 @@ const CreateForm = ({
                       }}
                     />
                   </MDBox>
-                ) : null}
-                <MDBox
+                ) : null} */}
+                {/* <MDBox
                   lineHeight={1}
                   gap={3}
                   width={"100%"}
@@ -938,95 +1267,59 @@ const CreateForm = ({
                     required={true}
                     placeholder="Warranty Date"
                     disabled={createUpdateLoading}
-                  /> */}
+                  /> 
+                </MDBox> */}
+
+                <MDBox
+                  lineHeight={1}
+                  gap={3}
+                  width={"100%"}
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <MDTypography variant="h6">
+                    Product Stock <AstrieskIcon />
+                  </MDTypography>
+                  <MDInput
+                    disabled={createUpdateLoading}
+                    required={true}
+                    type="text"
+                    placeholder="Stock"
+                    fullWidth
+                    name="stock"
+                    value={isData?.stock}
+                    onChange={handleForm}
+                  />
                 </MDBox>
-                {ecom ? (
-                  <MDBox
-                    lineHeight={1}
-                    gap={3}
-                    width={"100%"}
-                    sx={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <MDTypography variant="h6">
-                      Product Stock <AstrieskIcon />
-                    </MDTypography>
-                    <MDInput
-                      disabled={createUpdateLoading}
-                      required={true}
-                      type="text"
-                      placeholder="Stock"
-                      fullWidth
-                      name="stock"
-                      value={isData?.stock}
-                      onChange={handleForm}
-                    />
-                  </MDBox>
-                ) : null}
-                {!ecom ? (
-                  <>
-                    <MDBox
-                      lineHeight={1}
-                      gap={3}
-                      width={"100%"}
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <MDTypography variant="h6">
-                        Include <AstrieskIcon />
-                      </MDTypography>
-                      <MultiInput
-                        state={isData?.include}
-                        setState={(e) => handleForm({ target: { name: "include", value: e } })}
-                        addButtonText="Add New Include"
-                        addButtonHandler={(e) =>
-                          handleForm({ target: { name: "include", value: e } })
-                        }
-                        removeButtonHandler={(e) =>
-                          handleForm({ target: { name: "include", value: e } })
-                        }
-                        previousFilledValidate={true}
-                        required={true}
-                        disabled={createUpdateLoading}
-                      />
-                    </MDBox>
-                    <MDBox
-                      lineHeight={1}
-                      gap={3}
-                      width={"100%"}
-                      sx={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        flexDirection: "column",
-                      }}
-                    >
-                      <MDTypography variant="h6">
-                        Exclude <AstrieskIcon />
-                      </MDTypography>
-                      <MultiInput
-                        state={isData?.exclude}
-                        setState={(e) => handleForm({ target: { name: "exclude", value: e } })}
-                        addButtonText="Add New Exclude"
-                        addButtonHandler={(e) =>
-                          handleForm({ target: { name: "exclude", value: e } })
-                        }
-                        removeButtonHandler={(e) =>
-                          handleForm({ target: { name: "exclude", value: e } })
-                        }
-                        previousFilledValidate={true}
-                        required={true}
-                        disabled={createUpdateLoading}
-                      />
-                    </MDBox>
-                  </>
-                ) : (
-                  <MDBox
+                <MDBox
+                  lineHeight={1}
+                  gap={3}
+                  width={"100%"}
+                  sx={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    flexDirection: "column",
+                  }}
+                >
+                  <MDTypography variant="h6">
+                    Product Sold <AstrieskIcon />
+                  </MDTypography>
+                  <MDInput
+                    disabled={createUpdateLoading}
+                    required={true}
+                    type="text"
+                    placeholder="sold"
+                    fullWidth
+                    name="sold"
+                    value={isData?.sold}
+                    onChange={handleForm}
+                  />
+                </MDBox>
+
+                {/* <MDBox
                     lineHeight={1}
                     gap={3}
                     width={"100%"}
@@ -1053,8 +1346,7 @@ const CreateForm = ({
                       required={true}
                       disabled={createUpdateLoading}
                     />
-                  </MDBox>
-                )}
+                  </MDBox> */}
               </MDBox>
 
               <MDBox
@@ -1068,19 +1360,31 @@ const CreateForm = ({
                 }}
               >
                 <MDTypography variant="h6">
-                  Select Parent Category&apos;s <AstrieskIcon />
+                  Select Category&apos;s <AstrieskIcon />
                 </MDTypography>
+
                 <ApnaSelect2
                   required={true}
                   data={category}
-                  value={isData?.pcategoryId}
+                  value={isData?.categoryId?._id}
                   origin="Category"
                   onChange={handleForm}
-                  name="pcategoryId"
-                  nameKey="name"
-                  valueKey="_id"
-                  simpleArray={false}
+                  name="category"
+                  nameKey={"name"}
+                  valueKey={"_id"}
+                  simpleArray={true}
                 />
+
+                {/* <ApnaSelect
+                  required={true}
+                  data={category}
+                  state={isCategory}
+                  label="category"
+                  setState={setIsCategory}
+                  name="category"
+                  simpleArray={true}
+                /> */}
+
               </MDBox>
               <MDBox
                 lineHeight={1}
@@ -1093,18 +1397,18 @@ const CreateForm = ({
                 }}
               >
                 <MDTypography variant="h6">
-                  Select Sub Category&apos;s <AstrieskIcon />
+                  Select BrandId <AstrieskIcon />
                 </MDTypography>
                 <ApnaSelect2
+                  data={allBrands}
                   required={true}
-                  data={subCategory}
-                  value={isData?.categoryId}
-                  origin="Sub Category"
+                  value={isData?.brandId}
+                  origin="Brand"
                   onChange={handleForm}
-                  name="categoryId"
-                  valueKey="_id"
-                  nameKey="name"
-                  simpleArray={false}
+                  name="brandId"
+                  nameKey={"name"}
+                  valueKey={"_id"}
+                  isSimpleArray={false}
                 />
               </MDBox>
               <MDBox
@@ -1132,59 +1436,33 @@ const CreateForm = ({
                   isSimpleArray={false}
                 />
               </MDBox>
-              {ecom ? (
-                <MDBox
-                  lineHeight={1}
-                  gap={3}
-                  width={"90%"}
-                  sx={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    flexDirection: "column",
-                  }}
-                >
-                  <MDTypography variant="h6">
-                    Select Brand <AstrieskIcon />
-                  </MDTypography>
-                  <ApnaSelect2
-                    data={allBrands}
-                    required={true}
-                    value={isData?.brandId}
-                    origin="Brand"
-                    onChange={handleForm}
-                    name="brandId"
-                    nameKey={"name"}
-                    valueKey={"_id"}
-                    isSimpleArray={false}
-                  />
-                </MDBox>
-              ) : // <MDBox
-              //   lineHeight={1}
-              //   gap={3}
-              //   width={"90%"}
-              //   sx={{
-              //     display: "flex",
-              //     alignItems: "flex-start",
-              //     flexDirection: "column",
-              //   }}
-              // >
-              //   <MDTypography variant="h6">Select City <AstrieskIcon /></MDTypography>
-              //   <ApnaSelect2
-              //     disabled={createUpdateLoading}
-              //     data={city}
-              //     required={true}
-              //     value={isData?.cityId}
-              //     origin="City"
-              //     onChange={
-              //       handleForm
-              //     }
-              //     name="cityId"
-              //     nameKey={'cityName'}
-              //     valueKey={'_id'}
-              //     isSimpleArray={false}
-              //   />
-              // </MDBox>
-              null}
+              <MDBox
+                lineHeight={1}
+                gap={3}
+                width={"90%"}
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  flexDirection: "column",
+                }}
+              >
+                <MDTypography variant="h6">
+                  Select Type
+                  <AstrieskIcon />
+                </MDTypography>
+                {/* <ApnaSelect2
+                  data={allTax}
+                  required={true}
+                  value={isData?.taxId}
+                  origin="Tax Slab"
+                  onChange={handleForm}
+                  name="taxId"
+                  nameKey={"taxPercent"}
+                  valueKey={"_id"}
+                  isSimpleArray={false}
+                /> */}
+              </MDBox>
+
               <MDBox
                 display="flex"
                 flexDirection="column"
