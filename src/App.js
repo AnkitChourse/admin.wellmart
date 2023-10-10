@@ -123,65 +123,10 @@ export default function App() {
     }
    }, [])
  
-   console.log(isAdmin, "Admin");
+  //  console.log(isAdmin, "Admin");
 
 
-  //  const isSubset = (parentSet, subSet) => {
-  //   return subSet.some((x) => parentSet.includes(x));
-  // };
-
-  // const calculateRoutes = (allRoutes) => {
-  //   let filter = [];
-  //   const Froutes = allRoutes.map((route) => {
-  //     if (route.permissions && isAdmin) {
-  //       if (route.collapse) {
-  //         // console.log(route.collapse, 'coolea')
-  //         filter.push(route);
-  //         return calculateRoutes(route.collapse);
-  //       }
-  //       if (
-  //         route.route &&
-  //         isSubset(route?.permissions, isAdmin?.permissions)
-  //       ) {
-  //         if (route?.type) filter.push(route);
-  //         return (
-  //           <Route
-  //             exact
-  //             path={route.route}
-  //             element={route.component}
-  //             key={route.key}
-  //           />
-  //         );
-  //       }
-  //       return null;
-  //     } else {
-  //       if (route.collapse) {
-  //         // console.log(route.collapse, 'coolea')
-  //         filter.push(route);
-  //         return calculateRoutes(route.collapse);
-  //       }
-  //       if (route.route) {
-  //         if (route?.type) filter.push(route);
-  //         return (
-  //           <Route
-  //             exact
-  //             path={route.route}
-  //             element={route.component}
-  //             key={route.key}
-  //           />
-  //         );
-  //       }
-  //       return null;
-  //     }
-  //   });
-  //   setFilterRoutes(filter);
-  //   return Froutes;
-  // };
-
-  // const getRoutes = useMemo(() => {
-  //   return calculateRoutes(routes);
-  // }, [isAdmin]);
-  // console.log(getRoutes);
+  
 
 
 
@@ -191,105 +136,70 @@ export default function App() {
 
 
 
-  // // const isSubset = (parentSet, subSet) => {
-  // //   return subSet.some((x) => parentSet.includes(x));
-  // // };
-
-  // const calculateRoutes = (allRoutes) => {
-  //   let filter = [];
-  //   const Froutes = allRoutes.map((route) => {
-  //     if (isAdmin?.permissions && isAdmin) {
-  //       if (route.collapse) {
-  //         console.log(route.collapse, 'coolea')
-  //         const calculateRoutesData = calculateRoutes(route.collapse);
-  //         if (calculateRoutesData?.find(ele => ele?.key)) {
-  //           filter.push(route);
-  //         }
-  //         return calculateRoutesData
-  //       }
-  //       // if (
-  //       //   route.route &&
-  //       //   isSubset(route?.permissions, isAdmin?.permissions)
-  //       // ) {
-  //         if (route?.type) filter.push(route);
-  //         return (
-  //           <Route
-  //             exact
-  //             path={route.route}
-  //             element={route.component}
-  //             key={route.key}
-  //           />
-  //         );
-  //       // }
-  //       // return null;
-  //     } else {
-  //       if (route.collapse) {
-  //         // console.log(route.collapse, 'coolea')
-  //         const calculateRoutesData = calculateRoutes(route.collapse);
-  //         if (calculateRoutesData?.find(ele => ele?.key)) {
-  //           filter.push(route);
-  //         }
-  //         return calculateRoutesData
-  //       }
-  //       if (route.route) {
-  //         if (route?.type) filter.push(route);
-  //         return (
-  //           <Route
-  //             exact
-  //             path={route.route}
-  //             element={route.component}
-  //             key={route.key}
-  //           />
-  //         );
-  //       }
-  //       return null;
-  //     }
-  //   });
-  //   setFilterRoutes(filter);
-  //   return Froutes;
+  // const isSubset = (parentSet, subSet) => {
+  //   return subSet.some((x) => parentSet.includes(x));
   // };
 
-
-
-
-
-  
-
-
-
-
-  const isSubset = (parentSet, subSet) => {
-    return subSet.some((x) => parentSet.includes(x));
-  };
-  
-  const calculateRoutes = (allRoutes, isAdmin) => {
+  const calculateRoutes = (allRoutes) => {
     let filter = [];
-  
     const Froutes = allRoutes.map((route) => {
-      if (route.collapse) {
-        filter.push(route);
-        return calculateRoutes(route.collapse, isAdmin);
+      if (isAdmin?.permissions && isAdmin) {
+        if (route.collapse) {
+          console.log(route.collapse, 'coolea')
+          const calculateRoutesData = calculateRoutes(route.collapse);
+          if (calculateRoutesData?.find(ele => ele?.key)) {
+            filter.push(route);
+          }
+          return calculateRoutesData
+        }
+        // if (
+        //   route.route &&
+        //   isSubset(route?.permissions, isAdmin?.permissions)
+        // ) {
+          if (route?.type) filter.push(route);
+          return (
+            <Route
+              exact
+              path={route.route}
+              element={route.component}
+              key={route.key}
+            />
+          );
+        // }
+        // return null;
+      } else {
+        if (route.collapse) {
+          // console.log(route.collapse, 'coolea')
+          const calculateRoutesData = calculateRoutes(route.collapse);
+          if (calculateRoutesData?.find(ele => ele?.key)) {
+            filter.push(route);
+          }
+          return calculateRoutesData
+        }
+        if (route.route) {
+          if (route?.type) filter.push(route);
+          return (
+            <Route
+              exact
+              path={route.route}
+              element={route.component}
+              key={route.key}
+            />
+          );
+        }
+        return null;
       }
-  
-      if (route.route && (isAdmin ? isSubset(route?.permissions, isAdmin?.permissions) : true)) {
-        if (route.type) filter.push(route);
-  
-        return (
-          <Route
-            exact
-            path={route.route}
-            element={route.component}
-            key={route.key}
-          />
-        );
-      }
-  
-      return null;
     });
-  
     setFilterRoutes(filter);
     return Froutes;
   };
+
+
+
+
+
+  
+
   
   
   

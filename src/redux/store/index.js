@@ -30,6 +30,8 @@ import eHomeBannerSlice from "redux/festures/eHomeBannerSlice";
 import eHomeProduct from "redux/festures/eHomeProduct";
 import homeProduct from "redux/festures/homeProduct";
 import PermissionsSlice from "redux/festures/PermissionsSlice";
+import SubscribeSlice from "redux/festures/SubscribeSlice";
+import Shipingslice from "redux/festures/Shipingslice";
 
 export default configureStore(
   {
@@ -37,6 +39,8 @@ export default configureStore(
       admin: adminSlice,
       isAlert: alertSlice,
       isPermition: PermissionsSlice,
+      isSubscribe: SubscribeSlice,
+      isShiping: Shipingslice,
       isCategory: categorySlice,
       isProducts: productSlice,
       isBrand: brandSlice,

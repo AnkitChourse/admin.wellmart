@@ -65,7 +65,7 @@ const columns = {
     { Header: "Payment Method ", accessor: "payment method" },
     { Header: "Order Total", accessor: "order total" },
     { Header: "Place Order", accessor: "place Order" },
-    { Header: "Assign Partner", accessor: "assignPartner" },
+    // { Header: "Assign Partner", accessor: "assignPartner" },
     { Header: "Update", accessor: "update" },
     { Header: "View", accessor: "view" },
     // { Header: "action", accessor: "action" },
