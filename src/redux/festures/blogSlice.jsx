@@ -54,8 +54,8 @@ export const updateBlog = createAsyncThunk("updateBlog", async ({ url, data }) =
   try {
     const response = await axios.put(url, data, {
       headers: {
-        // "Content-Type": "multipart/form-data",
-        // Accept: "application/json",
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
         authorization: localStorage.getItem("token"),
       },
     });

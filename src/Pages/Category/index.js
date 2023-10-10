@@ -108,9 +108,13 @@ const Category = () => {
 
   // console.log(category, "category");
 
+
+
   const [rowsData, setRowsData] = useState([]);
   const [rowssubData, setRowssubData] = useState([]);
   const [isId, setIsId] = useState(null);
+  // const[subCat,setSubCat]=useState([]);
+  // console.log(subCategory)
   const [isOpen, setIsOpen] = useState(false);
   const [isOpen2, setIsOpen2] = useState(false);
   const [isOpenUpdate, setIsOpenUpdate] = useState(false);
@@ -326,7 +330,7 @@ const Category = () => {
   // }, [isId, category]);
 
   useEffect(() => {
-    dispatch(getCategory(`${process.env.REACT_APP_API}/WithPcategory/${admin}`));
+    dispatch(getCategory(`${process.env.REACT_APP_API}getAllCategoryWithPcategory/${admin}`));
   }, []);
 
 
@@ -646,36 +650,134 @@ const Category = () => {
     }
   }, [category?.at(0)?.subCategory]);
 
-  // useEffect(() => {
-  //   console.log(category?.subCategory,"category?.subCategory")
-  //   const temprows =
-  //   category?.subCategory &&
-  //   category?.subCategory &&
-  //   category?.subCategory.map((value, index) => ({
-  //       name: (
-  //         <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
-  //           {value?.name}
-  //         </MDTypography>
-  //       ),
-  //       image: (
-  //         <MDAvatar
-  //           src={`${process.env.REACT_APP_URI}/${value?.image}`}
-  //           name={value?.name}
-  //           size="sm"
-  //           variant="rounded"
-  //         />
-  //       ),
-  //       action: (
-  //         <Switch
-  //           checked={value?.showInHome}
-  //           onChange={() => console.log("showInHome")}
-  //           inputProps={{ "aria-label": "controlled" }}
-  //         />
-  //       ),
-  //     }));
-  //   console.log(temprows, "temprdjfhjdfjdhfdws");
-  //   setRowsData(temprows);
-  // }, [ category?.subCategory]);
+  useEffect(() => {
+    const temprows =
+    subCategory?.subCategory
+    &&
+    subCategory?.subCategory
+?.    at(0) &&
+    subCategory?.subCategory
+?.    map((value, index) => ({
+  no: (
+          <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
+            {index+1}
+          </MDTypography>
+        ),
+        name: (
+          <MDTypography display="block" variant="button" fontWeight="medium" ml={1} lineHeight={1}>
+            {value?.name}
+          </MDTypography>
+        ),
+        image: (
+          <MDAvatar
+            src={`${process.env.REACT_APP_URI}/${value?.icon}`}
+            name={value?.name}
+            size="sm"
+            variant="rounded"
+          />
+        ),
+        view: (
+          <IconButton
+            aria-label="action_edit"
+            onClick={() => {
+              setViewData(value);
+              setIsOpenView(true);
+            }}
+          >
+            <Visibility
+              sx={({ palette: { dark, white, info } }) => ({
+                color: darkMode ? info.main : dark.main,
+              })}
+            />
+          </IconButton>
+        ),
+        delete: (
+          <Tooltip title={value?.disable ? "move to Active" : "delete"}>
+            <IconButton
+              aria-label="action_edit"
+              // disabled={value?.disable}
+              onClick={() => {
+                handleBinSwitch(value?._id);
+              }}
+            >
+              {value?.disable ? (
+                <Input
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: darkMode ? info.main : dark.main,
+                  })}
+                />
+              ) : (
+                <Delete
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: darkMode ? info.main : dark.main,
+                  })}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
+        ),
+        action: (
+          <MDBox
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: { sx: "column", xs: "column", md: "row", xl: "row" },
+              alignItems: "center",
+              gap: 2,
+            }}
+          >
+            <IconButton aria-label="action-edit" onClick={() => handleUpdateSubCategory(value)}>
+              <Edit
+                sx={({ palette: { dark, white, info } }) => ({
+                  color: darkMode ? white.main : info.main,
+                })}
+              />
+            </IconButton>
+            {/* <IconButton
+            aria-label="action-delete"
+            onClick={() => {
+              setIsOpenDialog((Preview) => ({
+                ...Preview,
+                open: true,
+                isId: value?._id,
+              }));
+              // dispatch(
+              //   deleteCategory({
+              //     url: `${process.env.REACT_APP_API}/deleteCategory/${value?._id}/${admin}`,
+              //   })
+              // ).then((data) => {
+              //   // console.log(data, "data");
+              //   if (data.payload.success) {
+              //     dispatch(
+              //       handleAlert({
+              //         isOpen: true,
+              //         type: `${data.payload.success ? "success" : "error"}`,
+              //         msg: data.payload.message,
+              //       })
+              //     );
+              //     // dispatch(getSubGlobalCategory(`/getAllCategoryByPCategoryId/${value?._id}`));
+              //     setIsId(value?._id);
+            }}
+          >
+            <Delete
+              sx={({ palette: { dark, white, info } }) => ({
+                color: darkMode ? white.main : info.main,
+              })}
+            />
+          </IconButton> */}
+          </MDBox>
+        ),
+        // action: (
+        //   <Switch
+        //     checked={value?.showInHome}
+        //     onChange={() => console.log("showInHome")}
+        //     inputProps={{ "aria-label": "controlled" }}
+        //   />
+        // ),
+      }));
+    // console.log(temprows, "temprows");
+    setRowsData(temprows);
+  }, [subCategory, isId]);
   const [expanded, setExpanded] = useState(false);
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
@@ -1009,9 +1111,6 @@ const Category = () => {
   };
 
   const handleUpdateSubCategory = (value) => {
-    // dispatch(getSubGlobalCategory(`/ByPCategoryId/${value}`)).then((data) =>
-    //   console.log(data)
-    // );
     setIsOpenUpdate2(true);
     setProfile({
       categoryName: value?.name || "",
@@ -1022,7 +1121,7 @@ const Category = () => {
         city && city?.length && value?.cityId?.length
           ? city?.filter((ele) => value?.cityId?.includes(ele?._id))
           : [],
-      categoryId: value?.pCategory?._id || "",
+      categoryId: isId || "",
       category__Id: value?._id || "",
       isShow: value?.icon || "",
       serverBannerImage: value?.banner?.length
@@ -1221,6 +1320,7 @@ const Category = () => {
                     onChange={handleChange(`panel${index}`)}
                     onClick={() => {
                       setIsId(value?._id);
+                      dispatch(getSubCategory(value))
                     }}
                     py={1.5}
                     px={3}
@@ -1482,7 +1582,7 @@ const Category = () => {
                     <AccordionDetails>
                       {IsLoading ? (
                         <SkLoading />
-                      ) : expanded === `panel${index}` && category.at(0)?.subCategory && category.at(0)?.subCategory ? (
+                      ) : expanded === `panel${index}` && value?.subCategory && value?.subCategory?.at(0) ? (
                         <MDBox sx={{ textAlign: "center" }}>
                           <MDTypography variant="button" fontWeight="medium" color="info">
                             SubCategory details
@@ -2855,7 +2955,7 @@ const Category = () => {
               </div>
             )}
           </MDBox>
-          <MDBox
+          {/* <MDBox
             display="flex"
             alignItems="flex-start"
             flexDirection="column"
@@ -2944,7 +3044,7 @@ const Category = () => {
                 ))}
               </div>
             ) : null}
-          </MDBox>
+          </MDBox> */}
           {/* <MDBox
             display="flex"
             alignItems="flex-start"

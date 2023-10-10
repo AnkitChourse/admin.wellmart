@@ -13,7 +13,7 @@ const SingleBlog = () => {
   const { darkMode } = controller;
   //   const { Loading, singleBlogs } = useSelector((data) => ({ ...data.isBlogs }));
   const { Loading, singleBlogs } = useSelector((data) => ({ ...data?.isBlogs }));
-  //   console.log(singleBlogs, "asdgagg");
+    // console.log(singleBlogs, "asdgagg");
   return (
     <>
       <MDBox
@@ -158,6 +158,18 @@ const SingleBlog = () => {
                   >
                     {" "}
                     Title : {singleBlogs?.title}{" "}
+                  </MDTypography>
+                  <MDTypography
+                    variant="h6"
+                    sx={{
+                      overflow: "hidden",
+                      whiteSpace: "wrap",
+                      textOverflow: "ellipsis",
+                      maxWidth: "100%",
+                    }}
+                  >
+                    {" "}
+                    Subtitle : {singleBlogs?.subtitle}{" "}
                   </MDTypography>
                 </MDBox>
                 <MDBox
@@ -323,7 +335,7 @@ const SingleBlog = () => {
                 />
               </MDBox>
               <Divider width={"100%"} />
-              <MDBox
+              {/* <MDBox
                 sx={({ palette: { dark, white, info }, breakpoints }) => ({
                   display: "flex",
                   alignItems: "flex-start",
@@ -350,7 +362,7 @@ const SingleBlog = () => {
                 ) : (
                   <MDBadge badgeContent="No" color="error" variant="gradient" size="lg" />
                 )}
-              </MDBox>
+              </MDBox> */}
               <MDBox
                 sx={({ palette: { dark, white, info }, breakpoints }) => ({
                   display: "flex",

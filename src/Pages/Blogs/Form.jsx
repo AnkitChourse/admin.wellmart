@@ -15,7 +15,7 @@ import { updateBlog } from "redux/festures/blogSlice";
 import { createPostBlogs } from "redux/festures/blogSlice";
 import { handleAlert } from "redux/festures/alertSlice";
 import Skeditor from "components/SKeditor";
-import { EditorState, convertToRaw, convertFromHTML } from "draft-js";
+import { EditorState, convertToRaw, convertFromHTML ,ContentState} from "draft-js";
 import { stateToHTML } from "draft-js-export-html";
 import AstrieskIcon  from 'components/AstrieskIcon'
 
@@ -23,6 +23,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
   const [isBlogTitle, setIsBlogTitle] = useState("");
+  const [isBlogSubTitle, setIsBlogSubTitle] = useState("");
   // const [isBlogContent, setIsBlogContent] = useState("");
   const [isBlogImage, setIsBlogImage] = useState("");
   const [isShow, setIsShow] = useState("");
@@ -30,13 +31,22 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
   const admin = localStorage.getItem("admin_id");
   const dispatch = useDispatch();
   const { Loading, singleBlogs } = useSelector((data) => ({ ...data?.isBlogs }));
+
   const [isBlogContent, setIsBlogContent] = useState(EditorState.createEmpty());
-  // console.log(singleBrands, "singleBrands");
+  console.log(singleBlogs, "singleBlogs");
   useEffect(() => {
     if (singleBlogs && isOpenUpdate) {
       setIsBlogTitle(singleBlogs?.title);
+      setIsBlogSubTitle(singleBlogs?.subtitle);
       setIsShow(singleBlogs?.image);
-      // setIsBlogContent(singleBlogs?.content);
+      const termsData = EditorState.createWithContent(
+        ContentState.createFromBlockArray(
+          convertFromHTML(singleBlogs?.discription).contentBlocks,
+          convertFromHTML(singleBlogs?.discription).entityMap
+        )
+      );
+      setIsBlogContent(termsData);
+
     }
   }, [singleBlogs, isOpenUpdate]);
   // console.log(singleBlogs);
@@ -51,7 +61,8 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
       if (isOpenUpdate) {
         const formData = new FormData();
         formData.append("title", isBlogTitle);
-        formData.append("content", convertContentToHTML());
+        formData.append("subtitle", isBlogSubTitle);
+        formData.append("discription", convertContentToHTML());
         formData.append("image", isBlogImage);
         // console.log(...formData, "akldjhksjdhnsdfg");
         dispatch(
@@ -77,13 +88,14 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
       } else {
         const formData = new FormData();
         formData.append("title", isBlogTitle);
-        formData.append("content", convertContentToHTML());
+        formData.append("subtitle", isBlogSubTitle);
+        formData.append("discription", convertContentToHTML());
         formData.append("image", isBlogImage);
         //   formData.append("showInHome", isBrandShowHome);
         // console.log(...formData, "akldjhksjdhnsdfg");
         dispatch(
           createPostBlogs({
-            url: `${process.env.REACT_APP_API}/creatBlog/${admin}`,
+            url: `${process.env.REACT_APP_API}/createBlog/${admin}`,
             data: formData,
           })
         ).then((data) => {
@@ -194,6 +206,27 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               flexDirection: "column",
             }}
           >
+            <MDTypography variant="h6">Blog subtitle <AstrieskIcon /></MDTypography>
+            <MDInput
+              required={true}
+              type="text"
+              placeholder="Blog Title"
+              fullWidth
+              name="Blog Title"
+              value={isBlogSubTitle}
+              onChange={(e) => setIsBlogSubTitle(e.target.value)}
+            />
+          </MDBox>
+          <MDBox
+            lineHeight={1}
+            gap={3}
+            width={"90%"}
+            sx={{
+              display: "flex",
+              alignItems: "flex-start",
+              flexDirection: "column",
+            }}
+          >
             <MDTypography variant="h6">
               Blog Content{" "}<AstrieskIcon />
               <MDTypography variant="body1" component="span" fontSize={11}>
@@ -213,7 +246,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               editorState={isBlogContent}
               setEditorState={setIsBlogContent}
               placeholder={"Blog Content "}
-              initialContent={singleBlogs && isOpenUpdate && singleBlogs?.content}
+              initialContent={singleBlogs && isOpenUpdate && singleBlogs?.discription}
               isButton={true}
               // content={"Blog Content"}
               required={true}

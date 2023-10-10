@@ -20,10 +20,10 @@ export const getEcomCategory = createAsyncThunk("getEcomCategory", async (url) =
     return { data: null };
   }
 });
-export const getSubCategory = createAsyncThunk("getSubCategory", async (url) => {
+export const getSubCategory = createAsyncThunk("getSubCategory", async (data) => {
   try {
-    const res = await http.get(url);
-    return res.data;
+    // const res = await http.get(url);
+    return data;
   } catch (error) {
     return { data: null };
   }
@@ -176,7 +176,7 @@ const categorySlice = createSlice({
       })
       .addCase(getSubCategory.fulfilled, (state, action) => {
         state.IsLoading = false;
-        state.subCategory = action.payload?.data;
+        state.subCategory = action.payload;
         state.subCategoryData = action.payload;
       })
       .addCase(getSubGlobalCategory.fulfilled, (state, action) => {

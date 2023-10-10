@@ -1,4 +1,4 @@
-import { Close, Edit, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Close, Edit, Visibility, VisibilityOff,Delete,Input, } from "@mui/icons-material";
 import {
   Card,
   FormControlLabel,
@@ -10,6 +10,7 @@ import {
   Switch,
   Select,
   MenuItem,
+  Tooltip,
 } from "@mui/material";
 import MDBox from "components/MDBox";
 import MDButton from "components/MDButton";
@@ -38,7 +39,7 @@ const columns = {
     { Header: "S.No", accessor: "no" },
     { Header: "blog details", accessor: "blog details" },
     { Header: "date", accessor: "date" },
-    { Header: "showInHome", accessor: "showInHome" },
+    // { Header: "showInHome", accessor: "showInHome" },
     { Header: "disable", accessor: "disable" },
     { Header: "view", accessor: "view" },
     { Header: "action", accessor: "action" },
@@ -66,7 +67,7 @@ const BlogPage = () => {
       )
     );
   }, [isSearch, pagess, isFilterName]);
-  //   console.log(blogs, "blogs");
+    // console.log(blogs, "blogs");
   useEffect(() => {
     if (blogs && blogs.length > 0) {
       const temprows =
@@ -153,7 +154,7 @@ const BlogPage = () => {
               aria-label="action_edit"
               onClick={() => {
                 setIsOpenView(true);
-                dispatch(getSingleBlog(`/getBlogById/${value?._id}`));
+                dispatch(getSingleBlog(`/getByBlogId/${value?._id}`));
               }}
             >
               <Visibility
@@ -164,14 +165,38 @@ const BlogPage = () => {
             </IconButton>
           ),
           disable: (
-            <Switch
-              value={value?.disable}
-              checked={value?.disable}
-              color={"info"}
-              onChange={(e) => {
-                // handleSwitchControl(value?._id);
-                // setIsSwitch(!isSwitch);
-                dispatch(
+            // <Switch
+            //   value={value?.disable}
+            //   checked={value?.disable}
+            //   color={"info"}
+            //   onChange={(e) => {
+        
+                
+            //     dispatch(
+            //       updateBlog({
+            //         url: `${process.env.REACT_APP_API}/disableBlog/${value?._id}/${admin}`,
+            //       })
+            //     ).then((data) => {
+            //       dispatch(
+            //         handleAlert({
+            //           isOpen: true,
+            //           type: `${data?.payload?.success ? "success" : "error"}`,
+            //           msg: data?.payload?.message,
+            //         })
+            //       );
+            //       if (data?.payload?.success) {
+            //         dispatch(getGlobalBlog(`/getAllBlog?adminId=${admin}`));
+            //       }
+            //     });
+            //   }}
+            //   inputProps={{ "aria-label": "controlled" }}
+            // />
+            <Tooltip title={value?.disable ? "move to Active" : "delete"}>
+            <IconButton
+              aria-label="action_edit"
+              // disabled={value?.disable}
+              onClick={() => {
+                     dispatch(
                   updateBlog({
                     url: `${process.env.REACT_APP_API}/disableBlog/${value?._id}/${admin}`,
                   })
@@ -188,8 +213,23 @@ const BlogPage = () => {
                   }
                 });
               }}
-              inputProps={{ "aria-label": "controlled" }}
-            />
+              
+            >
+              {value?.disable ? (
+                <Input
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: darkMode ? info.main : dark.main,
+                  })}
+                />
+              ) : (
+                <Delete
+                  sx={({ palette: { dark, white, info } }) => ({
+                    color: darkMode ? info.main : dark.main,
+                  })}
+                />
+              )}
+            </IconButton>
+          </Tooltip>
           ),
           showInHome: (
             <Switch
@@ -227,7 +267,7 @@ const BlogPage = () => {
                   setIsOpen(true);
                   setIsOpenUpdate(true);
                   // console.log(value?._id);
-                  dispatch(getSingleBlog(`/getBlogById/${value?._id}`));
+                  dispatch(getSingleBlog(`/getByBlogId/${value?._id}`));
                 }}
               >
                 <Edit
