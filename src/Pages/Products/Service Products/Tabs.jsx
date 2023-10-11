@@ -188,94 +188,29 @@ export default function BasicTabs({
   ];
 
   const columns = {
-    // service: {
-    //   name: "Service Products",
-    //   value: "service",
-    //   pagination: true,
-      col: [
-        { Header: "S.No", accessor: "no" },
-        { Header: "Thumbnail", accessor: "thumbnail" },
-        { Header: "Title", accessor: "title" },
-        // { Header: "Price", accessor: "price" },
-        { Header: "MRP", accessor: "mrp" },
-        //   {
-        //     Header: "featured/bestselling/trending",
-        //     accessor: "featured/bestselling/trending",
-        //   },
-        { Header: "Category", accessor: "category" },
-        // { Header: "Stock / Qty", accessor: "showStock/Qty" },
-        // { Header: "Visibility", accessor: "visibility" },
-        { Header: "delete", accessor: "delete" },
 
-        { Header: "View", accessor: "view" },
-        { Header: "Action", accessor: "action" },
-      ],
+    col: [
+      { Header: "S.No", accessor: "no" },
+      { Header: "Thumbnail", accessor: "thumbnail" },
+      { Header: "Title", accessor: "title" },
+      // { Header: "Price", accessor: "price" },
+      { Header: "MRP", accessor: "mrp" },
+      //   {
+      //     Header: "featured/bestselling/trending",
+      //     accessor: "featured/bestselling/trending",
+      //   },
+      { Header: "Category", accessor: "category" },
+      // { Header: "Stock / Qty", accessor: "showStock/Qty" },
+      // { Header: "Visibility", accessor: "visibility" },
+      { Header: "delete", accessor: "delete" },
+
+      { Header: "View", accessor: "view" },
+      { Header: "Action", accessor: "action" },
+    ],
     // },
   };
 
-  const { category, EcomCategory } = useSelector((data) => ({ ...data?.isCategory }));
-
-  // const handleChange = (event, newValue) => {
-  //   setValue(newValue);
-  // };
-
-  // useEffect(() => {
-  //   if (pathname === "/products/ecom-products") setcurrent(columns?.ecomm);
-  //   else setcurrent(columns?.service);
-  // }, [pathname]);
-
-  // useEffect(() => {
-  //   dispatch(getCategory(`${process.env.REACT_APP_API}/getAllCategory`));
-  // }, []);
-
-  // useEffect(() => {
-  //   if (current?.value === "service") {
-  //     dispatch(getAllCity(`/getAllCityByAdmin/${admin}`));
-  //   }
-
-  //   if (current?.value === "service" || current?.value === "ecomm")
-  //     http
-  //       .get(
-  //         current?.value !== "service"
-  //           ? `/eCommerce/getAllSubCategory/${admin}`
-  //           : `/getAllSubCategory/${admin}`
-  //       )
-  //       .then((response) => {
-  //         setAllSubCategory(response?.data?.data);
-  //       })
-  //       .catch((error) => {
-  //         dispatch(
-  //           handleAlert({
-  //             isOpen: true,
-  //             type: "error",
-  //             msg: error?.response?.data?.message,
-  //           })
-  //         );
-  //       });
-
-  //   http
-  //     .get(`/getAllTax/${admin}`)
-  //     .then((response) => {
-  //       const tax =
-  //         response?.data?.data && response?.data?.data?.length
-  //           ? [...response?.data?.data]?.map((ele) => {
-  //               const temp = { ...ele };
-  //               temp.taxPercent = `${temp.taxPercent} %`;
-  //               return temp;
-  //             })
-  //           : [];
-  //       setAllTax(tax);
-  //     })
-  //     .catch((error) => {
-  //       dispatch(
-  //         handleAlert({
-  //           isOpen: true,
-  //           type: "error",
-  //           msg: error?.response?.data?.message,
-  //         })
-  //       );
-  //     });
-  // }, [current?.value]);
+  const { category } = useSelector((data) => ({ ...data?.isCategory }));
 
   useEffect(() => {
     dispatch(
@@ -422,8 +357,7 @@ export default function BasicTabs({
                   style: "currency",
                   currency: "INR",
                 }) || "-"} */}
-                {value?.mrp
-                 || "-"}₹
+                {value?.mrp || "-"}₹
               </MDTypography>
             ),
             category: (
@@ -524,9 +458,7 @@ export default function BasicTabs({
                         })
                       );
                       if (data?.payload?.success) {
-                        dispatch(
-                          getAllGlobalProducts(`${process.env.REACT_APP_API}productFilter`)
-                        );
+                        dispatch(getAllGlobalProducts(`${process.env.REACT_APP_API}productFilter`));
                       }
                     });
                   }}
@@ -609,44 +541,6 @@ export default function BasicTabs({
             },
           })}
         >
-          {/* <MDBox
-            py={3}
-            sx={{
-              flexDirection: "column",
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "flex-start",
-              gap: 1.5,
-              width: "50%",
-            }}
-          >
-            <MDTypography variant="button"> Product Filter</MDTypography>
-            <Select
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              value={isFilterName}
-              onChange={(e) => {
-                setIsFilterName(e.target.value);
-                setIsPages(1);
-                setcurrent(tabsName && tabsName[0]);
-                setIsSearch("");
-              }}
-              sx={({ palette: { dark, white, info } }) => ({
-                width: '100%',
-                height: "3rem",
-                color: darkMode ? white?.main : dark?.main,
-                bgcolor: "transparent",
-                "&	.MuiSelect-icon": {
-                  color: darkMode ? white?.main : dark?.main,
-                  display: "block !important",
-                  fontSize: "1.5rem !important",
-                },
-              })}
-            >
-              <MenuItem value={"name"}>Name</MenuItem>
-              <MenuItem value={"productId"}>ProductId</MenuItem>
-            </Select>
-          </MDBox> */}
           <MDBox
             sx={({ palette: { dark, white, info }, breakpoints }) => ({
               [breakpoints.up("xs")]: {
@@ -783,17 +677,6 @@ export default function BasicTabs({
                     </MenuItem>
                   ))}
                 </Select>
-
-                {/* <SimpleSelect
-                  disabled={Loading}
-                  sx={{ margin: "10px" }}
-                  data={dateFilter}
-                  category={filter}
-                  name="type"
-                  onChange={(e) => setFilter(e.target.value)}
-                  origin="Good Type"
-                  required={false}
-                /> */}
               </MDBox>
               <MDBox width="23%" display="flex" flexDirection="column">
                 <MDTypography variant="button">Filter By Category</MDTypography>
@@ -1037,126 +920,11 @@ export default function BasicTabs({
             </MDBox>
           </Collapse>
         </MDBox>
-        {/* <MDBox width="23%" display="flex" flexDirection="column" px={2}>
-          <MDTypography variant="button">Sort By discount</MDTypography>
-          <Select
-            disabled={Loading}
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            value={current?.filter?.disable}
-            defaultValue={""}
-            onChange={(e) => {
-              setIsPages(1);
-              setcurrent((prev) => ({
-                ...prev,
-                filter: { ...prev?.filter, disable: e.target.value },
-              }));
-            }}
-            sx={({ palette: { dark, white, info } }) => ({
-              width: "100%",
-              height: "3rem",
-              color: darkMode ? white?.main : dark?.main,
-              bgcolor: "transparent",
-              "&	.MuiSelect-icon": {
-                color: darkMode ? white?.main : dark?.main,
-                display: "block !important",
-                fontSize: "1.5rem !important",
-              },
-            })}
-          >
-            {sortByPrice?.map((ele, i) => (
-              <MenuItem key={i} value={ele?._id}>
-                {ele?.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </MDBox> */}
       </MDBox>
-      {/* <Box sx={{ borderBottom: 1, borderColor: "divider", py: 1 }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          {tabsName.map((elm, i) => (
-            <Tab
-              sx={({ palette: { dark, white, info } }) => ({
-                // backgroundColor: darkMode ? white.main : info.main,
-                "&.MuiButtonBase-root-MuiTab-root": {
-                  backgroundColor: info.main,
-                  color: white.main,
-                },
-                "&.Mui-selected": {
-                  backgroundColor: info.main,
-                  color: white.main,
-                },
-              })}
-              label={elm.name}
-              {...a11yProps(i)}
-              key={i}
-              onClick={() => {
-                setcurrent(elm);
-                handlePageChange(1);
-              }}
-            />
-          ))}
-        </Tabs>
-      </Box> */}
+
       {Loading ? (
         <SkLoading />
       ) : (
-        // tabsName.map((elm, i) => {
-        //   return (
-        //     <>
-        //       <TabPanel value={value} index={i}>
-        //         {/* <ProductsTable
-        //         columns={current.col}
-        //         rows={rows}
-        //         current={current}
-        //         currentFilter={currentFilter}
-        //         setCurrentFilter={setCurrentFilter}
-        //         filters={filters}
-        //         filterInput={filterInput}
-        //         setFilterInput={setFilterInput}
-        //       /> */}
-        //         {AllProducts && AllProducts.length > 0 ? (
-        //           <DataTable
-        //             table={{
-        //               columns: current.col,
-        //               rows: rowsData,
-        //             }}
-        //             isSorted={false}
-        //             entriesPerPage={false}
-        //             isPages={AllProducts && AllProducts.length}
-        //             noEndBorder
-        //             canSearch={false}
-        //             showTotalEntries={false}
-        //             pagination={false}
-        //             isPagination={false}
-        //           />
-        //         ) : (
-        //           <MDBox
-        //             // key={index}
-        //             display="flex"
-        //             justifyContent="center"
-        //             gap={2}
-        //             alignItems="center"
-        //           // width={"100%"}
-        //           >
-        //             <MDTypography variant="h6">Something went wrong !</MDTypography>
-        //           </MDBox>
-        //         )}
-        //         {current.pagination ? (
-        //           <MDBox className="center" py={3}>
-        //             {/* <Pagination
-        //             count={totalPage}
-        //             page={filterPage}
-        //             onChange={handlePageChange}
-        //             variant="outlined"
-        //             color="primary"
-        //           /> */}
-        //           </MDBox>
-        //         ) : null}
-        //       </TabPanel>
-        //     </>
-        //   );
-        // })
         <>
           {AllProducts && AllProducts.length > 0 ? (
             <DataTable
