@@ -84,6 +84,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
           data: ShipingData,
         })
       ).then((data) => {
+        console.log(data,"data")
         dispatch(
           handleAlert({
             isOpen: true,

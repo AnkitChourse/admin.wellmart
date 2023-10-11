@@ -1,4 +1,6 @@
-import http from "Utils/api2";
+import axios from "axios";
+// import http from "Utils/api";
+import http from "Utils/api2"
 import { handleAlert } from "./alertSlice";
 
 const { createSlice, createAsyncThunk } = require("@reduxjs/toolkit");
