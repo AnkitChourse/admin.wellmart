@@ -1080,7 +1080,7 @@ const Category = () => {
                 <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                 &nbsp; Create Category
               </MDButton>
-              {/* <MDButton
+              <MDButton
                 disabled={Loading}
                 variant="gradient"
                 sx={({ palette: { dark, white, info } }) => ({
@@ -1097,7 +1097,7 @@ const Category = () => {
               >
                 <Icon sx={{ fontWeight: "bold" }}>add</Icon>
                 &nbsp; Create subCategory
-              </MDButton> */}
+              </MDButton>
             </MDBox>{" "}
           </Card>
         </MDBox>

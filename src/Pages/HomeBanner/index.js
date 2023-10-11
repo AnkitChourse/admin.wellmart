@@ -64,7 +64,7 @@ const HomeBanner = () => {
   const [isOpenDialog, setIsOpenDialog] = useState({ open: false, isId: null });
   //   console.log(AllHomeBanner);
   useEffect(() => {
-    dispatch(getAllHomeBanner(`/getAllHomeBanner/${admin}`));
+    dispatch(getAllHomeBanner(`/getAllBanner`));
   }, []);
 
   return (
@@ -181,7 +181,7 @@ const HomeBanner = () => {
               </Box>
               <Box sx={{ height: "50vh", width: "100%", marginBottom: "5%" }}>
                 <img
-                  src={`${process.env.REACT_APP_URI}/${ele?.banner}`}
+                  src={`${process.env.REACT_APP_URI}/${ele?.bannerImage}`}
                   alt={"img"}
                   onError={(e) => {
                     (e.onError = null),

@@ -43,11 +43,11 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
   const [controller] = useMaterialUIController();
   const { darkMode } = controller;
   const [couponData, setCouponData] = useState({
-    title: "",
-    subtitle: "",
-    backgroundColourCode: "",
-    taskColourCode: "",
-    pcategory: "",
+    link: "",
+    // subtitle: "",
+    // backgroundColourCode: "",
+    // taskColourCode: "",
+    // pcategory: "",
   });
   const [isCouponsIcon, setIsCouponsIcon] = useState("");
   const [isShow, setIsShow] = useState("");
@@ -74,29 +74,29 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
         )
       );
   }, [couponData?.pcategory]);
-  console.log(singlehomeCategory, "singlehomeCategory");
+  // console.log(singlehomeCategory, "singlehomeCategory");
   useEffect(() => {
     if (singlehomeCategory && isOpenUpdate) {
       setIsShow(singlehomeCategory?.image);
       setCouponData((prev) => ({
         ...prev,
-        title: singlehomeCategory?.title,
-        subtitle: singlehomeCategory?.subtitle,
-        backgroundColourCode: singlehomeCategory?.backgroundColourCode,
-        taskColourCode: singlehomeCategory?.taskColourCode,
-        pcategory: singlehomeCategory?.pcategory,
-        category: singlehomeCategory?.category,
+        link: singlehomeCategory?.link,
+        // subtitle: singlehomeCategory?.subtitle,
+        // backgroundColourCode: singlehomeCategory?.backgroundColourCode,
+        // taskColourCode: singlehomeCategory?.taskColourCode,
+        // pcategory: singlehomeCategory?.pcategory,
+        // category: singlehomeCategory?.category,
       }));
     } else {
       setIsShow("");
       setCouponData((prev) => ({
         ...prev,
-        title: "",
-        subtitle: "",
-        backgroundColourCode: "",
-        taskColourCode: "",
-        category: "",
-        pcategory: "",
+        link: "",
+        // subtitle: "",
+        // backgroundColourCode: "",
+        // taskColourCode: "",
+        // category: "",
+        // pcategory: "",
       }));
     }
   }, [singlehomeCategory, isOpenUpdate]);
@@ -119,7 +119,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
       couponData && Object.entries(couponData).map(([key, value]) => formData.append(key, value));
       dispatch(
         updateSingleCategoryCart({
-          url: `${process.env.REACT_APP_APII}/updateHomeCategoryCart/${singlehomeCategory?._id}/${admin}`,
+          url: `${process.env.REACT_APP_API}updatehomeCategoryCart/${singlehomeCategory?._id}`,
           data: formData,
         })
       ).then((data) => {
@@ -137,15 +137,15 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
           setIsShow("");
           setCouponData((prev) => ({
             ...prev,
-            title: "",
-            subtitle: "",
-            backgroundColourCode: "",
-            taskColourCode: "",
-            category: "",
-            pcategory: "",
+            link: "",
+            // subtitle: "",
+            // backgroundColourCode: "",
+            // taskColourCode: "",
+            // category: "",
+            // pcategory: "",
           }));
           dispatch(
-            getHomeCategoryCart(`${process.env.REACT_APP_APII}/getAllHomeCategoryCart/${admin}`)
+            getHomeCategoryCart(`${process.env.REACT_APP_API}getAllHomeCategoryCart`)
           );
         } else {
           setLoading(false);
@@ -168,7 +168,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
       // console.log(...formData);
       dispatch(
         createCategoryCart({
-          url: `${process.env.REACT_APP_APII}/createHomeCategoryCart/${admin}`,
+          url: `${process.env.REACT_APP_API}/createhomeCategoryCart`,
           data: formData,
         })
       ).then((data) => {
@@ -194,7 +194,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
             pcategory: "",
           }));
           dispatch(
-            getHomeCategoryCart(`${process.env.REACT_APP_APII}/getAllHomeCategoryCart/${admin}`)
+            getHomeCategoryCart(`${process.env.REACT_APP_API}/getAllHomeCategoryCart`)
           );
         } else {
           setLoading(false);
@@ -266,20 +266,20 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
             }}
           >
             <MDTypography variant="h6">
-              Title <AstrieskIcon />
+              Link <AstrieskIcon />
             </MDTypography>
             <MDInput
               disabled={createUpdateLoading || Loading}
               required={true}
               type="text"
-              placeholder="Title"
+              placeholder="Link"
               fullWidth
-              name="title"
-              value={couponData?.title}
+              name="link"
+              value={couponData?.link}
               onChange={handleForm}
             />
           </MDBox>
-          <MDBox
+          {/* <MDBox
             lineHeight={1}
             gap={3}
             width={"90%"}
@@ -302,8 +302,8 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               value={couponData?.subtitle}
               onChange={handleForm}
             />
-          </MDBox>
-          <MDBox
+          </MDBox> */}
+          {/* <MDBox
             lineHeight={1}
             gap={3}
             width={"90%"}
@@ -330,8 +330,8 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               value={couponData?.backgroundColourCode}
               onChange={handleForm}
             />
-          </MDBox>
-          <MDBox
+          </MDBox> */}
+          {/* <MDBox
             lineHeight={1}
             gap={3}
             width={"90%"}
@@ -358,9 +358,9 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               value={couponData?.taskColourCode}
               onChange={handleForm}
             />
-          </MDBox>
+          </MDBox> */}
 
-          <MDBox
+          {/* <MDBox
             lineHeight={1}
             gap={3}
             width={"90%"}
@@ -384,9 +384,9 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               valueKey="_id"
               simpleArray={false}
             />
-          </MDBox>
+          </MDBox> */}
 
-          <MDBox
+          {/* <MDBox
             lineHeight={1}
             gap={3}
             width={"90%"}
@@ -410,7 +410,7 @@ const Form = ({ isOpenUpdate, setIsOpenUpdate, setIsOpen }) => {
               nameKey="name"
               simpleArray={false}
             />
-          </MDBox>
+          </MDBox> */}
 
           <MDBox
             lineHeight={1}
