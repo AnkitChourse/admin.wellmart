@@ -61,7 +61,7 @@ const ImagePicker = ({
     }
   }
 
-  console.log(imageURLs);
+  // console.log(imageURLs);
   return (
     <div style={{ width: "100%" }}>
       <input

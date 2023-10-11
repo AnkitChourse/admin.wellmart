@@ -124,6 +124,14 @@ const routes = [
     route: "/orders",
     component: <Orders />,
   },
+  {
+    type: "collapse",
+    name: "Blogs",
+    key: "blogs",
+    icon: <Icon fontSize="small">Blogs</Icon>,
+    route: "/blogs",
+    component: <BlogPage />,
+  },
   // {
   //   type: "collapse",
   //   name: "Home",
