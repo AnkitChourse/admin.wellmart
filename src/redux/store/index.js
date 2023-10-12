@@ -32,6 +32,8 @@ import homeProduct from "redux/festures/homeProduct";
 import PermissionsSlice from "redux/festures/PermissionsSlice";
 import SubscribeSlice from "redux/festures/SubscribeSlice";
 import Shipingslice from "redux/festures/Shipingslice";
+import ContectSlice from "redux/festures/ContectSlice";
+import PricerangeSlice from "redux/festures/PricerangeSlice";
 
 export default configureStore(
   {
@@ -39,8 +41,10 @@ export default configureStore(
       admin: adminSlice,
       isAlert: alertSlice,
       isPermition: PermissionsSlice,
+      isPrice: PricerangeSlice,
       isSubscribe: SubscribeSlice,
       isShiping: Shipingslice,
+      isContect: ContectSlice,
       isCategory: categorySlice,
       isProducts: productSlice,
       isBrand: brandSlice,

@@ -85,7 +85,6 @@ const CreateForm = ({
   //     // dispatch(getAllProducts(`/getAllProduct`));
   //   }, []);
 
- 
   const [serverThumbnail, setServerThumbnail] = useState("");
   const [isThumbnil, setIsThumbnil] = useState(null);
   const [isImages, setIsImages] = useState(null);
@@ -96,7 +95,7 @@ const CreateForm = ({
   // const [serverAdditionalVideos, setServerAdditionalVideos] = useState(null)
   // const [isVideo, setIsVideo] = useState(null);
   // const [serverVideo, setServerVideo] = useState(null)
- 
+
   const [allBrands, setAllBrands] = useState([]);
   const [allTax, setAllTax] = useState([]);
   const [isProductDescriptionServer, setIsProductDescriptionServer] = useState("");
@@ -240,13 +239,13 @@ const CreateForm = ({
     }
   }, [isOpen]);
 
-  console.log(singleProduct,"singleProduct")
+  console.log(singleProduct, "singleProduct");
 
   useEffect(() => {
     if (isOpen && singleProduct) {
       setIsData({
         name: singleProduct?.name,
-        brandId: singleProduct?.brandId,
+        brandId: singleProduct?.brandId?._id,
         categoryId: singleProduct?.categoryId?._id,
         mrp: singleProduct?.mrp,
         priceDiscount: singleProduct?.priceDiscount,
@@ -259,34 +258,26 @@ const CreateForm = ({
         affiliate: singleProduct?.affiliate?.affiliate,
       });
 
-      setServerThumbnail(singleProduct?.thumnail);
-      const tempImages = [];
-      const tempVideos = [];
-
-      const tempImages2 = [];
-      const tempVideos2 = [];
-
-      if (singleProduct?.images && singleProduct?.images?.length)
-        singleProduct?.images?.map((ele) =>
-          ele?.type === "IMAGE" ? tempImages?.push(ele) : tempVideos.push(ele)
-        );
-
-      if (singleProduct?.additional && singleProduct?.additional?.length)
-        singleProduct?.additional?.map((ele) =>
-          ele?.type === "IMAGE" ? tempImages2?.push(ele) : tempVideos2.push(ele)
-        );
-        // if (singleCoupons.categoryId && singleCoupons.categoryId.length > 0) {
-        //   const categoriesArray =
-        //     singleCoupons?.categoryId &&
-        //     singleCoupons?.categoryId.length > 0 &&
-        //     singleCoupons?.categoryId.map((items) => items?._id);
-  
-        //   setIsCategory(categoriesArray);
-        // }
-      setServerImages(tempImages && tempImages?.length ? tempImages : null);
+      setServerThumbnail(singleProduct?.thumbnail);
+      setServerImages(singleProduct?.thumbnail);
       // setServerVideo(tempVideos && tempVideos?.length ? tempVideos : null)
-      setServerAdditionalImages(tempImages2 && tempImages2?.length ? tempImages2 : null);
-      // setServerAdditionalVideos(tempVideos2 && tempVideos2?.length ? tempVideos2 : null)
+      setServerAdditionalImages(singleProduct?.thumbnail);
+
+      const tempImages = [];
+      const tempImages2 = [];
+
+      if (singleProduct?.productImages && singleProduct?.productImages?.length) {
+        singleProduct?.productImages?.forEach((ele) => tempImages.push(ele));
+      }
+
+      if (singleProduct?.productBanner && singleProduct?.productBanner?.length) {
+        singleProduct?.productBanner?.forEach((ele) => tempImages2.push(ele));
+      }
+
+      // Ensure that tempImages and tempImages2 are set to an empty array if they are null
+      setServerImages(tempImages || []);
+      setServerAdditionalImages(tempImages2 || []);
+
       setIsProductDescriptionServer(singleProduct?.description || "");
       setIsProductkeyBenefitServer(singleProduct?.keyBenefit || "");
       setIsProductotherInformationServer(singleProduct?.otherInformation || "");
@@ -669,6 +660,10 @@ const CreateForm = ({
     try {
       const formdata = new FormData();
 
+
+
+      
+
       if (isImages && isImages.length)
         isImages.forEach((image) => formdata.append("images", image));
 
@@ -677,16 +672,14 @@ const CreateForm = ({
 
       if (isThumbnil) formdata.append("thumbnail", isThumbnil);
 
-      // Use Object.entries for a cleaner loop
-      for (const [key, value] of Object.entries(isData)) {
-        if (key === "features") {
-          value.forEach((feature) => formdata.append("features", feature));
-        } else {
-          formdata.append(key, value);
-        }
-      }
+  
 
       formdata.append("description", convertContentToHTML());
+      formdata.append("keyBenefit", convertContentToHTML());
+      formdata.append("directionForUse", convertContentToHTML());
+      formdata.append("SafetyInformation", convertContentToHTML());
+      formdata.append("otherInformation", convertContentToHTML());
+  
 
       const url = singleProduct
         ? `${process.env.REACT_APP_API}/updateProduct/${singleProduct._id}/${admin}`
@@ -1384,7 +1377,6 @@ const CreateForm = ({
                   name="category"
                   simpleArray={true}
                 /> */}
-
               </MDBox>
               <MDBox
                 lineHeight={1}
@@ -1577,7 +1569,7 @@ const CreateForm = ({
                           <img
                             className="Image"
                             style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                            src={`${process.env.REACT_APP_URI}/${value?.url}`}
+                            src={`${process.env.REACT_APP_URI}/${value}`}
                           />
                         </span>
                         <span
@@ -1670,7 +1662,7 @@ const CreateForm = ({
                           <img
                             className="Image"
                             style={{ width: "100%", height: "100%", objectFit: "contain" }}
-                            src={`${process.env.REACT_APP_URI}/${value?.url}`}
+                            src={`${process.env.REACT_APP_URI}/${value}`}
                           />
                         </span>
                         <span

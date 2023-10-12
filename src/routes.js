@@ -66,6 +66,8 @@ import {
   AddBusiness,
   ViewCarousel,
   Anchor,
+  Assessment,
+  Contactless,
 } from "@mui/icons-material";
 import Brands from "Pages/Brands";
 import BlogPage from "Pages/Blogs";
@@ -90,6 +92,8 @@ import EcomAppBanner from "Pages/AppBanner/EcommAppBanner";
 import SubAdmin from "Pages/SubAdmin";
 import Subscribe from "Pages/Subscribe";
 import Shiping from "Pages/Shiping";
+import ContectUs from "Pages/ContectUs";
+import PriceRange from "Pages/PriceRange";
 
 const routes = [
   {
@@ -104,17 +108,28 @@ const routes = [
     type: "collapse",
     name: "Brands",
     key: "brands",
-    icon: <Icon fontSize="small">Brands</Icon>,
+    icon: <Api />,
     route: "/brands",
     component: <Brands />,
+    isPermissions: "brands",
+  },
+  {
+    type: "collapse",
+    name: "Price Range",
+    key: "pricerange",
+    icon: <Assessment/>,
+    route: "/pricerange",
+    component: <PriceRange />,
+    isPermissions: "pricerange",
   },
   {
     type: "collapse",
     name: "Categories",
     key: "categories",
-    icon: <Icon fontSize="small">Categories</Icon>,
+    icon: <Icon fontSize="small">category</Icon>,
     route: "/Categories",
     component: <Category />,
+    isPermissions: "categories",
   },
   {
     type: "collapse",
@@ -123,14 +138,16 @@ const routes = [
     icon: <ShoppingCart />,
     route: "/orders",
     component: <Orders />,
+    isPermissions: "orders",
   },
   {
     type: "collapse",
     name: "Blogs",
     key: "blogs",
-    icon: <Icon fontSize="small">Blogs</Icon>,
+    icon: <MenuBook/>,
     route: "/blogs",
     component: <BlogPage />,
+    isPermissions: "blogs",
   },
   // {
   //   type: "collapse",
@@ -290,9 +307,20 @@ const routes = [
         key: "products",
         collapseKey: "product1",
         route: "/products/service-products",
-        icon: <Icon fontSize="small"></Icon>,
+        icon: <Icon fontSize="small">storefront</Icon>,
         component: <ServiceProducts />,
-        permissions: ["ALL", "PRODUCT"],
+    
+        isPermissions: "products",
+      },
+        {
+          type: "collapse",
+        name: "Contect Us",
+        key: "Contect Us",
+        collapseKey: "Contect Us",
+        route: "/contectUs",
+        icon: <Contactless/>,
+        component: <ContectUs />,
+       isPermissions: "contectUs",
       },
 
 
@@ -346,7 +374,9 @@ const routes = [
         route: "/utilities/tax",
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
         component: <Tax />,
-        permissions: ["ALL", "TAX"],
+        // permissions: ["ALL", "TAX"],
+        isPermissions: "tax",
+        
       },
       {
         name: "Subscribe",
@@ -355,16 +385,18 @@ const routes = [
         route: "/utilities/brands",
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
         component: <Subscribe />,
-        permissions: ["ALL", "Subscribe"],
+   
+        isPermissions: "subscribe",
       },
       {
-        name: "Shiping",
+        name: "Shipping",
         key: "Utilities",
         collapseKey: "Utilities3",
         route: "/utilities/Shiping",
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
         component: <Shiping />,
-        permissions: ["ALL", "Shiping"],
+     
+        isPermissions: "shipping",
       },
 
 
@@ -376,7 +408,8 @@ const routes = [
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
         route: "/coupons",
         component: <Coupons />,
-        permissions: ["ALL", "COUPON"],
+       
+        isPermissions: "coupons",
       },
      
     ],
@@ -489,7 +522,7 @@ const routes = [
         route: "/users/customers",
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
         component: <Users />,
-        permissions: ["ALL", "USERS"],
+        isPermissions: "customers",
       },
       // {
       //   name: "Partners",
@@ -516,7 +549,8 @@ const routes = [
         route: "/users/subadmins",
         icon: <Icon fontSize="small">radio_button_checked</Icon>,
         component: <SubAdmin />,
-        permissions: ["ALL", "USERS"],
+      
+        isPermissions: "subadmin",
       },
     ],
   },
@@ -544,7 +578,8 @@ const routes = [
     icon: <RoomPreferences />,
     route: "/company",
     component: <Company />,
-    permissions: ["ALL", "COMMPANY"],
+
+    isPermissions: "company",
   },
   {
     type: "route",
@@ -553,7 +588,8 @@ const routes = [
     icon: <Icon fontSize="small">person</Icon>,
     route: "/profile",
     component: <Profile />,
-    permissions: ["ALL"], 
+    isPermissions: "all",
+
   },
   {
     type: "route",
