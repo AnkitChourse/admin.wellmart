@@ -630,20 +630,9 @@ function Header({ children }) {
                         maxWidth: "70%",
                       }}
                     >
-                      {/* {value.split(",")} */}
-
-                      {/* {value.split(",").map((permission, index) => (
-    <span key={index}>{permission.trim()}</span>
-
-
-  ))} */}
-
-                      {value.split(" ")
-                        // .replace(/^\[|\]$/g, "")
-                       
-                        .map((permission, index) => (
-                          <span key={index}>{permission}</span>
-                        ))}
+                      {value.map((permissions, index) => (
+                        <span key={index}>{permissions}</span>
+                      ))}
                     </MDTypography>
                   </MDBox>
                 ))}
