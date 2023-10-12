@@ -42,15 +42,15 @@ const columns = {
     { Header: "S.No", accessor: "no" },
     { Header: " details", accessor: " details" },
     // { Header: "date", accessor: "date" },
-    { Header: "Background Colour Code", accessor: "backgroundColourCode" },
+    // { Header: "Background Colour Code", accessor: "backgroundColourCode" },
     // {
     //   Header: "min order price / max discount price",
     //   accessor: "min order price / max discount price",
     // },
-    {
-      Header: "Task Colour Code",
-      accessor: "taskColourCode",
-    },
+    // {
+    //   Header: "Task Colour Code",
+    //   accessor: "taskColourCode",
+    // },
     // { Header: "disable", accessor: "disable" },
     { Header: "view", accessor: "view" },
     { Header: "action", accessor: "action" },
@@ -70,9 +70,9 @@ const HomeCategoryCart = () => {
   const { Loading, homeCategory, singlehomeCategory } = useSelector((state) => ({
     ...state.isHomeCategoryCart,
   }));
-
+// console.log(singlehomeCategory)
   useEffect(() => {
-    dispatch(getHomeCategoryCart(`${process.env.REACT_APP_APII}/getAllHomeCategoryCart/${admin}`));
+    dispatch(getHomeCategoryCart(`${process.env.REACT_APP_API}getAllhomeCategoryCart`));
   }, []);
 
   useEffect(() => {
@@ -122,7 +122,7 @@ const HomeCategoryCart = () => {
                   ml={1}
                   lineHeight={1}
                 >
-                  Title:
+                  Link:
                 </MDTypography>
                 <MDTypography
                   display="block"
@@ -138,11 +138,13 @@ const HomeCategoryCart = () => {
                     WebkitLineClamp: 2,
                     overflow: "hidden",
                     textOverflow: "ellipsis",
+                    wordWrap: "break-word",
+                    wordBreak:"break-all",
                   }}
                 >
-                  {value?.title || "N/A"}
+                  {value?.link || "N/A"}
                 </MDTypography>
-                <MDTypography
+                {/* <MDTypography
                   display="block"
                   variant="button"
                   fontWeight="medium"
@@ -170,7 +172,7 @@ const HomeCategoryCart = () => {
                   fontSize={12.5}
                 >
                   {value?.subtitle || "N/A"}
-                </MDTypography>
+                </MDTypography> */}
                 {/* <MDTypography
                   display="block"
                   variant="button"
@@ -632,7 +634,7 @@ const HomeCategoryCart = () => {
               onClick={() => {
                 dispatch(
                   deleteSingleCategoryCart(
-                    `${process.env.REACT_APP_APII}/deleteHomeCategoryCart/${isOpenDialog?.isId}/${admin}`
+                    `${process.env.REACT_APP_API}/deletehomeCategoryCart/${isOpenDialog?.isId}`
                   )
                 ).then((data) => {
                   dispatch(
@@ -645,7 +647,7 @@ const HomeCategoryCart = () => {
                   if (data?.payload?.success) {
                     dispatch(
                       getHomeCategoryCart(
-                        `${process.env.REACT_APP_APII}/getAllHomeCategoryCart/${admin}`
+                        `${process.env.REACT_APP_API}/getAllhomeCategoryCart`
                       )
                     );
                   }

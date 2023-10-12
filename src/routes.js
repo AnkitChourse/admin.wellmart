@@ -90,6 +90,8 @@ import EcomAppBanner from "Pages/AppBanner/EcommAppBanner";
 import SubAdmin from "Pages/SubAdmin";
 import Subscribe from "Pages/Subscribe";
 import Shiping from "Pages/Shiping";
+import Tactimonials from "Pages/Tactimonials";
+import FeedBack from "Pages/FeedBack";
 
 const routes = [
   {
@@ -131,6 +133,54 @@ const routes = [
     icon: <Icon fontSize="small">Blogs</Icon>,
     route: "/blogs",
     component: <BlogPage />,
+  },
+    {
+    type: "collapse",
+    name: "Home Section",
+    key: "HomeCategory",
+    icon: <House />,
+    collapse: [
+      {
+        name: "Home Category Cart",
+        key: "HomeCategory",
+        collapseKey: "HomeCategories1",
+        route: "/homeCategoryCart",
+        icon: <Icon fontSize="small">radio_button_checked</Icon>,
+        component: <HomeCategoryCart />,
+      },
+      {
+        name: "Home Banner",
+        key: "HomeCategory",
+        collapseKey: "HomeCategories2",
+        route: "/homecategoryBanner",
+        icon: <Icon fontSize="small">radio_button_checked</Icon>,
+        component: <HomeBanner />,
+      },
+      // {
+      //   name: "Home Product",
+      //   key: "ServiceHome",
+      //   collapseKey: "ServiceHome3",
+      //   route: "/serviceHome/homeproduct",
+      //   icon: <Icon fontSize="small">radio_button_checked</Icon>,
+      //   component: <HomeProduct />,
+      // },
+    ],
+  },
+  {
+    type: "collapse",
+    name: "Tactimonials",
+    key: "tactimonials",
+    icon: <Icon fontSize="small">Tactimonials</Icon>,
+    route: "/tactimonials",
+    component: <Tactimonials />,
+  },
+  {
+    type: "collapse",
+    name: "FeedBack",
+    key: "feedback",
+    icon: <Icon fontSize="small">FeedBack</Icon>,
+    route: "/feedback",
+    component: <FeedBack />,
   },
   // {
   //   type: "collapse",

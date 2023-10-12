@@ -31,11 +31,11 @@ const CreateBranner = ({ isOpen, isOpenUpdate, setIsOpenUpdate, setIsOpen }) => 
   const { Loading, AllHomeBanner, singleHomeBanner,createHomeLoading } = useSelector((state) => ({
     ...state.isHomeBanner,
   }));
-  // console.log(singleHomeBanner, "singleBrands");
+  console.log(singleHomeBanner, "singleBrands");
   useEffect(() => {
     if (singleHomeBanner && isOpenUpdate) {
       setIsBrandName(singleHomeBanner?.title);
-      setIsShow(singleHomeBanner?.banner);
+      setIsShow(singleHomeBanner?.bannerImage);
       // setIsBrandShowHome(singleBrands?.showInHome);
     } else {
       setIsBrandName("");
@@ -49,13 +49,13 @@ const CreateBranner = ({ isOpen, isOpenUpdate, setIsOpenUpdate, setIsOpen }) => 
     if ((isBrandImage && isBrandImage !== "") || (isShow && isShow !== "")) {
       if (isOpenUpdate) {
         const formData = new FormData();
-        formData.append("title", isBrandName);
-        formData.append("banner", isBrandImage);
+        // formData.append("title", isBrandName);
+        formData.append("bannerImg", isBrandImage);
         // formData.append("showInHome", isBrandShowHome);
         // console.log(...formData, "akldjhksjdhnsdfg");
         dispatch(
           updateHomeBanner({
-            url: `${process.env.REACT_APP_APII}/updateHomeBanner/${singleHomeBanner?._id}/${admin}`,
+            url: `${process.env.REACT_APP_API}/bannerUpdate/${singleHomeBanner?._id}`,
             data: formData,
           })
         ).then((data) => {
@@ -71,7 +71,7 @@ const CreateBranner = ({ isOpen, isOpenUpdate, setIsOpenUpdate, setIsOpen }) => 
           setIsBrandName("");
           setIsBrandImage("");
           // setIsBrandShowHome("");
-          dispatch(getAllHomeBanner(`/getAllHomeBanner/${admin}`));
+          dispatch(getAllHomeBanner(`/getAllBanner`));
         });
       } else {
         const formData = new FormData();
